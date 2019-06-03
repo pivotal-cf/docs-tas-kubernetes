@@ -1,0 +1,89 @@
+---
+title: Deploying PAS for Kubernetes to vSphere with NSX-T
+owner: PAS WOK
+---
+
+<p class="note warning">
+<strong>Warning: </strong>
+The PAS for Kubernetes tile is currently in pre-alpha and is intended for evaluation and test purposes only. 
+Do not use this product in a PCF production environment.
+</p>
+
+
+## Prerequisites
+- Ops Manager deployed to a vSphere environment with NSX-T.
+- The PKS tile installed and configured to use NSX-T for its container networking interface.
+- The `pks` CLI [installed on your workstation](https://docs.pivotal.io/runtimes/pks/installing-pks-cli.html).
+- The `kubectl` CLI [installed on your workstation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+- The `om` CLI [installed on your workstation](https://github.com/pivotal-cf/om#installation).
+- The `pas-wok-deployment` repository cloned to your workstation.
+
+## Download a PAS for Kubernetes tile
+1. Pre-alpha builds of the "PAS for Kubernetes" tile are available in a secured GCS bucket at [https://storage.cloud.google.com/pas-for-kubernetes-tiles](https://storage.cloud.google.com/pas-for-kubernetes-tiles).
+
+> Please note that you **must** be signed into Google with your Pivotal account to download the tile builds.
+
+## Upload the PAS for Kubernetes tile to Ops Manager
+1. In Ops Manager, click "Import a Product" to upload the PAS for Kubernetes tile.
+1. Once the upload is complete, click on the "+" icon next to the tile to add it to Ops Manager.
+
+## Configure the BOSH director
+1. In the "BOSH Director for vSphere" tile settings, navigate to the "Security" tab and check "Include OpsManager Root CA in Trusted Certs" option.
+
+## Create a K8s cluster with PKS
+1. In the "Pivotal Container Service" tile configuration, navigate to the "Credentials" tab.
+1. Click on the "Pks Uaa Management Admin Client" credential and note the secret value.
+1. Run `pks login -a <PKS API Address> --client-name admin --client-secret <ADMIN-CLIENT-SECRET-VALUE> --skip-ssl-validation` to log into PKS.
+1. Create a K8s cluster for the PAS for Kubernetes workloads by running `pks create-cluster pas-eirini --external-hostname <CLUSTER-ADDRESS> --plan small --num-nodes 2 --wait`, where `CLUSTER-ADDRESS` is the domain name you want to use for the cluster master.
+1. Create an A record in the DNS zone for this environment that points from `CLUSTER-ADDRESS` to the `pas-eirini` cluster master IP.
+
+## Configure the new K8s cluster to accept Eirini workloads
+1. Configure your `kubectl` CLI to point to your PKS cluster by running `pks get-credentials pas-eirini`.
+1. Change to the root directory of this repository and run the following commands:
+    - `kubectl create namespace pas-eirini`
+    - `kubectl apply -f eirini-k8s-service-account.yml`
+    - `kubectl apply -f eirini-k8s-service-account-cluster-role-binding.yml`
+
+## Configure the PAS for Kubernetes tile
+1. Consult the ["Configuring PAS"](https://docs.pivotal.io/pivotalcf/2-5/customizing/configure-pas.html) topic in the PCF documentation, or the ["Quick Start PAS Configuration"](https://docs.pivotal.io/pivotalcf/2-5/customizing/quickstart-pas.html) topic for a standard installation.
+1. For PAS for Kubernetes, also configure the following sections:
+
+### In the "Eirini" Tab
+Fill in the blanks with the following values:
+  - **Kubernetes Namespace**: `pas-eirini`
+  - **Kubernetes URL**: `https://<CLUSTER-ADDRESS>:8443`
+  - **Kubernetes Service Account username**: `opi-service-account`
+  - **Kubernetes Service Account password**:  
+    Retrieve the password from your Kubernetes cluster
+    1. `service_account_token_secret="$(kubectl get serviceaccount opi-service-account -o jsonpath='{.secrets[0].name}')"`
+    1. `kubectl get secret ${service_account_token_secret} -o jsonpath='{.data.token}' | base64 -D`
+  - **Kubernetes CA**:  
+    Retrieve the CA certificate of the Kubernetes cluster:
+    1. `kubectl config view --raw -o jsonpath='{.clusters[?(@.name=="pas-eirini")].cluster.certificate-authority-data}' | base64 -D`
+
+
+### In the "Errands" Tab
+1. Change all errands to "off".
+
+## Deploy PAS for Kubernetes and re-deploy PKS
+1. Click "Review Pending Changes" in Ops Manager.
+1. Ensure that "Pivotal Container Service" and "Pivotal Application Service" are both checked, and then click "Apply Changes".
+
+## Enable app logs
+1. Export the following environment variables so that the `om` CLI can target your OpsManager
+    - `OM_TARGET`:  URL of your OpsManager
+    - If you login to OpsManager with a user:
+        - `OM_USERNAME`: User you login to OpsManager with
+        - `OM_PASSWORD`: Password for the above user
+    - If you login to OpsManager with client/service credentials:
+        - `OM_CLIENT_ID`: Name of the client/service you login to OpsManager with
+        - `OM_CLIENT_SECRET`: Secret for the above client/service
+1. From the root directory of this repository, run the following commands:
+    - `./add-om-loggregator-daemonset.sh pas-eirini`
+        - This should create a daemonset in your PKS cluster called `loggregator-fluentd` along with pods associated with that daemonset
+
+## See it Working
+1. To see that Eirini is working, push an app to your PAS environment as you would normally.
+1. Use `kubectl` to observe a pod being created for your app:
+    - `kubectl -n pas-eirini get pods`
+1. Use `cf <YOUR-APP-NAME> logs` to observe app logs are available
