@@ -1,6 +1,6 @@
-# docs-pas-kubernetes
+# Documentation for PAS for Kubernetes
 
-Require [Bookbind](https://github.com/pivotal-cf/docs-layout-repo) to run locally.
+Require [Bookbind](https://github.com/pivotal-cf/docs-book-pas-kubernetes) to run locally.
 
 Adding Images, guideline: https://docs-wiki.cfapps.io/wiki/image/working-with-images.html
 
