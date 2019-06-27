@@ -1,0 +1,51 @@
+---
+title: Deploying PAS for Kubernetes to vSphere with NSX-T
+owner: PAS WOK
+---
+
+<%= partial 'pre_alpha_warning' %>
+
+Before configuring and deploying the PAS for Kubernetes tile, you will need to have previously completed the sections on [importing the tile](download-import-tile.html) and [configuring a PKS cluster](set-up-kubernetes-cluster.html).
+
+## Configure the BOSH director
+1. In the "BOSH Director for vSphere" tile settings, navigate to the "Security" tab and check "Include OpsManager Root CA in Trusted Certs" option.
+
+## Configure the PAS for Kubernetes tile
+1. Consult the ["Configuring PAS"](pivotalcf/customizing/configure-pas.html) topic in the PCF documentation, or the ["Quick Start PAS Configuration"](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html) topic for a standard installation.
+1. You will also need to configure the new "Kubernetes" tab with the following values:
+
+- **Kubernetes Namespace**: `pas-workloads`
+- **Kubernetes URL**: A URL pointing to the `pas-for-kubernetes` cluster's master node
+- **Kubernetes Service Account username**: `pas-service-account`
+- **Kubernetes Service Account password**:
+  Run the following commands to retrieve the `pas-service-account`'s token from the Kubernetes cluster
+
+  ```
+secret_name="$(kubectl get serviceaccount pas-service-account \
+  -o jsonpath='{.secrets[0].name}')"
+
+kubectl get secret ${secret_name} -o jsonpath='{.data.token}' | base64 --decode
+  ```
+  The value returned by the second command (`kubectl get secret` ...) should be used as the Kubernetes service account password.
+
+- **Kubernetes CA Certificate**:
+  Run the following command to retrieve the CA certificate bundle from the Kubernetes cluster:
+
+  ```
+kubectl config view --raw --minify \
+  -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
+  | base64 --decode
+  ```
+  The output should be used as the Kubernetes CA certificate.
+
+## Deploy PAS for Kubernetes and re-deploy PKS
+1. Click "Review Pending Changes" in Ops Manager.
+1. Ensure that "Pivotal Container Service" and "Pivotal Application Service" are both checked, and then click "Apply Changes".
+
+## Verify the installation (optional)
+1. To see that PAS is running workloads on Kuberenetes, push an app to your PAS environment as you would normally (e.g., `cf push <APP_NAME>`).
+1. Use `kubectl` to observe a pod being created for your app:
+
+  ```
+kubectl get pods -n pas-workloads
+  ```

@@ -1,0 +1,21 @@
+---
+title: PAS for Kubernetes Installation Overview and Requirements
+owner: PAS WOK
+---
+
+<p class="note warning">
+<strong>Warning: </strong>`
+The PAS for Kubernetes tile is currently in pre-alpha. This document is for Pivotal Field and Sales to test and demo the tile to their customers.
+</p>
+
+<p class="note"><strong>Note:</strong>The PAS for Kubernetes tile <strong>only runs on vSphere environments with NSX-T</strong>. Support for other infrastructure and networking providers will come in future releases.</p>
+
+## Requirements
+To install and use PAS for Kubernetes, you will need the following:
+
+- Ops Manager deployed to a vSphere environment with NSX-T.
+- The Pivotal Container Service (PKS) tile installed and configured to use NSX-T for its container networking interface.
+- The `pks` CLI [installed on your local machine](https://docs.pivotal.io/runtimes/pks/installing-pks-cli.html).
+- The `kubectl` CLI [installed on your local machine](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+
+<strong>Next</strong>: [Import the PAS for Kubernetes tile](download-import-tile.html)
