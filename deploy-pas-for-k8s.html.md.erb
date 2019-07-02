@@ -14,17 +14,19 @@ Before configuring and deploying the PAS for Kubernetes tile, you will need to h
 1. Consult the ["Configuring PAS"](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) topic in the PCF documentation, or the ["Quick Start PAS Configuration"](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html) topic for a standard installation.
 1. You will also need to configure the new "Kubernetes" tab with the following values:
 
-- **Kubernetes Namespace**: `pas-workloads`
+- **PAS Workloads Namespace**: `pas-workloads`
+- **PAS System Namespace**: `pas-system`
 - **Kubernetes URL**: A URL pointing to the `pas-for-kubernetes` cluster's master node
-- **Kubernetes Service Account username**: `pas-service-account`
+- **Kubernetes Service Account username**: `pas-system-service-account`
 - **Kubernetes Service Account password**:
-  Run the following commands to retrieve the `pas-service-account`'s token from the Kubernetes cluster
+  Run the following commands to retrieve the `pas-system-service-account`'s token from the Kubernetes cluster
 
   ```
-secret_name="$(kubectl get serviceaccount pas-service-account \
-  -o jsonpath='{.secrets[0].name}')"
+secret_name="$(kubectl get serviceaccount -n pas-system \
+  pas-system-service-account -o jsonpath='{.secrets[0].name}')"
 
-kubectl get secret ${secret_name} -o jsonpath='{.data.token}' | base64 --decode
+kubectl get secret -n pas-system ${secret_name} -o jsonpath='{.data.token}' \
+  | base64 --decode
   ```
   The value returned by the second command (`kubectl get secret` ...) should be used as the Kubernetes service account password.
 
