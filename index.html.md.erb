@@ -9,86 +9,34 @@ owner: PAS WOK
 
 ## <a id='overview'></a>Overview
 
-TO-DO: Figure out how we define PAS for Kubernetes, and what this alpha is for.
-Content basically can be taken from the first section in the [Field FAQs](https://docs.google.com/document/d/1K4UtH2u7-RYqM9-ixKUJOCuMwz7ZvtKGjgnzbW5ZAUk/edit#heading=h.56eugywk6kt8).
+PAS for Kubernetes aims to bring the development experience of PAS on top of the Kubernetes container orchestrator. As of this first alpha release, PAS for Kubernetes is packaged as an Ops Manager tile, deployable with BOSH, and depends on PKS, vSphere, and NSX-T.
+This first release is a proof-of-concept that supports the most important features of PAS, such as `cf push` for many buildpack-based apps, while running the PAS app instances on Kubernetes. Support for complicated app configurations and advanced developer workflows will improve in later releases.
 
-<!-- **Note**: This overview will appear under **OVERVIEW**, combined with the description above in the tile's listing on
-[Pivotal Network](http://network.pivotal.io). -->
+![User Flow](/img/pas-k8s-user-flow.png)
 
-## <a id='features'></a>Key Features
-
-<!-- **Note**: This feature list will appear under **FEATURES** in the tile's listing on
-[Pivotal Network](http://network.pivotal.io).
-Make sure you list the key features of the tile (the integration).
-We cannot accept a list of the key features of your product that we are integrating.
-
-YOUR-PRODUCT-NAME includes the following key features:
-
-* Feature one
-* Feature two
-* Feature three
+## <a id='pre-requisit'></a>Pre-requisit
 
 
+## <a id='security'></a>Known Security Issues
 
-## <a id="snapshot"></a>Product Snapshot
+### Container Ingress/Egress
 
-The following table provides version and version-support information about PRODUCT-NAME.
+- App container egress is completely open, as this is the default for both the Flannel and NSX-T container network plugins.
+  - The app containers have full access to any internal CF APIs. With Diego, these are restricted by app security groups, but Eirini has yet to implement this behavior.
+  - Access to Kubernetes APIs is unrestricted.
+- App container ingress is also completely open to every client that can route traffic to the Pod IPs (such as containers in other Pods, or other VMs if routes from those VMs to the Pod subnets exist).
+  - With either the Silk or NSX-T container plugins on Diego cells, CF app-to-app network policies normally restrict this ingress from other containers, but Eirini also has yet to implement this behavior.
+- Kubernetes controls container ingress/egress rules only via `NetworkPolicy` resources, which are effective only if the networking plugin on the K8s nodes also supports `NetworkPolicy`. See the [K8s documentation about NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) for more details.
+  - The Flannel networking plugin **does not** support `NetworkPolicy`.
+  - The NSX-T networking plugin **does** support `NetworkPolicy`.
 
-<table class="nice">
-    <th>Element</th>
-    <th>Details</th>
-    <tr>
-        <td>Tile version</td>
-        <td>vYOUR-VERSION-NUMBER</td>
-    </tr>
-    <tr>
-        <td>Release date</td>
-        <td>YOUR-RELEASE-DATE (Ex: July 1, 2019)</td>
-    </tr>
-    <tr>
-        <td>Software component version</td>
-        <td>YOUR-SOFTWARE-COMPONENT-VERSION-NUMBER</td>
-    </tr>
-    <tr>
-        <td>Compatible Ops Manager version(s)</td>
-        <td>YOUR-COMPATIBLE-OPS-MAN-VERSION (Ex. 2.2, 2.3, and 2.4)</td>
-    </tr>
-    <tr>
-        <td>Compatible Pivotal Application Service version(s)</td>
-        <td>YOUR-COMPATIBLE-PIVOTAL-APPLICATION-SERVICE-VERSION (Ex. 2.2, 2.3, and 2.4)</td>
-    </tr>
-    <tr>
-       <td>BOSH stemcell version</td>
-       <td>Ubuntu Xenial</td>
-    </tr>
-    <tr>
-        <td>IaaS support</td>
-        <td>AWS?, Azure?, GCP?, OpenStack?, and vSphere?</td>
-    </tr>
-</table>
+### Multi-Tenancy Considerations
+- Disk limit is currently unlimited within the app container pods. The app is able to fill up the entire disk.
 
+### Encrypted Communication
+- Requests to running applications are unencrypted between the gorouter and the application instance.
+- Requests to the Eirini API from the Cloud Controller are unencrypted. These requests contain application details including sensitive
+  data like environment variables and service credentials.
 
-## <a id="reqs"></a>Requirements
-
-**Provide any general or specific requirements, prerequisites, or dependencies here.
-A general requirement might be something like, "An AppDynamics account."
-A specific requirement might be something like, "Packaging Dependencies for Offline Buildpacks."**
-
-YOUR-PRODUCT-NAME has the following requirements:
-
-+ PREREQUISITE-1
-
-+ PREREQUISITE-2
-
-## <a id="limitations"></a>Limitations
-
-**List any known limitations.**
-
-## <a id="feedback"></a>Feedback
-
-If you have a feature request, questions, or information about a bug, please email
-[Pivotal Cloud Foundry Feedback](mailto:cf-feedback@pivotal.io) list or send an email to YOUR-SUPPORT-EMAIL.
-
-## <a id='license'></a>License
-
-**List any license information here.** -->
+### Service Account Permissions
+- The service account used by Eirini currently requires Admin permissions.
