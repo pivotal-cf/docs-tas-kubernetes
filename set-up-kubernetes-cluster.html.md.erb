@@ -16,7 +16,7 @@ owner: PAS WOK
 
     ```
     kubectl create namespace pas-system
-    kubectl create serviceaccount pas-system-service-account
+    kubectl create serviceaccount -n pas-system pas-system-service-account
     kubectl create clusterrolebinding pas-system-service-account-cluster-binding \
       --clusterrole=cluster-admin \
       --serviceaccount pas-system:pas-service-account
