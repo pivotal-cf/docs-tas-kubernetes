@@ -44,10 +44,4 @@ kubectl config view --raw --minify \
 1. Click "Review Pending Changes" in Ops Manager.
 1. Ensure that "Pivotal Container Service" and "Pivotal Application Service" are both checked, and then click "Apply Changes".
 
-## Verify the installation (optional)
-1. To see that PAS is running workloads on Kuberenetes, push an app to your PAS environment as you would normally (e.g., `cf push <APP_NAME>`).
-1. Use `kubectl` to observe a pod being created for your app:
-
-  ```
-kubectl get pods -n pas-workloads
-  ```
+<strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
