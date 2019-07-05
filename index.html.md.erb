@@ -7,36 +7,12 @@ owner: PAS WOK
 
 <%= partial 'pre_alpha_warning' %>
 
-## <a id='overview'></a>Overview
-
 PAS for Kubernetes aims to bring the development experience of PAS on top of the Kubernetes container orchestrator. As of this first alpha release, PAS for Kubernetes is packaged as an Ops Manager tile, deployable with BOSH, and depends on PKS, vSphere, and NSX-T.
+
 This first release is a proof-of-concept that supports the most important features of PAS, such as `cf push` for many buildpack-based apps, while running the PAS app instances on Kubernetes. Support for complicated app configurations and advanced developer workflows will improve in later releases.
 
-![User Flow](/img/pas-k8s-user-flow.png)
+<%= partial 'limitation_notes' %>
 
-## <a id='pre-requisit'></a>Pre-requisit
+![User Flow](/assets/pas-k8s-user-flow.png)
 
-
-## <a id='security'></a>Known Security Issues
-
-### Container Ingress/Egress
-
-- App container egress is completely open, as this is the default for both the Flannel and NSX-T container network plugins.
-  - The app containers have full access to any internal CF APIs. With Diego, these are restricted by app security groups, but Eirini has yet to implement this behavior.
-  - Access to Kubernetes APIs is unrestricted.
-- App container ingress is also completely open to every client that can route traffic to the Pod IPs (such as containers in other Pods, or other VMs if routes from those VMs to the Pod subnets exist).
-  - With either the Silk or NSX-T container plugins on Diego cells, CF app-to-app network policies normally restrict this ingress from other containers, but Eirini also has yet to implement this behavior.
-- Kubernetes controls container ingress/egress rules only via `NetworkPolicy` resources, which are effective only if the networking plugin on the K8s nodes also supports `NetworkPolicy`. See the [K8s documentation about NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) for more details.
-  - The Flannel networking plugin **does not** support `NetworkPolicy`.
-  - The NSX-T networking plugin **does** support `NetworkPolicy`.
-
-### Multi-Tenancy Considerations
-- Disk limit is currently unlimited within the app container pods. The app is able to fill up the entire disk.
-
-### Encrypted Communication
-- Requests to running applications are unencrypted between the gorouter and the application instance.
-- Requests to the Eirini API from the Cloud Controller are unencrypted. These requests contain application details including sensitive
-  data like environment variables and service credentials.
-
-### Service Account Permissions
-- The service account used by Eirini currently requires Admin permissions.
+<strong>Next</strong>: [Release Notes](release-notes.html)
