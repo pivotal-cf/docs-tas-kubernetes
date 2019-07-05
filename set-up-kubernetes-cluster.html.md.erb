@@ -12,14 +12,14 @@ owner: PAS WOK
     pks get-credentials pas-for-kubernetes
     ```
     This will set the active `kubectl` context to point to the `pas-for-kubernetes` cluster.
-1. Run the following commands to create the required namespace and service account in the pas-for-kubernetes cluster:
+1. Run the following commands to create the required system namespace and service account in the pas-for-kubernetes cluster:
 
     ```
-    kubectl create namespace pas-workloads
-    kubectl create serviceaccount pas-service-account
-    kubectl create clusterrolebinding pas-service-account-cluster-binding \
+    kubectl create namespace pas-system
+    kubectl create serviceaccount -n pas-system pas-system-service-account
+    kubectl create clusterrolebinding pas-system-service-account-cluster-binding \
       --clusterrole=cluster-admin \
-      --serviceaccount default:pas-service-account
+      --serviceaccount pas-system:pas-system-service-account
     ```
 
 <strong>Next</strong>: [Deploy PAS for Kubernetes](deploy-pas-for-k8s.html)
