@@ -42,8 +42,7 @@ Disk limit is currently unlimited within the app container pods. The app is able
 
 ### <a id='encrypted-communication'></a> Encrypted Communication
 - Requests to running applications are unencrypted between the gorouter and the application instance.
-- Requests to the Eirini API from the Cloud Controller are unencrypted. These requests contain application details including sensitive
-  data like environment variables and service credentials.
+- Requests to the Eirini API from the Cloud Controller are unencrypted and unauthenticated. These requests contain application details including sensitive data like environment variables and service credentials.
 
 ### <a id='service-account-permissions'></a> Service Account Permissions
 - The service account used by Eirini currently requires Admin permissions.
