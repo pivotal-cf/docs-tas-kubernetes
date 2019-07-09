@@ -3,9 +3,13 @@ title: Deploying PAS for Kubernetes to vSphere with NSX-T
 owner: PAS WOK
 ---
 
+<<<<<<< HEAD
 <%= partial 'pre_alpha_warning' %>
 
 This topic discusses how to configure and deploy the PAS for Kubernetes tile.
+=======
+Before configuring and deploying the PAS for Kubernetes tile, you will need to have previously completed the sections on [importing the tile](download-import-tile.html) and [configuring a PKS cluster](set-up-kubernetes-cluster.html).
+>>>>>>> 72eee8381b5348f5342d002cd7e6b6d66f1e1638
 
 
 ## <a id='prerequisite'></a> Prerequisite
@@ -57,6 +61,7 @@ kubectl config view --raw --minify \
   The output should be used as the Kubernetes CA certificate.
 
 
+<<<<<<< HEAD
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
 
 After configuring the PAS for Kubernetes tile, you must re-deploy PKS in addition to deploying the PAS for Kubernetes tile. Do the following:
@@ -79,3 +84,6 @@ If you want to verify that the installation succeeded, do the following:
   ```
 kubectl get pods -n pas-workloads
   ```
+=======
+<strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
+>>>>>>> 72eee8381b5348f5342d002cd7e6b6d66f1e1638

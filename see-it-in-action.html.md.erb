@@ -1,0 +1,13 @@
+---
+title: See PAS for Kubernetes in Action
+owner: PAS WOK
+---
+
+## Verify the installation
+1. To see that PAS is running workloads on Kuberenetes, push an app to your PAS environment as you would normally (e.g., `cf push <APP_NAME>`).
+1. Use `kubectl` to observe a pod being created for your app:
+
+  ```
+kubectl get pods -n pas-workloads
+  ```
+[insert the demo video here]

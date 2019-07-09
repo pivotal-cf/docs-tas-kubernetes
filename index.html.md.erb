@@ -7,88 +7,12 @@ owner: PAS WOK
 
 <%= partial 'pre_alpha_warning' %>
 
-## <a id='overview'></a>Overview
+PAS for Kubernetes aims to bring the development experience of PAS on top of the Kubernetes container orchestrator. As of this first alpha release, PAS for Kubernetes is packaged as an Ops Manager tile, deployable with BOSH, and depends on PKS, vSphere, and NSX-T.
 
-TO-DO: Figure out how we define PAS for Kubernetes, and what this alpha is for.
-Content basically can be taken from the first section in the [Field FAQs](https://docs.google.com/document/d/1K4UtH2u7-RYqM9-ixKUJOCuMwz7ZvtKGjgnzbW5ZAUk/edit#heading=h.56eugywk6kt8).
+This first release is based of the Small Footprint PAS tile. As a proof-of-concept, it supports the most important features of PAS, such as `cf push` for many buildpack-based apps, while running the PAS app instances on Kubernetes. Support for complicated app configurations and advanced developer workflows will improve in later releases.
 
-<!-- **Note**: This overview will appear under **OVERVIEW**, combined with the description above in the tile's listing on
-[Pivotal Network](http://network.pivotal.io). -->
+<%= partial 'limitation_notes' %>
 
-## <a id='features'></a>Key Features
+![User Flow](/assets/pas-k8s-user-flow.png)
 
-<!-- **Note**: This feature list will appear under **FEATURES** in the tile's listing on
-[Pivotal Network](http://network.pivotal.io).
-Make sure you list the key features of the tile (the integration).
-We cannot accept a list of the key features of your product that we are integrating.
-
-YOUR-PRODUCT-NAME includes the following key features:
-
-* Feature one
-* Feature two
-* Feature three
-
-
-
-## <a id="snapshot"></a>Product Snapshot
-
-The following table provides version and version-support information about PRODUCT-NAME.
-
-<table class="nice">
-    <th>Element</th>
-    <th>Details</th>
-    <tr>
-        <td>Tile version</td>
-        <td>vYOUR-VERSION-NUMBER</td>
-    </tr>
-    <tr>
-        <td>Release date</td>
-        <td>YOUR-RELEASE-DATE (Ex: July 1, 2019)</td>
-    </tr>
-    <tr>
-        <td>Software component version</td>
-        <td>YOUR-SOFTWARE-COMPONENT-VERSION-NUMBER</td>
-    </tr>
-    <tr>
-        <td>Compatible Ops Manager version(s)</td>
-        <td>YOUR-COMPATIBLE-OPS-MAN-VERSION (Ex. 2.2, 2.3, and 2.4)</td>
-    </tr>
-    <tr>
-        <td>Compatible Pivotal Application Service version(s)</td>
-        <td>YOUR-COMPATIBLE-PIVOTAL-APPLICATION-SERVICE-VERSION (Ex. 2.2, 2.3, and 2.4)</td>
-    </tr>
-    <tr>
-       <td>BOSH stemcell version</td>
-       <td>Ubuntu Xenial</td>
-    </tr>
-    <tr>
-        <td>IaaS support</td>
-        <td>AWS?, Azure?, GCP?, OpenStack?, and vSphere?</td>
-    </tr>
-</table>
-
-
-## <a id="reqs"></a>Requirements
-
-**Provide any general or specific requirements, prerequisites, or dependencies here.
-A general requirement might be something like, "An AppDynamics account."
-A specific requirement might be something like, "Packaging Dependencies for Offline Buildpacks."**
-
-YOUR-PRODUCT-NAME has the following requirements:
-
-+ PREREQUISITE-1
-
-+ PREREQUISITE-2
-
-## <a id="limitations"></a>Limitations
-
-**List any known limitations.**
-
-## <a id="feedback"></a>Feedback
-
-If you have a feature request, questions, or information about a bug, please email
-[Pivotal Cloud Foundry Feedback](mailto:cf-feedback@pivotal.io) list or send an email to YOUR-SUPPORT-EMAIL.
-
-## <a id='license'></a>License
-
-**List any license information here.** -->
+<strong>Next</strong>: [Release Notes](release-notes.html)
