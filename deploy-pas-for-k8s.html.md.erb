@@ -3,43 +3,68 @@ title: Deploying PAS for Kubernetes to vSphere with NSX-T
 owner: PAS WOK
 ---
 
-Before configuring and deploying the PAS for Kubernetes tile, you will need to have previously completed the sections on [importing the tile](download-import-tile.html) and [configuring a PKS cluster](set-up-kubernetes-cluster.html).
+This topic discusses how to configure and deploy the PAS for Kubernetes tile.
 
-## Configure the BOSH director
-1. In the "BOSH Director for vSphere" tile settings, navigate to the "Security" tab and check "Include OpsManager Root CA in Trusted Certs" option.
+## <a id='prerequisite'></a> Prerequisite
 
-## Configure the PAS for Kubernetes tile
-1. Consult the ["Configuring PAS"](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) topic in the PCF documentation, or the ["Quick Start PAS Configuration"](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html) topic for a standard installation.
-1. You will also need to configure the new "Kubernetes" tab with the following values:
+Before configuring and deploying the PAS for Kubernetes tile, you must do the following:
 
-- **PAS Workloads Namespace**: `pas-workloads`
-- **PAS System Namespace**: `pas-system`
-- **Kubernetes URL**: A URL pointing to the `pas-for-kubernetes` cluster's master node
-- **Kubernetes Service Account username**: `pas-system-service-account`
-- **Kubernetes Service Account password**:
-  Run the following commands to retrieve the `pas-system-service-account`'s token from the Kubernetes cluster
+* Import the tile. For more information, see [Downloading and Importing the PAS for Kubernetes Tile](download-import-tile.html).
 
-  ```
-secret_name="$(kubectl get serviceaccount -n pas-system \
-  pas-system-service-account -o jsonpath='{.secrets[0].name}')"
+* Configure a PKS cluster. For more information, see [Setting Up a Kubernetes Cluster for PAS Workloads](set-up-kubernetes-cluster.html).
 
-kubectl get secret -n pas-system ${secret_name} -o jsonpath='{.data.token}' \
-  | base64 --decode
-  ```
-  The value returned by the second command (`kubectl get secret` ...) should be used as the Kubernetes service account password.
 
-- **Kubernetes CA Certificate**:
-  Run the following command to retrieve the CA certificate bundle from the Kubernetes cluster:
+## <a id='configure-bosh'></a> Configure BOSH Director
 
-  ```
-kubectl config view --raw --minify \
-  -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
-  | base64 --decode
-  ```
-  The output should be used as the Kubernetes CA certificate.
+To configure BOSH Director for the PAS for Kubernetes tile, do the following:
 
-## Deploy PAS for Kubernetes and re-deploy PKS
-1. Click "Review Pending Changes" in Ops Manager.
-1. Ensure that "Pivotal Container Service" and "Pivotal Application Service" are both checked, and then click "Apply Changes".
+1. In the **BOSH Director for vSphere** tile settings, go to the **Security** tab.
+
+1. Enable the **Include OpsManager Root CA in Trusted Certs** checkbox.
+
+
+## <a id='configure-tile'></a> Configure the PAS for Kubernetes Tile
+
+To configure the PAS for Kubernetes tile, do the following:
+
+1. Configure the PAS for Kubernetes tile the same way you configure the PAS tile. For more information, see [Configuring PAS](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) or [Quick Start PAS Configuration](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html).
+
+1. Configure the **Kubernetes** tab with the following values:
+  - **PAS Workloads Namespace**: `pas-workloads`
+  - **PAS System Namespace**: `pas-system`
+  - **Kubernetes URL**: A URL pointing to the `pas-for-kubernetes` cluster's master node
+  - **Kubernetes Service Account username**: `pas-system-service-account`
+  - **Kubernetes Service Account password**:
+    Run the following commands to retrieve the `pas-system-service-account`'s token from the Kubernetes cluster:
+
+    ```
+    secret_name="$(kubectl get serviceaccount -n pas-system \
+      pas-system-service-account -o jsonpath='{.secrets[0].name}')"
+
+    kubectl get secret -n pas-system ${secret_name} -o jsonpath='{.data.token}' \
+      | base64 --decode
+    ```
+    The value returned by the second command (`kubectl get secret` ...) should be used as the Kubernetes service account password.
+
+  - **Kubernetes CA Certificate**:
+    Run the following command to retrieve the CA certificate bundle from the Kubernetes cluster:
+
+    ```
+    kubectl config view --raw --minify \
+      -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
+      | base64 --decode
+    ```
+    The output should be used as the Kubernetes CA certificate.
+
+
+## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
+
+After configuring the PAS for Kubernetes tile, you must re-deploy PKS in addition to deploying the PAS for Kubernetes tile. Do the following:
+
+1. Click **Review Pending Changes** in Ops Manager.
+
+1. Select **Pivotal Container Service** and **Pivotal Application Service**.
+
+1. Click **Apply Changes**.
 
 <strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
