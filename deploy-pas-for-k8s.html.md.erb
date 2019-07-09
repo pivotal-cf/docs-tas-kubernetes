@@ -3,8 +3,6 @@ title: Deploying PAS for Kubernetes to vSphere with NSX-T
 owner: PAS WOK
 ---
 
-<%= partial 'pre_alpha_warning' %>
-
 Before configuring and deploying the PAS for Kubernetes tile, you will need to have previously completed the sections on [importing the tile](download-import-tile.html) and [configuring a PKS cluster](set-up-kubernetes-cluster.html).
 
 ## Configure the BOSH director
@@ -44,10 +42,4 @@ kubectl config view --raw --minify \
 1. Click "Review Pending Changes" in Ops Manager.
 1. Ensure that "Pivotal Container Service" and "Pivotal Application Service" are both checked, and then click "Apply Changes".
 
-## Verify the installation (optional)
-1. To see that PAS is running workloads on Kuberenetes, push an app to your PAS environment as you would normally (e.g., `cf push <APP_NAME>`).
-1. Use `kubectl` to observe a pod being created for your app:
-
-  ```
-kubectl get pods -n pas-workloads
-  ```
+<strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
