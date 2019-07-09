@@ -1,18 +1,22 @@
 ---
-title: Setting up a Kubernetes cluster for PAS workloads
+title: Setting Up a Kubernetes Cluster for PAS Workloads
 owner: PAS WOK
 ---
 
 <%= partial 'pre_alpha_warning' %>
 
-1. Follow the PKS documentation for [Creating Clusters in PKS](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to login with the `pks` CLI and create a cluster named `pas-for-kubernetes`.
-1. Configure `kubectl` to point to the PKS cluster you created in the previous step by running the following command:
+To configure a Kubernetes cluster for PAS workloads, do the following:
+
+1. Follow the procedure in [Creating Clusters in PKS](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to log in with the `pks` CLI and create a cluster named `pas-for-kubernetes`.
+
+1. Configure `kubectl` to point to the PKS cluster you created by running the following command:
 
     ```
     pks get-credentials pas-for-kubernetes
     ```
-    This will set the active `kubectl` context to point to the `pas-for-kubernetes` cluster.
-1. Run the following commands to create the required system namespace and service account in the pas-for-kubernetes cluster:
+    This points `kubectl` to the `pas-for-kubernetes` cluster.
+
+1. Run the following commands to create the required system namespace and service account in the `pas-for-kubernetes` cluster:
 
     ```
     kubectl create namespace pas-system
