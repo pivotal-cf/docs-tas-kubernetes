@@ -1,13 +1,35 @@
 ---
-title: Deploy the Tile
+title: Deploy PAS for Kubernetes
 owner: PAS WOK
 ---
 
-<strong>Previous</strong>: [Configure Dependencies](configure-dependencies.html)  | <strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
+<strong>Previous</strong>: [Configure Dependencies](configure-dependencies.html)
+&middot;
+<strong>Next</strong>: [See PAS for Kubernetes in Action](see-it-in-action.html)
 
 <hr>
 
 This topic discusses how to configure and deploy the Pivotal Application Service (PAS) for Kubernetes tile.
+
+## <a id='download-tile'></a> Download the Tile
+
+To download the PAS for Kubernetes tile, do the following:
+
+1. Go to [Pivotal Network](https://network.pivotal.io) and sign in.
+
+1. Go to [PAS for Kubernetes](https://network.pivotal.io/products/pas-for-kubernetes/) on Pivotal Network.
+
+1. Click the item ending in `.pivotal` to download the tile to your local machine.
+
+
+## <a id='upload-tile'></a> Upload the Tile to Ops Manager
+
+To upload the PAS for Kubernetes tile to Ops Manager, do the following:
+
+1. In Ops Manager, click **Import a Product** to upload the PAS for Kubernetes tile.
+
+1. When the upload is complete, click the **+** icon next to the tile to add it to Ops Manager.
+
 
 ## <a id='configure-tile'></a> Configure the PAS for Kubernetes Tile
 
@@ -30,7 +52,7 @@ To configure the PAS for Kubernetes tile, do the following:
     kubectl get secret -n pas-system ${secret_name} -o jsonpath='{.data.token}' \
       | base64 --decode
     ```
-    The value returned by the second command (`kubectl get secret` ...) should be used as the Kubernetes service account password.
+    Use the value returned by the second command (`kubectl get secret` ...) as the Kubernetes service account password.
 
   - **Kubernetes CA Certificate**:
     Run the following command to retrieve the CA certificate bundle from the Kubernetes cluster:
@@ -40,7 +62,7 @@ To configure the PAS for Kubernetes tile, do the following:
       -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
       | base64 --decode
     ```
-    The output should be used as the Kubernetes CA certificate.
+    Use the output as the Kubernetes CA certificate.
 
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
