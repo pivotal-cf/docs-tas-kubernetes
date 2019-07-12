@@ -36,19 +36,27 @@ Features in this release:
 
 - PAS for Kubernetes does not support disk usage metrics for app instances.
 
+- PAS for Kubernetes does not enforce disk usage limits on app instances.
+
 - PAS for Kubernetes does not restrict network policies for app instance pods. This is the default network policy for Kubernetes pods. PAS for Kubernetes does not support application security groups to control egress policy from app instance pods or container-to-container network policies to control network policy between app instance pods. For more information about application security groups, see [Application Security Groups](https://docs.pivotal.io/pivotalcf/2-6/concepts/asg.html). For more information about container-to-container networking, see [Configuring Container-to-Container Networking](https://docs.pivotal.io/pivotalcf/2-6/devguide/deploy-apps/cf-networking.html).
 
 - PAS for Kubernetes does not encrypt or authenticate communication from Gorouters to app instances.
 
+- PAS for Kubernetes does not install additional CA certificates such as the Ops Manager root CA certificate in the system trust store for app instances.
+
 - PAS for Kubernetes does not encrypt or authenticate communication from the Cloud Controller to the Eirini component. This communication contains details of app configuration, including environment variables and service-binding credentials that may be sensitive.
 
-- PAS for Kubernetes does not enforce disk usage limits on app instances.
+- The Eirini component API does not require its clients to authenticate. Other clients with access to the API could send requests that cause the Eirini component to create additional workloads on the target Kubernetes cluster.
+
+- The OCI image registry provided by the bits-service component does not require authentication. Clients with access to this registry and knowledge of the repository name corresponding to an app droplet can retrieve an OCI image that include that droplet.
 
 - PAS for Kubernetes requires that its Kubernetes service account have cluster-admin privileges.
 
+- PAS for Kubernetes does not apply user namespaces to app instance container.
+
 ### <a id='known-issues'></a> Known Issues
 
-There are no known issues for this release.
+- Some PAS system apps, such as Apps Manager, function correctly only when PAS for Kubernetes is configured to disable SSL verification or to use publicly-trusted certificates for TLS termination of HTTP requests.
 
 ### <a id='component-versions'></a> Compatibility
 

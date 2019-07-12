@@ -48,7 +48,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
   - **PAS Workloads Namespace**: `pas-workloads`
   - **PAS System Namespace**: `pas-system`
-  - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster.
+  - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
   - **Kubernetes Service Account username**: `pas-system-service-account`
   - **Kubernetes Service Account password**:
     Run the following commands to retrieve the token for the `pas-system-service-account` service account from the Kubernetes cluster:
@@ -63,14 +63,14 @@ To configure the PAS for Kubernetes tile, do the following:
     Use the value returned by the second command (`kubectl get secret` ...) as the Kubernetes service account password.
 
   - **Kubernetes CA Certificate**:
-    Run the following command to retrieve the CA certificate bundle from the Kubernetes cluster:
+    Run the following command to retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster:
 
     ```
     kubectl config view --raw --minify \
       -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
       | base64 --decode
     ```
-    Use the output as the Kubernetes CA certificate.
+    Use the output as the Kubernetes CA certificate. This output should begin with `-----BEGIN CERTIFICATE-----` and end with `-----END CERTIFICATE-----`.
 
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
