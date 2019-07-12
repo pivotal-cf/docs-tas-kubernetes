@@ -39,22 +39,18 @@ We discuss limitations and discrepancies from PAS below.
 
 <%= partial 'limitation_notes' %>
 
-### <a id='container-ingress-egress'></a> Container Ingress/Egress
 
-- App container egress is completely open, as this is the default for NSX-T container network plugins.
-  - The app containers have full access to any internal CF APIs. With Diego, these are restricted by app security groups, but Eirini has yet to implement this behavior.
-  - Access to Kubernetes APIs is unrestricted.
-- App container ingress is also completely open to every client that can route traffic to the Pod IPs (such as containers in other Pods, or other VMs if routes from those VMs to the Pod subnets exist).
-  - With either the Silk or NSX-T container plugins on Diego cells, CF app-to-app network policies normally restrict this ingress from other containers, but Eirini also has yet to implement this behavior.
-- Kubernetes controls container ingress/egress rules only via `NetworkPolicy` resources, which are effective only if the networking plugin on the K8s nodes also supports `NetworkPolicy`. See the [K8s documentation about NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) for more details.
-  - The NSX-T networking plugin **does** support `NetworkPolicy`.
+### <a id='security-limitations'></a>Known Security Limitations
 
-### <a id='multi-tenancy'></a>Multi-Tenancy Considerations
-Disk limit is currently unlimited within the app container pods. The app is able to fill up the entire disk.
+- Network policies for app instance pods are unrestricted, as this is the default network policy for Kubernetes pods. PAS for Kubernetes does not yet implement [application security groups](https://docs.pivotal.io/pivotalcf/2-6/concepts/asg.html) to control egress policy from app instance pods or [container-to-container network policies](https://docs.pivotal.io/pivotalcf/2-6/devguide/deploy-apps/cf-networking.html) to control network policy between app instance pods.
 
-### <a id='encrypted-communication'></a> Encrypted Communication
-- Requests to running applications are unencrypted between the gorouter and the application instance.
-- Requests to the Eirini API from the Cloud Controller are unencrypted and unauthenticated. These requests contain application details including sensitive data like environment variables and service credentials.
+- Communication from the gorouters to app instances is unencrypted and unauthenticated.
 
-### <a id='service-account-permissions'></a> Service Account Permissions
-- The service account used by Eirini currently requires Admin permissions.
+- Communication from the Cloud Controller to the Eirini component is unencrypted and unauthenticated. This communication contains details of app configuration, including  environment variables and service-binding credentials that may be sensitive.
+
+- PAS for Kubernetes does not yet enforce disk usage limits on app instances.
+
+- PAS for Kubernetes currently requires that its Kubernetes service account have cluster-admin privileges.
+
+Future releases of PAS for Kubernetes will address some of these security limitations.
+
