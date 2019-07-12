@@ -52,6 +52,8 @@ We discuss limitations and discrepancies from PAS below.
 
 - PAS for Kubernetes does not yet support SSH access to app instances.
 
+- PAS for Kubernetes does not yet install additional CA certificates such as the Ops Manager root CA certificate in the system trust store for app instances.
+
 - Disk usage metrics for app instances are not yet implemented.
 
 
@@ -61,11 +63,21 @@ We discuss limitations and discrepancies from PAS below.
 
 - Communication from the gorouters to app instances is unencrypted and unauthenticated.
 
-- Communication from the Cloud Controller to the Eirini component is unencrypted and unauthenticated. This communication contains details of app configuration, including  environment variables and service-binding credentials that may be sensitive.
+- Communication from the Cloud Controller to the Eirini component is unencrypted. This communication contains details of app configuration, including environment variables and service-binding credentials that may be sensitive.
+
+- The Eirini component API does not require its clients to authenticate. Other clients with access to the API could send requests that cause the Eirini component to create additional workloads on the target Kubernetes cluster.
+
+- The OCI image registry provided by the bits-service component does not require authentication. Clients with access to this registry and knowledge of the repository name corresponding to an app droplet can retrieve an OCI image that include that droplet.
 
 - PAS for Kubernetes does not yet enforce disk usage limits on app instances.
+
+- PAS for Kubernetes does not apply user namespaces to app instance containers, as Kubernetes does not yet support that container isolation mechanism.
 
 - PAS for Kubernetes currently requires that its Kubernetes service account have cluster-admin privileges.
 
 Future releases of PAS for Kubernetes will address some of these security limitations.
 
+
+## <a id='known-issues'></a>Known Issues
+
+- Some PAS system apps such as Apps Manager function correctly only when PAS for Kubernetes is configured to disable SSL verification or to use publicly trusted certificates for TLS termination of HTTP requests.
