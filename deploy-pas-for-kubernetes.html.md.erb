@@ -38,16 +38,16 @@ To configure the PAS for Kubernetes tile, do the following:
 
 1. Configure the PAS for Kubernetes tile the same way you configure the PAS tile. For more information, see [Configuring PAS](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) or [Quick Start PAS Configuration](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html).
 
-1. Configure the **Kubernetes** tab with the following values:
+1. Configure the **Kubernetes** tab as follows:
 
 ![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-pas-k8s-tile.png)
 
   - **PAS Workloads Namespace**: `pas-workloads`
   - **PAS System Namespace**: `pas-system`
-  - **Kubernetes URL**: A URL pointing to the `pas-for-kubernetes` cluster's master node
+  - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster.
   - **Kubernetes Service Account username**: `pas-system-service-account`
   - **Kubernetes Service Account password**:
-    Run the following commands to retrieve the `pas-system-service-account`'s token from the Kubernetes cluster:
+    Run the following commands to retrieve the token for the `pas-system-service-account` service account from the Kubernetes cluster:
 
     ```
     secret_name="$(kubectl get serviceaccount -n pas-system \
