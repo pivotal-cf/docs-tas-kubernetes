@@ -39,6 +39,21 @@ We discuss limitations and discrepancies from PAS below.
 
 <%= partial 'limitation_notes' %>
 
+- Scale of the PAS for Kubernetes tile has been validated only on the order of a few hundred app instances. Operation at larger scale may result in degraded behavior of new system components or integrations.
+
+
+### <a id='functional-limitations'></a>Known Functional Limitations
+
+- PAS for Kubernetes supports only buildpack-based apps on the `cflinuxfs3` stack. Support for Docker-image-based apps or Windows apps is not yet implemented.
+
+- PAS for Kubernetes supports only HTTP routing. Support for TCP routing and internal DNS-based routing is not yet implemented.
+
+- PAS for Kubernetes does not yet implement app tasks.
+
+- PAS for Kubernetes does not yet support SSH access to app instances.
+
+- Disk usage metrics for app instances are not yet implemented.
+
 
 ### <a id='security-limitations'></a>Known Security Limitations
 
