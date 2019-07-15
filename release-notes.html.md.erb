@@ -7,6 +7,9 @@ owner: PAS WOK
 
 **Release Date:** July 16, 2019
 
+<%= partial 'evaluation_only' %>
+
+
 ### <a id='features'></a> Features
 
 PAS for Kubernetes is based on Small Footprint PAS v2.6.0, and many of those PAS features work unchanged. In particular, buildpack-based apps can still take advantage of core PAS features.
@@ -23,10 +26,6 @@ Features in this release:
 ### <a id='known-limitations'></a> Known Limitations
 
 <%= partial 'limitation_notes' %>
-
-<p class="note warning">
-  Because of current feature, scale, and security limitations, the PAS for Kubernetes v2.6.0-alpha.1 tile is recommended <strong>only for evaluation environments</strong>.
-</p>
 
 - Operating at a scale larger than a few hundred app instances may result in performance issues from new system components or integrations.
 
