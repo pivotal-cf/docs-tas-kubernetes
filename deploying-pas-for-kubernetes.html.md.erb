@@ -4,8 +4,6 @@ owner: PAS WOK
 ---
 
 <strong>Previous</strong>: [Configuring Dependencies](configuring-dependencies.html)
-&middot;
-<strong>Next</strong>: [See PAS for Kubernetes in Action](see-pas-for-kubernetes-in-action.html)
 
 <hr>
 
@@ -42,7 +40,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
 1. Configure the PAS for Kubernetes tile the same way you configure the PAS tile. For more information, see [Configuring PAS](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) or [Quick Start PAS Configuration](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html).
 
-1. Configure the **Kubernetes** pane as follows:
+1. Configure the **Kubernetes** pane with the following values:
 
 ![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-pas-k8s-tile.png)
 
@@ -83,7 +81,18 @@ After configuring the PAS for Kubernetes tile, you must re-deploy PKS in additio
 
 1. Click **Apply Changes**.
 
+
+## <a id='verify'></a> Verify the Installation
+
+If you want to verify that the PAS installation succeeded and now runs app workloads on Kubernetes, do the following:
+
+1. Push an app to your PAS environment by running `cf push APP_NAME`.
+
+1. Observe the pod that corresponds to this app by running the following command:
+
+  ```
+kubectl get pods -n pas-workloads
+  ```
+
 <hr>
 <strong>Previous</strong>: [Configuring Dependencies](configuring-dependencies.html)
-&middot;
-<strong>Next</strong>: [See PAS for Kubernetes in Action](see-pas-for-kubernetes-in-action.html)

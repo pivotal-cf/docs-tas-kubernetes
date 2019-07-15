@@ -23,14 +23,15 @@ To configure the BOSH Director for the PAS for Kubernetes tile, do the following
 
 ## <a id='prepare-kubernetes'></a> Prepare a Kubernetes Cluster
 
-1. Follow the procedure in [Creating Clusters in PKS](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to log in with the `pks` CLI and create a cluster named `pas-for-kubernetes`.
+To prepare your Kubernetes cluster to receive PAS workloads, do the following:
 
-1. Configure `kubectl` to point to the PKS cluster you created by running the following command:
+1. Follow the procedure in [Creating Clusters in PKS](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to log in to PKS with the `pks` CLI and create a cluster named `pas-for-kubernetes`.
+
+1. Configure `kubectl` to target the `pas-for-kubernetes` Kubernetes cluster by running the following command:
 
     ```
     pks get-credentials pas-for-kubernetes
     ```
-    This points `kubectl` to the `pas-for-kubernetes` cluster.
 
 1. Run the following commands to create the required system namespace and service account in the `pas-for-kubernetes` cluster:
 
