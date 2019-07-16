@@ -14,7 +14,7 @@ The "Deploy App Logging Components Errand" also creates the DaemonSet for the Lo
 
 ## <a id='system-setup'></a> App Workloads on Kubernetes
 
-When PAS for Kubernetes runs an app on the targe Kubernetes cluster, the PAS components and Kubernetes interact as follows:
+When PAS for Kubernetes runs an app on the target Kubernetes cluster, the PAS components and Kubernetes interact as follows:
 
 - The Eirini component translates each running app into a Kubernetes StatefulSet and then submits that StatefulSet to the Kubernetes API.
 - The container image in that StatefulSet specification refers to an image that the bits-service OCI registry produces from the app droplet.
