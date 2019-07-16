@@ -1,0 +1,29 @@
+---
+title: How App Logging Works
+owner: PAS WOK
+---
+
+This topic discusses how the Loggregator system delivers logs from the Kubernetes app-instance pods to app developers via the Loggregator system.
+
+
+## <a id='system-components'></a> System Components
+
+The PAS for Kubernetes tile uses a DaemonSet to deploy Loggregator system components to each Kubernetes worker node. Each pod in this DaemonSet contains two containers:
+
+- The "loggregator-agent" container contains the same Loggregator agent that runs as a BOSH-deployed job on the other PAS for Kubernetes VMs. It is configured to connect to the doppler Loggregator component.
+
+- The "eirini-loggregator-fluentd" container contains fluentd as well as a plugin that configures fluentd to communicate with the loggregator agent.
+
+Each pod in the DaemonSet is configured to have access to the log files from the pods on its worker node.
+
+
+## <a id='app-log-flow'></a> App Log Flow
+
+When a PAS for Kubernetes app instance produces a log line, the Loggregator system conveys it to the app developer as follows:
+
+- The Docker server serializes the log line to a log file for the container. It also includes some metadata, such as the timestamp and the output stream (stdout or stderr).
+- The fluentd process in the local loggregator pod observes the new entry in the log file, converts it into a loggregator-formatted message, and emits that message to the local loggregator agent.
+- The Loggregator agent forwards the log message along to the Loggregator control plane processes running on BOSH VMs.
+- The Loggregator control plane aggregates the messages and makes them available to the Loggregator egress components such as the reverse log proxy and the log-cache that command such as `cf logs` use.
+
+For more about how Loggregator works, see the [Loggregator Architecture](https://docs.pivotal.io/pivotalcf/2-6/loggregator/architecture.html) page in the Pivotal Application Service docs.

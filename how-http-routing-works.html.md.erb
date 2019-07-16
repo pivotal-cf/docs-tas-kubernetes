@@ -1,0 +1,24 @@
+---
+title: How HTTP Routing Works
+owner: PAS WOK
+---
+
+This topic discusses how routes are registered and unregistered for app instances and how the Gorouters forward requests to them.
+
+
+## <a id='route-registrations'></a> Route Registrations
+
+The Eirini component is responsible for submitting Gorouter route-registration messages for all the running app instances as well as route-unregistration messages for instances that have crashed or have been shut down recently. The routes for each app are stored in an annotation on its StatefulSet.
+
+Eirini continually monitors both the StatefulSets and the PAS app-instance pods for changes. When changes to route registrations or app-instance status occur, the Eirini component synthesizes the corresponding route-registration or route-unregistration messages and sends them to the Gorouters via NATS messages.
+
+The destination of the app instance in each route-registration message is the IP for its pod on the pod network, along with the port on which the app haas been configured to listen.
+
+
+## <a id='request-handling'></a> Request Handling
+
+When a Gorouter receives a request on a route bound to an app, it selects an app instance target for that request and attempts to connect to that app instance. Because the route registration messages contain only the pod IP and port for the app instance, the Gorouter must be on a network that can route directly to the pod network in the target Kubernetes cluster.
+
+Of the container-networking options currently available in PKS, only the NSX-T Container Plugin provides this direct network connectivity between the BOSH-deployed Gorouter VMs and the app instance pods.
+
+See [HTTP Routing](https://docs.pivotal.io/pivotalcf/2-6/concepts/http-routing.html) in the Pivotal Application Service docs for more information about how HTTP routing works.
