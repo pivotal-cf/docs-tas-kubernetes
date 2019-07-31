@@ -3,19 +3,32 @@ title: Preparing to Install PAS for Kubernetes
 owner: PAS WOK
 ---
 
-This topic discusses configuring BOSH Director to work with Pivotal Application Service (PAS) for Kubernetes, creating a Kubernetes cluster with PKS, and preparing the Kubernetes cluster to receive PAS workloads.
+This topic describes how to prepare to install Pivotal Application Service (PAS) for Kubernetes.
+
+To prepare for installation, you must meet the prerequisites, configure the BOSH Director, and prepare your Kubernetes cluster to receive PAS workloads.
+
+<%= partial 'evaluation_only' %>
+
+<%= partial 'limitation_notes' %>
+
+## <a id='prerequisites'></a> Prerequisites
+
+To install and use PAS for Kubernetes, you need the following:
+
+- Ops Manager deployed to a vSphere environment with NSX-T.
+
+- Pivotal Container Service (PKS) v1.3 or later installed. It must be configured to use NSX-T for its container networking interface.
+
+- The `pks` CLI installed on your local machine. For more information, see [Installing the PKS CLI](https://docs.pivotal.io/runtimes/pks/installing-pks-cli.html).
+
+- The Kubernetes CLI, `kubectl`, installed on your local machine. For more information, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
 
-## <a id='overview'></a> Overview
-
-PAS for Kubernetes is packaged as an Ops Manager tile and is deployable with BOSH. To use PAS for Kubernetes, you must first create a Kubernetes cluster and configure it to receive PAS workloads.
-
-
-## <a id='configure-bosh'></a> Configure BOSH Director
+## <a id='configure-bosh'></a> Update BOSH Director Security Settings
 
 To configure the BOSH Director for the PAS for Kubernetes tile, do the following:
 
-1. In the **BOSH Director for vSphere** tile settings, go to **Security**.
+1. In the **BOSH Director for vSphere** tile, go to **Security** settings.
 
 1. Enable the **Include OpsManager Root CA in Trusted Certs** checkbox.
 
@@ -30,9 +43,9 @@ To configure the BOSH Director for the PAS for Kubernetes tile, do the following
 
 To prepare your Kubernetes cluster to receive PAS workloads, do the following:
 
-1. Follow the procedure in [Creating Clusters in PKS](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to log in to PKS with the `pks` CLI and create a cluster named `pas-for-kubernetes`.
+1. Follow the procedure in [Creating Clusters](https://docs.pivotal.io/runtimes/pks/create-cluster.html) to log in to PKS with the `pks` CLI. For the value of `CLUSTER-NAME`, enter `pas-for-kubernetes`.
 
-1. Using the `kubectl` CLI, target the `pas-for-kubernetes` Kubernetes cluster by running the following command:
+1. Target the `pas-for-kubernetes` Kubernetes cluster by running the following command:
 
     ```
     pks get-credentials pas-for-kubernetes
@@ -47,3 +60,5 @@ To prepare your Kubernetes cluster to receive PAS workloads, do the following:
       --clusterrole=cluster-admin \
       --serviceaccount pas-system:pas-system-service-account
     ```
+
+    The values for `namespace` and `serviceaccount` are used in the follow-up procedure: [Deploying PAS for Kubernetes](deploying-pas-for-kubernetes.html).
