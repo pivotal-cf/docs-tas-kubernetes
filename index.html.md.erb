@@ -9,7 +9,7 @@ This guide describes setting up and using Pivotal Application Service (PAS) for 
 
 ## <a id='overview'></a> Overview
 
-Pivotal Application Service (PAS) for Kubernetes combines the development experience of PAS and the Kubernetes container orchestrator. It includes the most important features of PAS, such as `cf push` for many buildpack-based apps, while running PAS app instances on Kubernetes.
+PAS for Kubernetes combines the development experience of PAS and the Kubernetes container orchestrator. It includes the most important features of PAS, such as `cf push` for many buildpack-based apps, while running PAS app instances on Kubernetes.
 
 PAS for Kubernetes is packaged as an Ops Manager tile, is deployable with BOSH, and has dependencies on Pivotal Container Service (PKS), vSphere, and NSX-T.
 
@@ -25,8 +25,8 @@ The diagram illustrates the following user flow:
 
 1. The app developer requests to push an app to PAS for Kubernetes using the Cloud Foundry Command Line Interface (cf CLI).
 
-1. The Cloud Controller passes the request to Eirini. 
+1. The Cloud Controller passes the request to Eirini.
 
-1. Eirini translates the app from its representation in Cloud Controller into a `StatefulSet` resource in Kubernetes and submits it to the Kubernetes API. 
+1. Eirini translates the app from its representation in Cloud Controller into a `StatefulSet` resource in Kubernetes and submits it to the Kubernetes API.
 
-1. Kubernetes schedules a pod for an app instance onto a worker node. 
+1. Kubernetes schedules a pod for an app instance onto a worker node.

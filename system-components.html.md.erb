@@ -3,30 +3,43 @@ title: System Components
 owner: PAS WOK
 ---
 
-This topic discusses the key components in the PAS for Kubernetes tile.
+This topic describes the key components of the Pivotal Application Service (PAS) for Kubernetes tile.
 
-## <a id='small-footprint'></a> Small Footprint PAS tile
+## <a id='overview'></a>Overview
 
-The PAS for Kubernetes tile includes the system components and BOSH instance groups from the Small Footprint PAS tile. For more information about the Small Footprint PAS tile, see the [Getting Started with Small Footprint PAS](https://docs.pivotal.io/pivotalcf/2-6/customizing/small-footprint.html) topic in the Pivotal Cloud Foundry documentation.
+PAS for Kubernetes includes components that provide support for BOSH and PAS features, as well as
+other components that extend PAS functionality to the Kubernetes platform. Components from the Small
+Footprint PAS tile, the bits-service, and an internal Docker registry enable PAS features, and Eirini
+enables PAS workloads to run on Kubernetes.
 
+## <a id='small-footprint'></a> Small Footprint PAS Tile
 
-## <a id='eirini'></a> Eirini
-
-The PAS for Kubernetes tile also includes the Eirini component. The Eirini component enables app workloads to run on Kubernetes by translating the app from its representation in Cloud Controller into a StatefulSet resource in Kubernetes. Additionally, it works with Cloud Controller periodically to ensure that if the sets of started apps and StatefulSets ever differ, the set of StatefulSets is corrected to match the set of started apps.
-
-The Eirini component also registers HTTP routes for app instances with active routes and relays container metrics from Kubernetes into the loggregator system.
-
-For more information about Eirini, see the [Eirini Project](https://www.cloudfoundry.org/project-eirini/).
-
+The PAS for Kubernetes tile includes the system components and BOSH instance groups from the Small Footprint
+PAS tile. For more information about the Small Footprint PAS tile, see the [Getting Started with Small Footprint
+PAS](https://docs.pivotal.io/pivotalcf/2-6/customizing/small-footprint.html) topic in the Pivotal Cloud Foundry documentation.
 
 ## <a id='bits-service'></a> Bits-Service
 
-The PAS for Kubernetes tile deploys the bits-service to manage application and buildpack file assets on behalf of the Cloud Controller. It supports the Eirini component by converting app droplets into OCI images. Eirini then refers to these images when it runs those apps on the Kubernetes cluster.
+The PAS for Kubernetes tile deploys the bits-service to manage app and buildpack file assets on behalf of the
+Cloud Controller. It supports Eirini by converting app droplets into Open Container Initiative (OCI) images.
+Eirini then refers to the OCI images when it runs those apps on the Kubernetes cluster.
 
-For more information about the bits-service, see the [Bits-Service GitHub repository](https://github.com/cloudfoundry-incubator/bits-service).
-
+For more information about the bits-service, see the [bits-service repository](https://github.com/cloudfoundry-incubator/bits-service) on GitHub.
 
 ## <a id='docker-registry'></a> Internal Docker Registry
 
-The PAS for Kubernetes tile deploys an internal docker registry to host the container images for the Loggregator components that run on the Kubernetes worker nodes. Read more about [how Loggregator works in PAS for Kubernetes](how-app-logging-works.html).
+The PAS for Kubernetes tile deploys an internal Docker registry to host the container images for the Loggregator
+components that run on the Kubernetes worker nodes. For more information about Loggregator in PAS for Kubernetes,
+see [How App Logging Works](how-app-logging-works.html).
 
+## <a id='eirini'></a> Eirini
+
+The Eirini component enables app workloads to run on Kubernetes by translating the app from its representation in
+Cloud Controller into a StatefulSet resource in Kubernetes. Additionally, Eirini works with Cloud Controller
+to ensure that if the sets of started apps and StatefulSets ever differ, the set of StatefulSets is corrected to match
+the set of started apps.
+
+Eirini also registers HTTP routes for app instances with active routes and relays container metrics from
+Kubernetes into the Loggregator system.
+
+For more information about Eirini, see the [Eirini Project](https://www.cloudfoundry.org/project-eirini/).
