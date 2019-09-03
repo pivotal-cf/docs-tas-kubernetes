@@ -7,18 +7,21 @@ This topic describes the key components of the Pivotal Application Service (PAS)
 
 ## <a id='overview'></a>Overview
 
-PAS for Kubernetes includes components that provide support for BOSH and PAS features, as well as
-other components that extend PAS functionality to the Kubernetes platform. Components from the Small
-Footprint PAS tile, the bits-service, and an internal Docker registry enable PAS features, and Eirini
-enables PAS workloads to run on Kubernetes.
+PAS for Kubernetes includes components that provide support for BOSH and PAS features as well as
+other components that extend PAS functionality to the Kubernetes platform. To enable PAS features,
+PAS for Kubernetes includes components from the Small Footprint PAS tile, such as the bits-service
+and an internal Docker registry. The Eirini component enables PAS workloads to run on Kubernetes.
 
 ## <a id='small-footprint'></a> Small Footprint PAS Tile
 
 The PAS for Kubernetes tile includes the system components and BOSH instance groups from the Small Footprint
-PAS tile. For more information about the Small Footprint PAS tile, see the [Getting Started with Small Footprint
-PAS](https://docs.pivotal.io/pivotalcf/2-6/customizing/small-footprint.html) topic in the Pivotal Cloud Foundry documentation.
+PAS tile. The system components, including the bits-service and internal Docker registry, provide support for
+apps that run on PAS.
 
-## <a id='bits-service'></a> Bits-Service
+For more information about the Small Footprint PAS tile, see the [Getting Started with Small Footprint
+PAS](https://docs.pivotal.io/pivotalcf/customizing/small-footprint.html) topic in the Pivotal Cloud Foundry documentation.
+
+### <a id='bits-service'></a> Bits-Service
 
 The PAS for Kubernetes tile deploys the bits-service to manage app and buildpack file assets on behalf of the
 Cloud Controller. It supports Eirini by converting app droplets into Open Container Initiative (OCI) images.
@@ -26,18 +29,19 @@ Eirini then refers to the OCI images when it runs those apps on the Kubernetes c
 
 For more information about the bits-service, see the [bits-service repository](https://github.com/cloudfoundry-incubator/bits-service) on GitHub.
 
-## <a id='docker-registry'></a> Internal Docker Registry
+### <a id='docker-registry'></a> Internal Docker Registry
 
 The PAS for Kubernetes tile deploys an internal Docker registry to host the container images for the Loggregator
-components that run on the Kubernetes worker nodes. For more information about Loggregator in PAS for Kubernetes,
-see [How App Logging Works](how-app-logging-works.html).
+components that run on the Kubernetes worker nodes.
+
+For more information about Loggregator in PAS for Kubernetes, see [How App Logging Works](how-app-logging-works.html).
 
 ## <a id='eirini'></a> Eirini
 
 The Eirini component enables app workloads to run on Kubernetes by translating the app from its representation in
-Cloud Controller into a StatefulSet resource in Kubernetes. Additionally, Eirini works with Cloud Controller
-to ensure that if the sets of started apps and StatefulSets ever differ, the set of StatefulSets is corrected to match
-the set of started apps.
+Cloud Controller into a StatefulSet resource in Kubernetes. Eirini works with Cloud Controller to monitor and compare
+the sets of started apps to the StatefulSet resources. If Eirini detects a difference between a set of started apps and
+its corresponding StatefulSet, Eirini updates the StatefulSet to match the set of started apps.
 
 Eirini also registers HTTP routes for app instances with active routes and relays container metrics from
 Kubernetes into the Loggregator system.
