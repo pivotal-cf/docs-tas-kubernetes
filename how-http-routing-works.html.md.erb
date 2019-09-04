@@ -8,15 +8,26 @@ Service (PAS) for Kubernetes, and how the Gorouters forward requests to them.
 
 ## <a id='route-registrations'></a> Route Registrations
 
-Eirini is responsible for submitting Gorouter route-registration messages for all the running app instances as well as route-unregistration messages for instances that have crashed or have been shut down recently. The routes for each app are stored in an annotation on its StatefulSet.
+Eirini is responsible for submitting Gorouter route-registration messages for all the running app
+instances as well as route-unregistration messages for instances that have crashed or have been shut
+down recently.
 
-Eirini continually monitors both the StatefulSets and the PAS app instance pods for changes. When changes to route registrations or app instance status occur, Eirini synthesizes the corresponding route-registration or route-unregistration messages and sends them to the Gorouters using NATS messages.
+Each StatefulSet contains an annotation with the app instance's routes. The route-registration messages
+contain both the IP address for the app instance's pod on the pod network and the port number that the app listens on.
 
-The destination of the app instance in each route-registration message is the IP address for its pod on the pod network, along with the port on which the app has been configured to listen.
+To handle route registrations and unregistrations:
+
+1. Eirini monitors both StatefulSets and PAS app instance pods for changes in route registration or app instance status.
+1. When Eirini detects a change, it synthesizes the route-registration or route-unregistration messages
+that correspond to the app instance change.
+1. Eirini sends the synthesized messages to the Gorouters over NATS.
 
 ## <a id='request-handling'></a> Request Handling
 
-When a Gorouter receives a request on a route bound to an app, it selects an app instance target for that request and attempts to connect to that app instance. Because the route registration messages contain only the pod IP address and port number for the app instance, the Gorouter must be on a network that can route directly to the pod network in the target Kubernetes cluster.
+When a Gorouter receives a request on a route that is bound to an app, it selects an app instance target
+for that request and attempts to connect to that app instance. Because the route registration messages
+contain only the pod IP address and port number for the app instance, the Gorouter must be on a network
+that can route directly to the pod network in the target Kubernetes cluster.
 
 Of the container-networking options currently available in Pivotal Container Service (PKS), only the NSX-T Container Plugin provides this direct network connectivity between the BOSH-deployed Gorouter VMs and the app instance pods.
 
