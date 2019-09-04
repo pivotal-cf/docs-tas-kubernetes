@@ -1,5 +1,5 @@
 ---
-title: Interactions with Kubernetes
+title: How Interactions with Kubernetes Work
 owner: PAS WOK
 ---
 
@@ -12,21 +12,33 @@ The PAS for Kubernetes tile runs app workloads in a Kubernetes namespace that is
 namespace that runs system components. The **Deploy App Logging Components Errand** creates this namespace
 for app workloads if it does not already exist.
 
-The **Deploy App Logging Components Errand** also creates the DaemonSet for Loggregator components. For more
-information about Loggregator in PAS for Kubernetes, see [How App Logging Works](how-app-logging-works.html).
+The **Deploy App Logging Components Errand** also creates the DaemonSet for Loggregator components.
+
+For more information about Loggregator in PAS for Kubernetes, see [How App Logging Works](how-app-logging-works.html).
 
 ## <a id='system-setup'></a> App Workloads on Kubernetes
 
-When PAS for Kubernetes runs an app on the target Kubernetes cluster, the PAS components and Kubernetes interact as follows:
+This section describes how the PAS for Kubernetes components interact to run and manage PAS app workloads
+on Kubernetes clusters.
 
-- Eirini translates each running app into a Kubernetes StatefulSet and then submits that StatefulSet to the Kubernetes API. The StatefulSet includes a reference to an image that corresponds to an app droplet.
-- The bits-service, as a Docker registry, produces and serves a container image based on the app droplet.
-- When Kubernetes schedules a pod for an app instance on a worker node, that worker node pulls the container image from the
+### <a id='app-starting'></a> Starting an App Workload
+
+To run an app on a Kubernetes cluster, the PAS for Kubernetes components interact as follows:
+
+1. Eirini translates each running app into a Kubernetes StatefulSet and then submits that StatefulSet to the Kubernetes API. The StatefulSet includes an image reference that corresponds to an app droplet.
+1. The bits-service, as a Docker registry, produces and serves a container image based on the app droplet.
+1. When Kubernetes schedules a pod for an app instance on a worker node, that worker node pulls the container image from the
 bits-service registry to create the container for that pod.
 
-When Cloud Controller receives a request to report on the status of an app's instances, it makes a request for the app instance
-status to Eirini. Eirini then obtains information about the app instance pods for that app from the Kubernetes API and relays
-that information back to Cloud Controller. Cloud Controller uses the information from Eirini in its response.
+### <a id='app-reporting'></a> Reporting Workload Status
+
+To respond to a workload status request, the PAS for Kubernetes components interact as follows:
+
+1. When Cloud Controller receives a request to report on the status of an app's instances, it makes a request to Eirini.
+1. Eirini obtains information about the app instance pods from the Kubernetes API and relays that information back to Cloud Controller.
+1. Cloud Controller responds to the status request using the information from Eirini.
 
 Eirini also registers HTTP routes for running app instances that include information about the network addresses of the app instance
-pods. For more information about HTTP routing in PAS for Kubernetes, see [How HTTP Routing Works](how-http-routing-works.html).
+pods.
+
+For more information about HTTP routing in PAS for Kubernetes, see [How HTTP Routing Works](how-http-routing-works.html).
