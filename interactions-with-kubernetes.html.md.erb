@@ -8,6 +8,8 @@ tile interact with the Kubernetes cluster.
 
 ## <a id='system-setup'></a> System Setup with Tile Errands
 
+PAS for Kubernetes uses a tile errand to set up a dedicated namespace for app workloads.
+
 The PAS for Kubernetes tile runs app workloads in a Kubernetes namespace that is separate from the
 namespace that runs system components. The **Deploy App Logging Components Errand** creates this namespace
 for app workloads if it does not already exist.
