@@ -36,6 +36,37 @@ To configure the PAS for Kubernetes tile, do the following:
   - **OCI Registry Hostname**: Hostname of the OCI registry to which the PAS for Kubernetes tile should publish system images.
   - **OCI Registry Credentials**: User credentials for OCI registry authentication.
 
+1. Configure the **Kubernetes** pane with the following values:
+
+![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-pas-k8s-tile.png)
+
+  - **PAS Workloads Namespace**: `pas-workloads` (default value)
+  - **PAS System Namespace**: `pas-system` (default value)
+  - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
+  - **Kubernetes Service Account username**:
+    Run the following command to retrieve the name of the service account created by PKS after running `pks get-credentials`:
+
+    ```
+    kubectl config view --minify --raw -o jsonpath='{.users[0].name}'
+    ```
+
+  - **Kubernetes Service Account password**:
+    Run the following command to retrieve the token for the service account created by PKS after running `pks get-credentials`:
+
+    ```
+    kubectl config view --minify --raw -o jsonpath='{.users[0].user.token}'
+    ```
+
+  - **Kubernetes CA Certificate**:
+    Run the following command to retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster:
+
+    ```
+    kubectl config view --raw --minify \
+      -o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
+      | base64 --decode
+    ```
+    Use the output as the Kubernetes CA certificate. This output should begin with `-----BEGIN CERTIFICATE-----` and end with `-----END CERTIFICATE-----`.
+
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
 
