@@ -22,28 +22,31 @@ To install and use PAS for Kubernetes, you need the following:
 - Download the [VMWare Harbor Registry](https://network.pivotal.io/products/harbor-container-registry/) tile
 
 
-## <a id='configure-bosh'></a> Update BOSH Director Security Settings
-
-To configure the BOSH Director for the PAS for Kubernetes tile, do the following:
-
-1. In the **BOSH Director** tile, go to **Security** settings.
-
-1. Place the certificates for the CAs signing your OCI registry's server certificate in the **Trusted Certificates** text box.
-
-1. Click **Save**.
-
-1. Go to the **Installation Dashboard**.
-
-1. Click **Review Pending Changes**, then **Apply Changes**.
-
-
 ## <a id='deploy-harbor'></a> Deploy Harbor Registry
 
-PAS for Kubernetes requires an internal OCI registry to which it can deploy OCI images for its system components.
+PAS for Kubernetes requires an internal OCI image registry to which it can deploy OCI images for its system components.
 
 Currently it only supports limited integration with the Harbor Registry so we must deploy Harbor Registry as such:
 
 1. Follow the general installation instructions for Harbor Registry here: https://docs.pivotal.io/partners/vmware-harbor/installing.html
     - When configuring [Harbor Authentication Mode](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_authentication) ensure the `Internal` authentication mode is used
         - PAS for Kubernetes does not yet support any of Harbor Registry's other authentication modes
-1. Save off the credentials for the Harbor system administrator account configured on [installation](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_credentials) as they will need to be supplied during installation of PAS for Kubernetes
+1. Ensure you can [login to the Harbor UI](https://docs.pivotal.io/partners/vmware-harbor/using.html)
+1. In the Harbor UI, [create a user](https://github.com/goharbor/harbor/blob/v1.8.5/docs/user_guide.md#managing-members-of-a-project) with the `Developer` role for the desired [Harbor project](https://github.com/goharbor/harbor/blob/master/docs/user_guide.md#managing-projects) to which the PAS for Kubernetes tile will push its system component images
+1. Save off the credentials for the user created above as they will need to be supplied during installation of PAS for Kubernetes
+
+
+## <a id='configure-bosh'></a> Update BOSH Director Security Settings
+
+To configure the BOSH Director for the PAS for Kubernetes tile, do the following:
+
+1. In the **BOSH Director** tile, go to **Security** settings.
+
+1. Place the certificates for the CAs signing your OCI image registry's server certificate in the **Trusted Certificates** text box.
+    - When integrating with the Harbor Registry, these CA certificates correspond to the CA certificates signing the Harbor Registry's server certificate [configured during installation](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_certificate)
+
+1. Click **Save**.
+
+1. Go to the **Installation Dashboard**.
+
+1. Click **Review Pending Changes**, then **Apply Changes**.
