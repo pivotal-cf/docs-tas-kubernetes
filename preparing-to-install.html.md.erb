@@ -19,7 +19,7 @@ To install and use PAS for Kubernetes, you need the following:
 
 - The Kubernetes CLI, `kubectl`, installed on your local machine. For more information, see [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the Kubernetes documentation.
 
-- An OCI registry. We would suggest using [VMWare Harbor Registry](https://network.pivotal.io/products/harbor-container-registry/).
+- Download the [VMWare Harbor Registry](https://network.pivotal.io/products/harbor-container-registry/) tile
 
 
 ## <a id='configure-bosh'></a> Update BOSH Director Security Settings
@@ -35,3 +35,15 @@ To configure the BOSH Director for the PAS for Kubernetes tile, do the following
 1. Go to the **Installation Dashboard**.
 
 1. Click **Review Pending Changes**, then **Apply Changes**.
+
+
+## <a id='deploy-harbor'></a> Deploy Harbor Registry
+
+PAS for Kubernetes requires an internal OCI registry to which it can deploy OCI images for its system components.
+
+Currently it only supports limited integration with the Harbor Registry so we must deploy Harbor Registry as such:
+
+1. Follow the general installation instructions for Harbor Registry here: https://docs.pivotal.io/partners/vmware-harbor/installing.html
+    - When configuring [Harbor Authentication Mode](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_authentication) ensure the `Internal` authentication mode is used
+        - PAS for Kubernetes does not yet support any of Harbor Registry's other authentication modes
+1. Save off the credentials for the Harbor system administrator account configured on [installation](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_credentials) as they will need to be supplied during installation of PAS for Kubernetes

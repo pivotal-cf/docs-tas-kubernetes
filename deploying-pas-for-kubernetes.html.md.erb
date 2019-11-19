@@ -37,26 +37,22 @@ To configure the PAS for Kubernetes tile, do the following:
   - **OCI Registry Credentials**: User credentials for OCI registry authentication.
 
 1. Configure the **Kubernetes** pane with the following values:
-
-![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-pas-k8s-tile.png)
-
+![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-kubernetes-pane.png)
   - **PAS Workloads Namespace**: `pas-workloads` (default value)
   - **PAS System Namespace**: `pas-system` (default value)
   - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
-  - **Kubernetes Service Account username**:
+  - **Kubernetes Service Account - Username**:
     Run the following command to retrieve the name of the service account created by PKS after running `pks get-credentials`:
 
     ```
     kubectl config view --minify --raw -o jsonpath='{.users[0].name}'
     ```
-
-  - **Kubernetes Service Account password**:
+  - **Kubernetes Service Account - Password**:
     Run the following command to retrieve the token for the service account created by PKS after running `pks get-credentials`:
 
     ```
     kubectl config view --minify --raw -o jsonpath='{.users[0].user.token}'
     ```
-
   - **Kubernetes CA Certificate**:
     Run the following command to retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster:
 
@@ -66,6 +62,15 @@ To configure the PAS for Kubernetes tile, do the following:
       | base64 --decode
     ```
     Use the output as the Kubernetes CA certificate. This output should begin with `-----BEGIN CERTIFICATE-----` and end with `-----END CERTIFICATE-----`.
+
+1. Configure the **OCI Registry** pane with the following values:
+![OCI Registry pane in PAS for Kubernetes tile](/assets/configure-oci-registry-pane.png)
+  - **OCI Registry Hostname**: The value provided for `Hostname` in the `General` pane in the `VMWare Harbor Registry` tile: https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_general
+  - **OCI Registry Repository Name Prefix**: The name of the desired [Harbor project](https://github.com/goharbor/harbor/blob/master/docs/user_guide.md#managing-projects) to push images to
+      - This **must** be supplied when integrating with Harbor Registry
+  - **OCI Registry Credentials - Username**: The username of the Harbor system administrator account configured on [Harbor Registry installation](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_credentials)
+      - Unless overridden after initial Harbor Registry installation, this will default to the username `admin`
+  - **OCI Registry Credentials - Password**: The password for the Harbor system administrator account configured on [Harbor Registry installation](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_credentials)
 
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
