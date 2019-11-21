@@ -34,8 +34,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
 1. Configure the **Kubernetes** pane with the following values:
 ![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-kubernetes-pane.png)
-  - **PAS Workloads Namespace**: `pas-workloads` (default value)
-  - **PAS System Namespace**: `pas-system` (default value)
+  - **PAS Workloads Namespace**: The namespace in which application workloads will run. If this namespace does not already exist in the Kubernetes cluster, it will be created. Note that all system components will be run inside the `pas-system` namespace, which will also be created if it doesn't already exist. We recommend separating the application workloads from the system components by choosing a namespace other than `pas-system` here.
   - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
   - **Kubernetes Service Account - Username**:
     Run the following command to retrieve the name of the service account created by PKS after running `pks get-credentials`:
