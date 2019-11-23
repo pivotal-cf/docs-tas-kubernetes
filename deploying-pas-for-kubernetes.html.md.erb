@@ -32,6 +32,12 @@ The PAS for Kubernetes tile will then appear staged as in the screenshot below:
 
 To configure the PAS for Kubernetes tile, do the following:
 
+1. Configure the **Networking** pane with the following values:
+![Networking pane in PAS for Kubernetes tile](/assets/configure-networking-pane.png)
+  - **CA Certificate for Ingress Gateway Router**: The PEM-encoded Certificate Authority (CA) certificate used to sign the certificate provided below.
+  - **TLS Certificate and Private Key for Ingress Gateway Router**: The PEM-encoded certificate and private key used to terminate TLS traffic for the foundation. The Common Name (CN) or Subject Alternative Names (SANs) for the provided certificate should include the domain configured for `System Domain` in the `Domains` pane.
+      - For example, if the System Domain is configured as `system.example.com`, then the certificate should be valid for `*.system.example.com`.
+
 1. Configure the **Kubernetes** pane with the following values:
 ![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-kubernetes-pane.png)
   - **PAS Workloads Namespace**: The namespace in which application workloads will run. If this namespace does not already exist in the Kubernetes cluster, it will be created. Note that all system components will be run inside the `pas-system` namespace, which will also be created if it doesn't already exist. We recommend separating the application workloads from the system components by choosing a namespace other than `pas-system` here.
