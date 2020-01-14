@@ -3,12 +3,12 @@ title: Deploying PAS for Kubernetes
 owner: PAS WOK
 ---
 
-This topic discusses how to configure and deploy the Pivotal Application Service (PAS) for Kubernetes tile.
+This topic describes how to configure and deploy the Pivotal Application Service (PAS) for Kubernetes tile.
 
 
 ## <a id='download-tile'></a> Download the PAS for Kubernetes Tile
 
-To download the PAS for Kubernetes tile, do the following:
+To download the PAS for Kubernetes tile:
 
 1. Go to [Pivotal Network](https://network.pivotal.io) and sign in.
 
@@ -19,7 +19,7 @@ To download the PAS for Kubernetes tile, do the following:
 
 ## <a id='upload-tile'></a> Upload the Tile to Ops Manager
 
-To upload the PAS for Kubernetes tile to Ops Manager, do the following:
+To upload the PAS for Kubernetes tile to Ops Manager:
 
 1. In Ops Manager, click **Import a Product** to upload the PAS for Kubernetes tile.
 
@@ -30,11 +30,10 @@ The PAS for Kubernetes tile will then appear staged as in the screenshot below:
 
 ## <a id='configure-tile'></a> Configure the Tile
 
-To configure the PAS for Kubernetes tile, do the following:
+To configure the PAS for Kubernetes tile:
 
 1. Configure the **Domains** pane with the following values:
   - **System Domain**: This field defines the base domain for the PAS for Kubernetes installation. For example, `system.example.com`. PAS for Kubernetes assigns subdomains of this domain to system components such as Cloud Controller and UAA.
-
 
 1. Configure the **Networking** pane with the following values:
 ![Networking pane in PAS for Kubernetes tile](/assets/configure-networking-pane.png)
@@ -44,22 +43,22 @@ To configure the PAS for Kubernetes tile, do the following:
 
 1. Configure the **Kubernetes** pane with the following values:
 ![Kubernetes pane in PAS for Kubernetes tile](/assets/configure-kubernetes-pane.png)
-  - **PAS Workloads Namespace**: The namespace in which application workloads will run. If this namespace does not already exist in the Kubernetes cluster, it will be created. Note that all system components will be run inside the `pas-system` namespace, which will also be created if it doesn't already exist. We recommend separating the application workloads from the system components by choosing a namespace other than `pas-system` here.
+  - **PAS Workloads Namespace**: The namespace in which app workloads are to run. If this namespace does not already exist in the Kubernetes cluster, the Kubernetes cluster creates it. All system components run inside the `pas-system` namespace, which the Kubernetes cluster also creates if it does not already exist. <%= vars.recommended_by%> recommends separating the app workloads from the system components by choosing a namespace other than `pas-system` here.
   - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
   - **Kubernetes Service Account - Username**:
-    Run the following command to retrieve the name of the service account created by PKS after running `pks get-credentials`:
+    To retrieve the name of the service account created by PKS after running `pks get-credentials`, run:
 
     ```
     kubectl config view --minify --raw -o jsonpath='{.users[0].name}'
     ```
   - **Kubernetes Service Account - Password**:
-    Run the following command to retrieve the token for the service account created by PKS after running `pks get-credentials`:
+    To retrieve the token for the service account created by PKS after running `pks get-credentials`, run:
 
     ```
     kubectl config view --minify --raw -o jsonpath='{.users[0].user.token}'
     ```
   - **Kubernetes CA Certificate**:
-    Run the following command to retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster:
+    To retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster, run:
 
     ```
     kubectl config view --raw --minify \
@@ -70,7 +69,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
 1. Configure the **OCI Image Registry** pane with the following values:
 ![OCI Image Registry pane in PAS for Kubernetes tile](/assets/configure-oci-registry-pane.png)
-  - **OCI Image Registry Hostname**: The value provided for `Hostname` in the `General` pane in the `VMWare Harbor Registry` tile: https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_general
+  - **OCI Image Registry Hostname**: The value provided for **Hostname** in the **General** pane in the [VMWare Harbor Registry tile](https://docs.pivotal.io/partners/vmware-harbor/installing.html#configure_general)
   - **OCI Image Registry Repository Name Prefix**: The name of the desired [Harbor project](https://github.com/goharbor/harbor/blob/master/docs/user_guide.md#managing-projects) to push images to
       - This **must** be supplied when integrating with Harbor Registry
   - **OCI Image Registry Credentials - Username**: The username of the Harbor project user created when [Preparing to Install PAS for Kubernetes](./preparing-to-install.html#deploy-harbor)
@@ -79,7 +78,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes
 
-After configuring the PAS for Kubernetes tile, do the following:
+After configuring the PAS for Kubernetes tile:
 
 1. Click **Review Pending Changes** in Ops Manager.
 
