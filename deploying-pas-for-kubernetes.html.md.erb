@@ -3,12 +3,12 @@ title: Deploying PAS for Kubernetes
 owner: PAS WOK
 ---
 
-This topic discusses how to configure and deploy the Pivotal Application Service (PAS) for Kubernetes tile.
+This topic describes how to configure and deploy the Pivotal Application Service (PAS) for Kubernetes tile.
 
 
 ## <a id='download-tile'></a> Download the PAS for Kubernetes Tile
 
-To download the PAS for Kubernetes tile, do the following:
+To download the PAS for Kubernetes tile:
 
 1. Go to [Pivotal Network](https://network.pivotal.io) and sign in.
 
@@ -19,7 +19,7 @@ To download the PAS for Kubernetes tile, do the following:
 
 ## <a id='upload-tile'></a> Upload the Tile to Ops Manager
 
-To upload the PAS for Kubernetes tile to Ops Manager, do the following:
+To upload the PAS for Kubernetes tile to Ops Manager:
 
 1. In Ops Manager, click **Import a Product** to upload the PAS for Kubernetes tile.
 
@@ -32,7 +32,7 @@ The PAS for Kubernetes tile will then appear staged as in the screenshot below:
 
 ## <a id='configure-tile'></a> Configure the Tile
 
-To configure the PAS for Kubernetes tile, do the following:
+To configure the PAS for Kubernetes tile:
 
 1. Configure the PAS for Kubernetes tile the same way you configure the PAS tile. For more information, see [Configuring PAS](https://docs.pivotal.io/pivotalcf/customizing/configure-pas.html) or [Quick Start PAS Configuration](https://docs.pivotal.io/pivotalcf/customizing/quickstart-pas.html).
 
@@ -45,7 +45,7 @@ To configure the PAS for Kubernetes tile, do the following:
   - **Kubernetes URL**: The URL for the master node of the `pas-for-kubernetes` cluster, as reported by `kubectl cluster-info`.
   - **Kubernetes Service Account username**: `pas-system-service-account`
   - **Kubernetes Service Account password**:
-    Run the following commands to retrieve the token for the `pas-system-service-account` service account from the Kubernetes cluster:
+    To retrieve the token for the `pas-system-service-account` service account from the Kubernetes cluster, run:
 
     ```
     secret_name="$(kubectl get serviceaccount -n pas-system \
@@ -57,7 +57,7 @@ To configure the PAS for Kubernetes tile, do the following:
     Use the value returned by the second command (`kubectl get secret` ...) as the Kubernetes service account password.
 
   - **Kubernetes CA Certificate**:
-    Run the following command to retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster:
+    To retrieve the PEM-encoded CA certificate bundle from the Kubernetes cluster, run:
 
     ```
     kubectl config view --raw --minify \
@@ -69,7 +69,7 @@ To configure the PAS for Kubernetes tile, do the following:
 
 ## <a id='deploy'></a> Deploy PAS for Kubernetes and Re-Deploy PKS
 
-After configuring the PAS for Kubernetes tile, you must re-deploy PKS in addition to deploying the PAS for Kubernetes tile. Do the following:
+After configuring the PAS for Kubernetes tile, you must re-deploy PKS in addition to deploying the PAS for Kubernetes tile. To re-deploy both tiles:
 
 1. Click **Review Pending Changes** in Ops Manager.
 
@@ -82,10 +82,15 @@ After configuring the PAS for Kubernetes tile, you must re-deploy PKS in additio
 
 If you want to verify that the PAS installation succeeded and now runs app workloads on Kubernetes, do the following:
 
-1. Push an app to your PAS environment by running `cf push APP_NAME`.
+1. Push an app to your PAS environment by running:
 
-1. Observe the pod that corresponds to this app by running the following command:
+    ```
+    cf push APP-NAME
+    ```
+    Where `APP-NAME` is the name of your app.
 
-  ```
-kubectl get pods -n pas-workloads
-  ```
+1. To observe the pod that corresponds to this app, run:
+
+    ```
+    kubectl get pods -n pas-workloads
+    ```
