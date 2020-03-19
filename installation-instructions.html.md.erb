@@ -191,9 +191,9 @@ There is another script contained within the unpacked artifact that can automati
 	> ⌛ Deploying takes approximately 10-15 minutes.
 
 	```bash
-	export REGISTRY_SERVER="registry.pivotal.io"
-	export REGISTRY_USER="..."
-	export REGISTRY_PASSWORD="..."
+	export YTT_TAS_registry__server="registry.pivotal.io"
+	export YTT_TAS_registry__username="..."
+	export YTT_TAS_registry__password="..."
 	
 	cd tanzu-application-service
 	bin/install-tas.sh /path/to/deployment-values.yml
@@ -201,9 +201,9 @@ There is another script contained within the unpacked artifact that can automati
 	
 	Where:
 	
-	* `REGISTRY_SERVER` is the FQDN of the Tanzu Network Registry, e.g. `registry.pivotal.io`.
-	* `REGISTRY_USER` is your Tanzu Network username
-	* `REGISTRY_PASSWORD` is your Tanzu Network password
+	* `YTT_TAS_registry__server` is the FQDN of the Tanzu Network Registry, e.g. `registry.pivotal.io`.
+	* `YTT_TAS_registry__username` is your Tanzu Network username
+	* `YTT_TAS_registry__password` is your Tanzu Network password
 
 ### Post-Deployment Configuration
 

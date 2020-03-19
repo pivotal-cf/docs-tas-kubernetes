@@ -1,4 +1,4 @@
-# Documentation for PAS for Kubernetes
+# Documentation for Tanzu Application Service for Kubernetes
 
 Require [this bookbind repo](https://github.com/pivotal-cf/docs-book-pas-kubernetes) to run locally.
 
