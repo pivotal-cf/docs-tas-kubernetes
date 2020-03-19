@@ -29,6 +29,7 @@ Retrieve the following CLIs to provision a PKS cluster on vSphere and to deploy 
 * [kubectl cli](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
 * [k14s tools](https://k14s.io)
 
+> Note: Please make sure your version of kapp is 0.22+ and your version of ytt is 0.26+.
 
 ### Deployment Artifacts
 
@@ -145,7 +146,7 @@ Download the desired deployment artifact from the [VMware Tanzu Network product 
 1. Unpack the deployment artifact using `tar`, for example:
 
    ```bash
-   mkdir -p tanzau-application-service
+   mkdir -p tanzu-application-service
    tar xvf ~/Downloads/tanzu-application-service.0.0.0-build.000.tar -C tanzu-application-service
    ```
 
