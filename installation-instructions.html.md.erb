@@ -64,9 +64,9 @@ Download the desired deployment artifact from the [VMware Tanzu Network product 
 
 #### Option 2 (Preferred, but optional) - Using the `bosh` cli
 
-> Note: This method is **optional** and relies on the functionality of `bosh interpolate` to generate the values. One must also have the `bosh` cli locally to proceed with this method.
-> 
-> Please also keep in mind that this script will generate self-signed certifcates on deployment.
+<p class="note"><strong>Note:</strong> This method is **optional** and relies on the functionality 
+of `bosh interpolate` to generate the values. One must also have the `bosh` cli locally to proceed with this method. 
+Please also keep in mind that this script will generate self-signed certifcates on deployment. </p>
 
 Another script contained within the unpacked artifact that can automatically generate deployment values. 
 
@@ -81,7 +81,6 @@ Another script contained within the unpacked artifact that can automatically gen
    ```bash
    tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "tas.example.com" > /tmp/deployment-values.yml
    ```
-
 
 ### Deploy
 
@@ -109,7 +108,8 @@ Another script contained within the unpacked artifact that can automatically gen
 1. Deploy the load balancing pods onto the Kubernetes cluster for ingress traffic.
 
    ```bash
-   kubectl apply --filename config/cf-k8s-networking/config/no-loadbalancer/node-to-ingressgateway-daemonset.yaml
+   cd tanzu-application-service
+   kapp deploy -a node-igw -f config/cf-k8s-networking/config/no-loadbalancer/node-to-ingressgateway-daemonset.yaml
    ```
 
 3. Create a DNS record pointing to the external IPs of the Kubernetes worker nodes to finish ingress conectivity.
