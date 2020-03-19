@@ -1,6 +1,6 @@
 ---
 title: Deploying to Tanzu Application Service
-owner: TAS Releng
+owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to deploy Tanzu Application Service.
@@ -11,133 +11,31 @@ This topic describes how to deploy Tanzu Application Service.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-### vSphere Requirements
-
-In general, follow the guidance provided by the [Enterprise PKS vSphere Prerequisites and Resource Requirements](https://docs.pivotal.io/pks/1-6/vsphere-requirements.html).
-
-At a minimum, one must have enough resources in their vSphere foundation to support deploying:
-
-* the Pivotal Ops Manager, BOSH director, Enterprise PKS service VMs, as specified in the [Enterprise PKS vSphere Resource Requirements](https://docs.pivotal.io/pks/1-6/vsphere-requirements.html#resources)
-* an additional 6 VMs, with at least 2CPU, and 7.5GB memory per VM, for the Kubernetes master and worker nodes
-
-
 ### CLIs
 
-Retrieve the following CLIs to provision a PKS cluster on vSphere and to deploy Tanzu Application Service 
+Install the following CLIs:
 
-* [pks cli](https://docs.pivotal.io/pks/1-6/installing-pks-cli.html)
-* [kubectl cli](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
+* [kubectl](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
 * [k14s tools](https://k14s.io)
+  * ytt
+  * kapp
+  * kbld
 
-> Note: Please make sure your version of kapp is 0.22+ and your version of ytt is 0.26+.
+
+<p class="note"><strong>Note:</strong>Note: Please make sure your version of kapp is 0.22+ and your version of ytt is 0.26+.</p>
+
+### Provision the Cluster
+
+To deploy Tanzu Application Service, the cluster should:
+* be running version 1.14.x or 1.15.x
+* have a minimum of 5 nodes
+* have a minimum of 2 CPU, 7.5GB memory per node
+
+Refer to [Cluster Setup](/pas-for-kubernets/cluster-setup) for specific installation instructions.
 
 ### Deployment Artifacts
 
 Download the desired deployment artifact from the [VMware Tanzu Network product page](https://network.pivotal.io/products/pas-for-kubernetes)
-
-> Note: one only needs to download the Tanzu Application Service tarball. A manifest with the Image References is already present in the tarball and is programmatically consumed by the deployment script, which is also contained within the tarball.
-
-
-## <a id='provision'></a> Provision an Enterprise PKS cluster for Tanzu Application Service
-
-> Note: this installation document assumes that one has already deployed Enterprise PKS onto the foundation. 
-> 
-> If this is not the case, please follow the Enterprise PKS installation instructions provided at:
-> 
-> 1. [Installing Enterprise PKS on vSphere](https://docs.pivotal.io/pks/1-6/installing-pks-vsphere.html)
-> 1. [Configuring PKS API Load Balancer](https://docs.pivotal.io/pks/1-6/vsphere-configure-pks-api.html)
-
-### Provision the Cluster
-
-1. [Log in to the PKS CLI](https://docs.pivotal.io/pks/1-6/login.html#login)
-
-2. Provision a cluster that satisfies the minimum resource requirements:
-
-	> ⌛ Provisioning a cluster will take approximately 30 minutes.
-
-	```bash	
-	pks create-cluster "${CLUSTER_NAME}" \
-	  --external-hostname "${EXTERNAL_HOSTNAME}" \
-	  --plan "${PLAN_NAME}"
-	```
-	
-	Where:
-	* `${CLUSTER_NAME}` is the desired name of the cluster to be provisioned
-	* `${EXTERNAL_HOSTANME}` is the desired fully qualified domain name (FQDN) or IP address that will point to the Master Node(s) of the Kubernetes cluster
-	* `${PLAN_NAME}` is the name of a desired plan specified during the Enterprise PKS Cluster Tile installation. This plan must satisfy the minimum vSphere resource requirments.
-
-	For example:
-	
-	```bash
-	pks create-cluster tas-cluster \
-      --external-hostname "tas-cluster.example.com" \
-      --plan tanzu-application-service
-	```
-
-3. Create DNS record pointing to the newly created master node.
-	
-	First retreive the IP(s) of the Master Node(s) using the PKS cli:
-	
-	```bash
-	pks cluster "${CLUSTER_NAME}"
-	```
-	
-	For example:
-	
-	```bash
-	$ pks cluster tas-cluster
-
-	Name:                     tas-cluster
-	Plan Name:                tanzu-application-service
-	UUID:                     aaaa1234-bb56-cc78-dd90-eeffgghhii10
-	Last Action:              CREATE
-	Last Action State:        succeeded
-	Last Action Description:  Instance provisioning completed
-	Kubernetes Master Host:   tas-cluster.example.com
-	Kubernetes Master Port:   8443
-	Worker Instances:         5
-	Kubernetes Master IP(s):  1.2.3.4, 5.6.7.8
-	```
-
-	Then create an `A` record from the `${EXTERNAL_HOSTNAME}` pointing to the IP(s):
-	
-	```
-	"${EXTERNAL_HOSTNAME}" → KUBERNETES_MASTER_IPs
-	```
-	
-	For example:
-	
-	```
-	tas-cluster.example.com → 1.2.3.4, 5.6.7.8
-	```
-
-4. Retrieve the credentials and target the cluster with `kubectl`:
-
-	```bash
-	pks get-credentials "${CLUSTER_NAME}"
-	
-	kubectl cluster-info
-	```
-	
-	For example:
-	
-   ```
-	$ pks get-credentials tas-cluster
-    
-   Fetching credentials for cluster tas-cluster.
-   Context set for cluster tas-cluster.
-   
-   You can now switch between clusters by using:
-   $kubectl config use-context <cluster-name>
-    
-   
-   $ kubectl cluster-info
-   
-   Kubernetes master is running at https://tas-cluster.example.com:8443
-   CoreDNS is running at https://tas-cluster.example.com:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-    
-   To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-    ```
 
 ## <a id='deploy'></a> Deploying Tanzu Application Service
 
@@ -166,22 +64,22 @@ Download the desired deployment artifact from the [VMware Tanzu Network product 
 
 #### Option 2 (Preferred, but optional) - Using the `bosh` cli
 
-> Note: This method is **optional** and relies on the functionality of `bosh interpolate` to easily generate the values. One must also have the `bosh` cli locally to proceed with this method.
+> Note: This method is **optional** and relies on the functionality of `bosh interpolate` to generate the values. One must also have the `bosh` cli locally to proceed with this method.
 > 
 > Please also keep in mind that this script will generate self-signed certifcates on deployment.
 
-There is another script contained within the unpacked artifact that can automatically generate deployment values. 
+Another script contained within the unpacked artifact that can automatically generate deployment values. 
 
-1. Simply feed the script the desired domain for the foundation and redirect the output of the command for use later when deploying:
+1. Feed the script the desired domain for the foundation and redirect the output of the command for use later when deploying:
 
    ```bash
-   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "${SYSTEM_DOMAIN}" > deployment-values.yml
+   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "${SYSTEM_DOMAIN}" > /tmp/deployment-values.yml
    ```
    
    For example:
    
    ```bash
-   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "tas.example.com" > deployment-values.yml
+   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "tas.example.com" > /tmp/deployment-values.yml
    ```
 
 
@@ -189,7 +87,7 @@ There is another script contained within the unpacked artifact that can automati
 
 1. Deploy Tanzu Application Service
 
-	> ⌛ Deploying takes approximately 10-15 minutes.
+	> ⌛ Deploying takes approximately 10 minutes.
 
 	```bash
 	export YTT_TAS_registry__server="registry.pivotal.io"
@@ -197,7 +95,7 @@ There is another script contained within the unpacked artifact that can automati
 	export YTT_TAS_registry__password="..."
 	
 	cd tanzu-application-service
-	bin/install-tas.sh /path/to/deployment-values.yml
+	bin/install-tas.sh /tmp/deployment-values.yml
 	```
 	
 	Where:
