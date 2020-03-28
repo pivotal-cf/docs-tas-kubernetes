@@ -11,11 +11,12 @@ This topic describes how to deploy Tanzu Application Service.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-### CLIs
+### Download the CLIs
 
 Install the following CLIs:
 
 * [kubectl](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
+* [bosh CLI](https://github.com/cloudfoundry/bosh-cli/releases)
 * [k14s tools](https://k14s.io)
   * ytt (requires 0.26+)
   * kapp (requires 0.22+)
@@ -24,15 +25,16 @@ Install the following CLIs:
 ### Provision the Cluster
 
 To deploy Tanzu Application Service, the cluster should:
+
 * be running version 1.14.x or 1.15.x
 * have a minimum of 5 nodes
 * have a minimum of 2 CPU, 7.5GB memory per node
 
 Refer to [Cluster Setup](cluster-setup.html) for specific installation instructions.
 
-### Deployment Artifacts
+### Download the Product
 
-Download the desired deployment artifact from the [VMware Tanzu Network product page](https://network.pivotal.io/products/pas-for-kubernetes)
+Download the v0.1 Alpha release from the [VMware Tanzu Network product page](https://network.pivotal.io/products/pas-for-kubernetes).
 
 ## <a id='deploy'></a> Deploying Tanzu Application Service
 
@@ -40,112 +42,67 @@ Download the desired deployment artifact from the [VMware Tanzu Network product 
 
 1. Unpack the deployment artifact using `tar`, for example:
 
-   ```bash
    mkdir -p tanzu-application-service
-   tar xvf ~/Downloads/tanzu-application-service.0.0.0-build.000.tar -C tanzu-application-service
-   ```
+   tar xvf ~/Downloads/tanzu-application-service.x.x.x-build.X.tar -C tanzu-application-service
 
-### Generate deployment values
+### Generate deployment values using `bosh` CLI
 
-#### Option 1 - Manually 
-
-1. Copy the sample deployment values file from the unpacked artifact
-
-   ```bash
-   cp tanzu-application-service/config/cf-for-k8s/sample-cf-install-values.yml deployment-values.yml
-   ```
-   
-1. Open `deployment-values.yml` in an editor and replace the `system_domain` and `app_domain` with the desired domain address(es).
-1. Generate certificates for the desired `system_domain`, and `app_domain` with the SAN `*.cf-system.svc.cluster.local` 
-1. Replace the associated `crt`, `key` and `ca` fields in the `deployment-values.yml`
-
-#### Option 2 (Preferred, but optional) - Using the `bosh` cli
-
-<p class="note"><strong>Note:</strong> This method is **optional** and relies on the functionality 
-of `bosh interpolate` to generate the values. One must also have the `bosh` cli locally to proceed with this method. 
-Please also keep in mind that this script will generate self-signed certifcates on deployment. </p>
-
-Another script contained within the unpacked artifact that can automatically generate deployment values. 
+<p class="note">
+  <strong>Note:</strong> This method is relies on the functionality
+  of `bosh interpolate` command to generate the YAML file with values used to deploy.
+  This script will generate self-signed certificates on deployment.
+</p>
 
 1. Feed the script the desired domain for the foundation and redirect the output of the command for use later when deploying:
 
-   ```bash
-   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "${SYSTEM_DOMAIN}" > /tmp/deployment-values.yml
-   ```
-   
-   For example:
-   
-   ```bash
-   tanzu-application-service/config/cf-for-k8s/hack/generate-values.sh "tas.example.com" > /tmp/deployment-values.yml
-   ```
+   tanzu-application-service/hack/generate-values.sh "${SYSTEM_DOMAIN}" > /tmp/deployment-values.yml
 
 ### Deploy
 
 1. Deploy Tanzu Application Service
 
-	> ⌛ Deploying takes approximately 10 minutes.
+<p class="note">
+	Deploying takes approximately 10 minutes.
+</p>
 
-	```bash
 	export YTT_TAS_registry__server="registry.pivotal.io"
 	export YTT_TAS_registry__username="..."
 	export YTT_TAS_registry__password="..."
 	
 	cd tanzu-application-service
 	bin/install-tas.sh /tmp/deployment-values.yml
-	```
 	
-	Where:
-	
-	* `YTT_TAS_registry__server` is the FQDN of the Tanzu Network Registry, e.g. `registry.pivotal.io`.
-	* `YTT_TAS_registry__username` is your Tanzu Network username
-	* `YTT_TAS_registry__password` is your Tanzu Network password
+Here are the environment variables used above:
+
+* `YTT_TAS_registry__server` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
+* `YTT_TAS_registry__username` is your Tanzu Network username
+* `YTT_TAS_registry__password` is your Tanzu Network password
 
 ### Post-Deployment Configuration
 
-1. Deploy the load balancing pods onto the Kubernetes cluster for ingress traffic.
-
-   ```bash
-   cd tanzu-application-service
-   kapp deploy -a node-igw -f config/cf-k8s-networking/config/no-loadbalancer/node-to-ingressgateway-daemonset.yaml
-   ```
-
-3. Create a DNS record pointing to the external IPs of the Kubernetes worker nodes to finish ingress conectivity.
+Create a DNS record pointing to the external IPs of the Kubernetes worker nodes to establish ingress connectivity.
 	
-	First retreive the IPs of the worker nodes using the `kubectl` cli:
+First retreive the IPs of the worker nodes using the `kubectl` CLI:
 	
-	```bash
-	kubectl get nodes --output='wide'
-	```
+```
+kubectl get nodes --output='wide'
+```
 	
-	For example:
+For example:
 	
-	```bash
 	$ kubectl get nodes --output='wide'
-   NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP    OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-   5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    <none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133   Ubuntu 16.04.6 LTS   4.15.0-76-generic   docker://18.9.9
-   a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    <none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134   Ubuntu 16.04.6 LTS   4.15.0-76-generic   docker://18.9.9
-   a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    <none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135   Ubuntu 16.04.6 LTS   4.15.0-76-generic   docker://18.9.9
-   af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    <none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136   Ubuntu 16.04.6 LTS   4.15.0-76-generic   docker://18.9.9
-   cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    <none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137   Ubuntu 16.04.6 LTS   4.15.0-76-generic   docker://18.9.9
-	```
+ 	 NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
+ 	 5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    <none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
+ 	 a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    <none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
+ 	 a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    <none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
+ 	 af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    <none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
+ 	 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    <none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
 
-	Then create a wildcard `A` record pointing to the IPs:
+Then create a wildcard `A` record pointing to the IPs:
 	
-	```
 	*.system_domain → EXTERNAL-IPs
-	```
 	
-	For example:
-	
-	```
-	*.tas.example.com      →   10.85.87.133
-	                           10.85.87.134
-	                           10.85.87.135
-	                           10.85.87.136
-	                           10.85.87.137
-	```
+### Post-Deploy Validation
 
-
-
-### (Optional) Post-Deploy Validation
-1. Follow the [`cf-for-k8s` instructions](https://github.com/cloudfoundry/cf-for-k8s/blob/master/docs/deploy.md#validate-the-deployment) to validate the deployment.
+Follow the [`cf-for-k8s` validation instructions](https://github.com/cloudfoundry/cf-for-k8s/blob/master/docs/deploy.md#validate-the-deployment-using-a-image-based-app)
+to verify that the deployment runs successfully.
