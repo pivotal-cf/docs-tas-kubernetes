@@ -65,18 +65,18 @@ Download the v0.1 Alpha release from the [VMware Tanzu Network product page](htt
 	Deploying takes approximately 10 minutes.
 </p>
 
-	export YTT_TAS_registry__server="registry.pivotal.io"
-	export YTT_TAS_registry__username="..."
-	export YTT_TAS_registry__password="..."
+	export YTT_TAS_system_registry__hostname="registry.pivotal.io"
+	export YTT_TAS_system_registry__username="..."
+	export YTT_TAS_system_registry__password="..."
 	
 	cd tanzu-application-service
 	bin/install-tas.sh /tmp/deployment-values.yml
 	
 Here are the environment variables used above:
 
-* `YTT_TAS_registry__server` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
-* `YTT_TAS_registry__username` is your Tanzu Network username
-* `YTT_TAS_registry__password` is your Tanzu Network password
+* `YTT_TAS_system_registry__hostname` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
+* `YTT_TAS_system_registry__username` is your Tanzu Network username
+* `YTT_TAS_system_registry__password` is your Tanzu Network password
 
 ### Post-Deployment Configuration
 
