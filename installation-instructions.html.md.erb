@@ -17,10 +17,10 @@ Install the following CLIs:
 
 * [kubectl](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
 * [bosh CLI](https://github.com/cloudfoundry/bosh-cli/releases)
-* [k14s tools](https://k14s.io)
-  * ytt (requires 0.26+)
-  * kapp (requires 0.22+)
-  * kbld (requires 0.17+)
+* k14s tools
+  * [ytt (requires 0.26+)](https://network.pivotal.io/products/ytt/)
+  * [kapp (requires 0.22+)](https://network.pivotal.io/products/kapp/)
+  * [kbld (requires 0.17+)](https://network.pivotal.io/products/kbld/)
 
 ### Provision the Cluster
 
@@ -55,7 +55,48 @@ Download the v0.1 Alpha release from the [VMware Tanzu Network product page](htt
 
 1. Feed the script the desired domain for the foundation and redirect the output of the command for use later when deploying:
 
-   tanzu-application-service/hack/generate-values.sh "${SYSTEM_DOMAIN}" > /tmp/deployment-values.yml
+```
+tanzu-application-service/bin/generate-values.sh -d "${SYSTEM_DOMAIN}" > /tmp/deployment-values.yml
+```
+
+### Configure System and App Registry
+
+Tanzu Application Service retrieves container images for system components from Tanzu Network's container registry.
+Supply your username and password to Tanzu Network as illustrated below. Tanzu Application Service will store
+application container images for apps that developers push with `cf push` in your own registry. Supply the hostname,
+repository, username, password and CA cert as described below:
+
+```
+	export YTT_TAS_system_registry__hostname="registry.pivotal.io"
+	export YTT_TAS_system_registry__username="..."
+  export YTT_TAS_system_registry__password="..."
+  export YTT_TAS_app_registry__hostname="harbor.mesa.cf-app.com"
+  export YTT_TAS_app_registry__repository="cf-workloads"
+  export YTT_TAS_app_registry__username="..."
+  export YTT_TAS_app_registry__password="..."
+  export YTT_TAS_app_registry__ca="$(cat path/to/your/registry.ca)"
+```
+
+Here are the environment variables used above:
+
+* `YTT_TAS_system_registry__hostname` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
+* `YTT_TAS_system_registry__username` is your Tanzu Network username.
+* `YTT_TAS_system_registry__password` is your Tanzu Network password.
+* `YTT_TAS_app_registry__hostname` is the hostname of your registry used to store images for deployed apps.
+* `YTT_TAS_app_registry__repository` is the repository, namespace, project, etc. under which images should be stored.
+* `YTT_TAS_app_registry__username` is the username used for push access to your registry.
+* `YTT_TAS_app_registry__password` is the password used for push access to your registry.
+* `YTT_TAS_app_registry__ca` is the CA certifica, optional but necessary if your registry's certificate is not signed by
+a Certificate Authority in [Mozilla's included certificate list](https://wiki.mozilla.org/CA/Included_Certificates)
+
+<p class="note">
+  <strong>Note:</strong> It is also possible to add these values to the bottom of the `values.yml`.
+</p>
+
+<p class="note">
+  <strong>Note:</strong> If using a harbor project for the value of `YTT_TAS_app_registry__repository`, ensure the
+  project is created in the harber UI before attempting to use it with Tanzu Application Service.
+</p>
 
 ### Deploy
 
@@ -65,24 +106,17 @@ Download the v0.1 Alpha release from the [VMware Tanzu Network product page](htt
 	Deploying takes approximately 10 minutes.
 </p>
 
-	export YTT_TAS_system_registry__hostname="registry.pivotal.io"
-	export YTT_TAS_system_registry__username="..."
-	export YTT_TAS_system_registry__password="..."
-	
-	cd tanzu-application-service
-	bin/install-tas.sh /tmp/deployment-values.yml
-	
-Here are the environment variables used above:
+```
+cd tanzu-application-service
+bin/install-tas.sh /tmp/deployment-values.yml
+```
 
-* `YTT_TAS_system_registry__hostname` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
-* `YTT_TAS_system_registry__username` is your Tanzu Network username
-* `YTT_TAS_system_registry__password` is your Tanzu Network password
 
 ### Post-Deployment Configuration
 
 Create a DNS record pointing to the external IPs of the Kubernetes worker nodes to establish ingress connectivity.
 	
-First retreive the IPs of the worker nodes using the `kubectl` CLI:
+First retrieve the IPs of the worker nodes using the `kubectl` CLI:
 	
 ```
 kubectl get nodes --output='wide'
