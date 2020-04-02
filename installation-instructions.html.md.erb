@@ -99,7 +99,7 @@ system_registry:
   password: ...
 app_registry:
   hostname: my-registry.example.com
-  repository: cf-workloads
+  repository: my-registry.example.com/cf-workloads
   username: ...
   password: ...
   ca: |
@@ -110,8 +110,8 @@ MIIDgzCC...
 </p>
 
 <p class="note">
-  <strong>Note:</strong> If using a harbor project for the value of `YTT_TAS_app_registry__repository`, ensure the
-  project is created in the harber UI before attempting to use it with Tanzu Application Service.
+  <strong>Note:</strong> If using a harbor project as part of the value of `YTT_TAS_app_registry__repository`, ensure the
+  project is created in the harbor UI before attempting to use it with Tanzu Application Service.
 </p>
 
 ### Deploy
