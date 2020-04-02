@@ -92,6 +92,21 @@ a Certificate Authority in [Mozilla's included certificate list](https://wiki.mo
 
 <p class="note">
   <strong>Note:</strong> It is also possible to add these values to the bottom of the `values.yml`.
+```
+system_registry:
+  hostname: registry.pivotal.io
+  username: ...
+  password: ...
+app_registry:
+  hostname: my-registry.example.com
+  repository: cf-workloads
+  username: ...
+  password: ...
+  ca: |
+----BEGIN CERTIFICATE-----
+MIIDgzCC...
+-----END CERTIFICATE-----
+```
 </p>
 
 <p class="note">
