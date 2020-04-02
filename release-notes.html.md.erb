@@ -19,13 +19,12 @@ Key features in this release:
 
 ### <a id='known-issues'></a> Known Issues
 
-- Installation script is not idempotent.
 - Custom buildpacks and cf cli buildpacks related commands are not supported.
 - `cf restage APP_NAME` fails to re-stage the app.
-- Upgrading Tanzu Application Service to a new version fails.
+- Upgrading existing Tanzu Application Service installation to a new version is not supported.
 - `cf push` does not show staging logs.
 - `cf buildpacks` shows empty build-packs list.
 - Pushing buildpack apps required the diego_docker feature flag to be set.
 - CF tail returns istio sidecar logs alongside app logs.
 - Apps not available via HTTPS.
-- Re-deploying Tanzu Application Service with different credentials fails.
+- Re-deploying Tanzu Application Service with different credentials is not supported.
