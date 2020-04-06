@@ -1,9 +1,9 @@
 ---
-title: Deploying Tanzu Application Service
+title: Deploying Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to deploy Tanzu Application Service.
+This topic describes how to deploy Tanzu Application Service for Kubernetes.
 
 <%= partial 'evaluation_only' %>
 
@@ -11,16 +11,17 @@ This topic describes how to deploy Tanzu Application Service.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-### Download the CLIs
+### <a id='command-line-tools'></a>Command-Line Tools
 
-Install the following CLIs:
+The installation procedure for Tanzu Application Service for Kubernetes requires the following command-line tools to be installed to your workstation:
 
-* [kubectl](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html)
-* [bosh CLI](https://github.com/cloudfoundry/bosh-cli/releases)
-* k14s tools
-  * [ytt (requires 0.26+)](https://network.pivotal.io/products/ytt/)
-  * [kapp (requires 0.22+)](https://network.pivotal.io/products/kapp/)
-  * [kbld (requires 0.17+)](https://network.pivotal.io/products/kbld/)
+* The Kubernetes CLI, `kubectl`. For more information, see the [Installing the Kubernetes CLI](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html) topic.
+* The `kapp` utility, version v0.22.0 or later. For more information, see the [Installing kapp](installing-kapp.html) topic.
+* The `kbld` utility, version v0.19.0 or later. For more information, see the [Installing kbld](installing-kbld.html) topic.
+* The `ytt` utility, version v0.26.0 or later. For more information, see the [Installing ytt](installing-ytt.html) topic.
+* The v2 BOSH CLI, `bosh`. For more information, see the [Installing the BOSH CLI](./installing-bosh-cli.html) topic.
+
+
 
 ### Provision the Cluster
 
@@ -34,16 +35,18 @@ Refer to [Cluster Setup](cluster-setup.html) for specific installation instructi
 
 ### Download the Product
 
-Download the v0.1 Alpha release from the [VMware Tanzu Network product page](https://network.pivotal.io/products/pas-for-kubernetes).
+Download the v0.1 release from the [VMware Tanzu Network product page](https://network.pivotal.io/products/tas-for-kubernetes).
 
 ## <a id='deploy'></a> Deploying Tanzu Application Service
 
-### Unpack the deployment artifact
+### <a id='unpack'></a> Extract the deployment artifact
 
-1. Unpack the deployment artifact using `tar`, for example:
+1. Extract the deployment artifact using `tar`, for example:
 
+```
    mkdir -p tanzu-application-service
    tar xvf ~/Downloads/tanzu-application-service.x.x.x-build.X.tar -C tanzu-application-service
+```
 
 ### Generate deployment values using `bosh` CLI
 
@@ -139,13 +142,15 @@ kubectl get nodes --output='wide'
 	
 For example:
 	
-	$ kubectl get nodes --output='wide'
- 	 NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
- 	 5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    <none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
- 	 a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    <none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
- 	 a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    <none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
- 	 af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    <none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
- 	 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    <none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
+```
+$ kubectl get nodes --output='wide'
+NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
+5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    <none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
+a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    <none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
+a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    <none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
+af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    <none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
+cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    <none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
+```
 
 Then create a wildcard `A` record pointing to the IPs:
 	
