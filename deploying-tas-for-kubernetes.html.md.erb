@@ -22,17 +22,26 @@ The installation procedure for Tanzu Application Service for Kubernetes requires
 * The v2 BOSH CLI, `bosh`. For more information, see the [Installing the BOSH CLI](installing-bosh-cli.html) topic.
 
 
-
 ### <a id='kubernetes-cluster'></a> Kubernetes Cluster
 
 Tanzu Application Service for Kubernetes should be deployed to a Kubernetes cluster satisfying the following characteristics:
 
-* The Kubernetes cluster should be version 1.14.x, 1.15.x, or 1.16.x.
+* The version of the Kubernetes cluster should be 1.14.x, 1.15.x, or 1.16.x.
 * The Kubernetes cluster should have at least 5 worker nodes.
 * Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
 * The Kubernetes cluster should have a default storage class installed.
 
-See the [Cluster Setup](cluster-setup.html) topic for more detais.
+See the [Cluster Setup](cluster-setup.html) topic for more details.
+
+### <a id='app-container-registry'></a> Container Registry for App Images
+
+TKTKTK
+
+<p class="note">
+  <strong>Note:</strong> If using a harbor project as part of the value of `YTT_TAS_app_registry__repository`, ensure the
+  project is created in the harbor UI before attempting to use it with Tanzu Application Service.
+</p>
+
 
 ### <a id='system-domain'></a> System Domain
 
@@ -55,87 +64,118 @@ Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network
 
 1. Extract the contents of `tanzu-application-service.tar` into the `tanzu-application-service` directory.
 
-```
+```bash
 tar xvf ~/Downloads/tanzu-application-service.tar -C tanzu-application-service
 ```
 
-### <a id='generate-installation-parameters'></a> Generate Installation Parameters
+### <a id='generate-configuration-values'></a> Generate Configuration Values
+
+
+1. Create a directory named `configuration-values` in the same directory as the `tanzu-application-service` directory. You will use this directory to store configuration values for this installation.
+
+1. Change into the `tanzu-application-service` directory in your terminal.
+
+1. Run the value-generation script with the system domain you selected previous and store its output in the `configuration-values` directory:
+
+```bash
+./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
+```
 
 <p class="note">
-  <strong>Note:</strong> This script generates self-signed certificates on deployment.
+  <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
 </p>
 
-1. Feed the script the desired system domain for the installation and redirect the output of the command for use later when deploying:
+### <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-```
-tanzu-application-service/bin/generate-values.sh -d "sys.cf.example.com" > /tmp/deployment-values.yml
-```
+Tanzu Application Service retrieves container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
 
-### Configure System and App Registry
+* `system_registry.hostname`: This parameter stores the hostname of the Tanzu Network Registry. It should always be set to `registry.pivotal.io`.
+* `system_registry.username`: This parameter stores the username of the Tanzu Network Registry user that will pull system component images inside the Kubernetes cluster.
+* `system_registry.password`: This parameter stores the password of the Tanzu Network Registry user specified above.
 
-Tanzu Application Service retrieves container images for system components from Tanzu Network's container registry.
-Supply your username and password to Tanzu Network as illustrated below. Tanzu Application Service will store
-application container images for apps that developers push with `cf push` in your own registry. Supply the hostname,
-repository, username, password and CA cert as described below:
+You may specify these values either by environment variables or by configuration file.
 
-```
-  export YTT_TAS_system_registry__hostname="registry.pivotal.io"
-  export YTT_TAS_system_registry__username="..."
-  export YTT_TAS_system_registry__password="..."
-  export YTT_TAS_app_registry__hostname="my-registry.example.com"
-  export YTT_TAS_app_registry__repository="cf-workloads"
-  export YTT_TAS_app_registry__username="..."
-  export YTT_TAS_app_registry__password="..."
-  export YTT_TAS_app_registry__ca="$(cat path/to/your/registry.ca)"
+
+#### Option 1: Environment Variables
+
+Run the following commands in your terminal to set these configuration parameters:
+
+```bash
+export YTT_TAS_system_registry__hostname='registry.pivotal.io'
+export YTT_TAS_system_registry__username='PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME'
+export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD'
 ```
 
-Here are the environment variables used above:
 
-* `YTT_TAS_system_registry__hostname` is the FQDN of the Tanzu Network Registry: `registry.pivotal.io`
-* `YTT_TAS_system_registry__username` is your Tanzu Network username.
-* `YTT_TAS_system_registry__password` is your Tanzu Network password.
-* `YTT_TAS_app_registry__hostname` is the hostname of your registry used to store images for deployed apps.
-* `YTT_TAS_app_registry__repository` is the repository, namespace, project, etc. under which images should be stored.
-* `YTT_TAS_app_registry__username` is the username used for push access to your registry.
-* `YTT_TAS_app_registry__password` is the password used for push access to your registry.
-* `YTT_TAS_app_registry__ca` is the CA certifica, optional but necessary if your registry's certificate is not signed by
-a Certificate Authority in [Mozilla's included certificate list](https://wiki.mozilla.org/CA/Included_Certificates)
+#### Option 2: Configuration File
 
-<p class="note">
-  <strong>Note:</strong> It is also possible to add these values to the bottom of the `/tmp/deployment-values.yml`.
-```
+Append the following lines to the `deployment-values.yml` file you generated above:
+
+```yaml
 system_registry:
   hostname: registry.pivotal.io
-  username: ...
-  password: ...
+  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
+  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
+```
+
+Alternatively, you may create a separate `system-registry-values.yml` file in the `configuration-values` directory that contains these lines.
+
+
+### <a id='configure-app-registry-values'></a> Configure App Registry Values
+
+Tanzu Application Service stores the container images for buildpack-based applications in a container image registry. It does so via the following required configuration parameters:
+
+* `app_registry.hostname`: This parameter stores the hostname of the application image registry used to store the application images.
+* `app_registry.repository`: This parameter stores the repository in the image registry that will store the application images. It should include the hostname specified above.
+* `app_registry.username`: This parameter stores the username of the application image registry user that will push application images to the registry and pull them inside the Kubernetes cluster.
+* `app_registry.password`: This parameter stores the password of the application image registry user specified above.
+* `app_registry.ca`: This parameter stores the certificate of the certificate authority that issued the certificate for the app image registry. This is required for registry certificates not issued from a globally trusted root Certificate Authority.
+
+You may specify these values either by environment variables or by configuration file.
+
+
+#### Option 1: Environment Variables
+
+Run the following commands in your terminal to set these configuration parameters:
+
+```bash
+export YTT_TAS_system_registry__hostname='my-registry.example.com'
+export YTT_TAS_system_registry__repository='my-registry.example.com/tas-app-images'
+export YTT_TAS_system_registry__username='PLACEHOLDER-APP-REGISTRY-USERNAME'
+export YTT_TAS_system_registry__password='PLACEHOLDER-APP-REGISTRY-PASSWORD'
+export YTT_TAS_system_registry__ca='PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS'
+```
+
+#### Option 2: Configuration File
+
+Append the following lines to the `deployment-values.yml` file you generated above:
+
+```yaml
 app_registry:
   hostname: my-registry.example.com
-  repository: my-registry.example.com/cf-workloads
-  username: ...
-  password: ...
+  repository: my-registry.example.com/tas-app-images
+  username: "PLACEHOLDER-APP-REGISTRY-USERNAME"
+  password: "PLACEHOLDER-APP-REGISTRY-PASSWORD"
   ca: |
-----BEGIN CERTIFICATE-----
-MIIDgzCC...
------END CERTIFICATE-----
+    PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS
 ```
-</p>
 
-<p class="note">
-  <strong>Note:</strong> If using a harbor project as part of the value of `YTT_TAS_app_registry__repository`, ensure the
-  project is created in the harbor UI before attempting to use it with Tanzu Application Service.
-</p>
+Alternatively, you may create a separate `app-registry-values.yml` file in the `configuration-values` directory that contains these lines.
 
-### Deploy
 
-1. Deploy Tanzu Application Service
+
+### <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes
 
 <p class="note">
 	Deploying takes approximately 10 minutes.
 </p>
 
-```
-cd tanzu-application-service
-bin/install-tas.sh /tmp/deployment-values.yml
+1. Change into the `tanzu-application-service` directory.
+
+2. Run the installation script, configured to use the deployment values above:
+
+```bash
+./bin/install-tas.sh ../configuration-values
 ```
 
 
@@ -165,6 +205,7 @@ Then create a wildcard `A` record pointing to the IPs:
 	
 	*.system_domain → EXTERNAL-IPs
 	
+
 ### Post-Deploy Validation
 
 Follow the [`cf-for-k8s` validation instructions](https://github.com/cloudfoundry/cf-for-k8s/blob/master/docs/deploy.md#validate-the-deployment-using-a-image-based-app)
