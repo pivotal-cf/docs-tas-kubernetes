@@ -11,7 +11,7 @@ This topic describes how to deploy Tanzu Application Service for Kubernetes.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-### <a id='command-line-tools'></a>Command-Line Tools
+### <a id='command-line-tools'></a> Command-Line Tools
 
 The installation procedure for Tanzu Application Service for Kubernetes requires the following command-line tools to be installed to your workstation:
 
@@ -19,47 +19,56 @@ The installation procedure for Tanzu Application Service for Kubernetes requires
 * The `kapp` utility, version v0.22.0 or later. For more information, see the [Installing kapp](installing-kapp.html) topic.
 * The `kbld` utility, version v0.19.0 or later. For more information, see the [Installing kbld](installing-kbld.html) topic.
 * The `ytt` utility, version v0.26.0 or later. For more information, see the [Installing ytt](installing-ytt.html) topic.
-* The v2 BOSH CLI, `bosh`. For more information, see the [Installing the BOSH CLI](./installing-bosh-cli.html) topic.
+* The v2 BOSH CLI, `bosh`. For more information, see the [Installing the BOSH CLI](installing-bosh-cli.html) topic.
 
 
 
-### Provision the Cluster
+### <a id='kubernetes-cluster'></a> Kubernetes Cluster
 
-To deploy Tanzu Application Service, the cluster should:
+Tanzu Application Service for Kubernetes should be deployed to a Kubernetes cluster satisfying the following characteristics:
 
-* be running version 1.14.x or 1.15.x
-* have a minimum of 5 nodes
-* have a minimum of 2 CPU, 7.5GB memory per node
+* The Kubernetes cluster should be version 1.14.x, 1.15.x, or 1.16.x.
+* The Kubernetes cluster should have at least 5 worker nodes.
+* Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
+* The Kubernetes cluster should have a default storage class installed.
 
-Refer to [Cluster Setup](cluster-setup.html) for specific installation instructions.
+See the [Cluster Setup](cluster-setup.html) topic for more detais.
 
-### Download the Product
+### <a id='system-domain'></a> System Domain
 
-Download the v0.1 release from the [VMware Tanzu Network product page](https://network.pivotal.io/products/tas-for-kubernetes).
+Select the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes (for example, `sys.tas.example.com`). This domain name should be one for which you can create DNS records in a DNS zone.
+
 
 ## <a id='deploy'></a> Deploying Tanzu Application Service
 
-### <a id='unpack'></a> Extract the deployment artifact
+### <a id='prepare-installation-resources'></a> Prepare the Installation Resources
 
-1. Extract the deployment artifact using `tar`, for example:
+Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
+
+1. Log into [VMware Tanzu Network](https://network.pivotal.io).
+
+1. Navigate to the [VMware Tanzu Application Service for Kubernetes product listing](https://network.pivotal.io/products/tas-for-kubernetes).
+
+1. Download the "Tanzu Application Service" file and rename it to `tanzu-application-service.tar`.
+
+1. Create a directory named `tanzu-application-service`.
+
+1. Extract the contents of `tanzu-application-service.tar` into the `tanzu-application-service` directory.
 
 ```
-   mkdir -p tanzu-application-service
-   tar xvf ~/Downloads/tanzu-application-service.x.x.x-build.X.tar -C tanzu-application-service
+tar xvf ~/Downloads/tanzu-application-service.tar -C tanzu-application-service
 ```
 
-### Generate deployment values using `bosh` CLI
+### <a id='generate-installation-parameters'></a> Generate Installation Parameters
 
 <p class="note">
-  <strong>Note:</strong> This method is relies on the functionality
-  of `bosh interpolate` command to generate the YAML file with values used to deploy.
-  This script will generate self-signed certificates on deployment.
+  <strong>Note:</strong> This script generates self-signed certificates on deployment.
 </p>
 
-1. Feed the script the desired domain for the foundation and redirect the output of the command for use later when deploying:
+1. Feed the script the desired system domain for the installation and redirect the output of the command for use later when deploying:
 
 ```
-tanzu-application-service/bin/generate-values.sh -d "cf.example.com" > /tmp/deployment-values.yml
+tanzu-application-service/bin/generate-values.sh -d "sys.cf.example.com" > /tmp/deployment-values.yml
 ```
 
 ### Configure System and App Registry
