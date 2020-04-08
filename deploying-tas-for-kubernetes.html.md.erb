@@ -33,17 +33,15 @@ Tanzu Application Service for Kubernetes should be deployed to a Kubernetes clus
 * The Kubernetes cluster should have at least 5 worker nodes.
 * Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
 * The Kubernetes cluster should have a default storage class installed.
+* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images.
 
 See the [Cluster Setup](cluster-setup.html) topic for more details.
 
 ### <a id='app-container-registry'></a> Container Registry for App Images
 
-TKTKTK
+Tanzu Application Service for Kubernetes requires a container image registry to store images for buildpack-based apps. This registry must have a repository designated to store the app images and a user with push and pull access to the repository.
 
-<p class="note">
-  <strong>Note:</strong> If using a harbor project as part of the value of `YTT_TAS_app_registry__repository`, ensure the
-  project is created in the harbor UI before attempting to use it with Tanzu Application Service.
-</p>
+See the [Configuring the App Image Registry](configure-app-image-registry.html) topic for more details on how to configure container registries such as Harbor and Google Container Registry to be compatible with Tanzu Application Service for Kubernetes.
 
 
 ### <a id='system-domain'></a> System Domain
@@ -216,7 +214,12 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
   <pre><code>$ cf enable-feature-flag diego_docker</code></pre>
 
 
-### <a id='post-installation-configuration'></a> Post-Installation Validation
+## <a id='post-installation-configuration'></a> Post-Installation Validation
+
+
+<p class="note">
+  <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
+</p>
 
 1. Ensure that you are still logged into the Tanzu Application Service for Kubernetes installation as the admin user.
 
@@ -239,7 +242,3 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
 
 1. After the `cf push` command succeeds, make a request to the app:
   <pre><code>$ curl test-app.sys.tas.example.com</code></pre>
-
-<p class="note">
-  <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
-</p>
