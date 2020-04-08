@@ -22,6 +22,9 @@ The installation procedure for Tanzu Application Service for Kubernetes requires
 * The v2 BOSH CLI, `bosh`. For more information, see the [Installing the BOSH CLI](installing-bosh-cli.html) topic.
 
 
+The system verification procedure for Tanzu Application Service for Kubernetes also requires that the CF CLI tool be installed.
+
+
 ### <a id='kubernetes-cluster'></a> Kubernetes Cluster
 
 Tanzu Application Service for Kubernetes should be deployed to a Kubernetes cluster satisfying the following characteristics:
@@ -48,6 +51,23 @@ TKTKTK
 Select the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes (for example, `sys.tas.example.com`). This domain name should be one for which you can create DNS records in a DNS zone.
 
 
+Set up DNS records to establish ingress connectivity:
+
+1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
+  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
+  For example:
+  <pre><code>$ kubectl get nodes --output='wide'
+NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
+5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
+a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
+a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
+af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
+cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
+</code></pre>
+
+1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to the set of external IP addresses for the worker nodes.
+
+
 ## <a id='deploy'></a> Deploying Tanzu Application Service
 
 ### <a id='prepare-installation-resources'></a> Prepare the Installation Resources
@@ -65,7 +85,7 @@ Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network
 1. Extract the contents of `tanzu-application-service.tar` into the `tanzu-application-service` directory.
 
 ```bash
-tar xvf ~/Downloads/tanzu-application-service.tar -C tanzu-application-service
+$ tar xvf ~/Downloads/tanzu-application-service.tar -C tanzu-application-service
 ```
 
 ### <a id='generate-configuration-values'></a> Generate Configuration Values
@@ -78,7 +98,7 @@ tar xvf ~/Downloads/tanzu-application-service.tar -C tanzu-application-service
 1. Run the value-generation script with the system domain you selected previous and store its output in the `configuration-values` directory:
 
 ```bash
-./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
+$ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
 ```
 
 <p class="note">
@@ -101,9 +121,9 @@ You may specify these values either by environment variables or by configuration
 Run the following commands in your terminal to set these configuration parameters:
 
 ```bash
-export YTT_TAS_system_registry__hostname='registry.pivotal.io'
-export YTT_TAS_system_registry__username='PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME'
-export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD'
+$ export YTT_TAS_system_registry__hostname='registry.pivotal.io'
+$ export YTT_TAS_system_registry__username='PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME'
+$ export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD'
 ```
 
 
@@ -139,11 +159,11 @@ You may specify these values either by environment variables or by configuration
 Run the following commands in your terminal to set these configuration parameters:
 
 ```bash
-export YTT_TAS_system_registry__hostname='my-registry.example.com'
-export YTT_TAS_system_registry__repository='my-registry.example.com/tas-app-images'
-export YTT_TAS_system_registry__username='PLACEHOLDER-APP-REGISTRY-USERNAME'
-export YTT_TAS_system_registry__password='PLACEHOLDER-APP-REGISTRY-PASSWORD'
-export YTT_TAS_system_registry__ca='PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS'
+$ export YTT_TAS_app_registry__hostname='my-registry.example.com'
+$ export YTT_TAS_app_registry__repository='my-registry.example.com/tas-app-images'
+$ export YTT_TAS_app_registry__username='PLACEHOLDER-APP-REGISTRY-USERNAME'
+$ export YTT_TAS_app_registry__password='PLACEHOLDER-APP-REGISTRY-PASSWORD'
+$ export YTT_TAS_app_registry__ca='PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS'
 ```
 
 #### Option 2: Configuration File
@@ -167,46 +187,59 @@ Alternatively, you may create a separate `app-registry-values.yml` file in the `
 ### <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes
 
 <p class="note">
-	Deploying takes approximately 10 minutes.
+	Deploying Tanzu Application Service for Kubernetes takes approximately 10 minutes.
 </p>
 
-1. Change into the `tanzu-application-service` directory.
+1. Change into the `tanzu-application-service` directory in your terminal.
 
 2. Run the installation script, configured to use the deployment values above:
 
 ```bash
-./bin/install-tas.sh ../configuration-values
+$ ./bin/install-tas.sh ../configuration-values
 ```
 
 
-### Post-Deployment Configuration
+### <a id='post-installation-configuration'></a> Post-Installation Configuration
 
-Create a DNS record pointing to the external IPs of the Kubernetes worker nodes to establish ingress connectivity.
-	
-First retrieve the IPs of the worker nodes using the `kubectl` CLI:
-	
-```
-kubectl get nodes --output='wide'
-```
-	
-For example:
-	
-```
-$ kubectl get nodes --output='wide'
-NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
-5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    <none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
-a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    <none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
-a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    <none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
-af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    <none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
-cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    <none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
-```
+To enable buildpack-based apps to run on Tanzu Application Service for Kubernetes, you must configure the system correctly after the initial installation.
 
-Then create a wildcard `A` record pointing to the IPs:
-	
-	*.system_domain → EXTERNAL-IPs
-	
+1. Use the CF CLI to target the installation at the system domain configured earlier:
+  <pre><code>$ cf api api.sys.tas.example.com --skip-ssl-validation</code></pre>
 
-### Post-Deploy Validation
+1. Set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password, stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
+  <pre><code>$ CF\_ADMIN\_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml --path /cf\_admin\_password)"</code></pre>
 
-Follow the [`cf-for-k8s` validation instructions](https://github.com/cloudfoundry/cf-for-k8s/blob/master/docs/deploy.md#validate-the-deployment-using-a-image-based-app)
-to verify that the deployment runs successfully.
+1. Log into the installation as the admin user:
+  <pre><code>$ cf auth admin $CF\_ADMIN\_PASSWORD</code></pre>
+
+1. Enable the Diego-Docker feature flag:
+  <pre><code>$ cf enable-feature-flag diego_docker</code></pre>
+
+
+### <a id='post-installation-configuration'></a> Post-Installation Validation
+
+1. Ensure that you are still logged into the Tanzu Application Service for Kubernetes installation as the admin user.
+
+1. Create and target an organization and space for the verification application:
+  <pre><code>$ cf create-org test-org
+  $ cf create-space -o test-org test-space
+  $ cf target -o test-org -s test-space
+  </code></pre>
+
+1. Clone the Cloud Foundry test application from GitHub:
+  <pre><code>$ git clone https://github.com/cloudfoundry-samples/test-app</code></pre>
+
+1. Change into the `test-app` directory in your terminal.
+
+1. Push the test app to the installation:
+  <pre><code>$ cf push test-app --hostname test-app</code></pre>
+
+1. While the `cf push` command is running, open another terminal pane and monitor the build logs:
+  <pre><code>$ cf logs test-app</code></pre>
+
+1. After the `cf push` command succeeds, make a request to the app:
+  <pre><code>$ curl test-app.sys.tas.example.com</code></pre>
+
+<p class="note">
+  <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
+</p>
