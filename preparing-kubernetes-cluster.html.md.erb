@@ -1,0 +1,36 @@
+---
+title: Preparing the Kubernetes Cluster
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to create and configure Kubernetes clusters to support Tanzu Application Service for Kubernetes.
+
+
+## <a id='enterprise-pks'></a> VMware Enterprise PKS
+
+See the [Creating Clusters](https://docs.pivotal.io/pks/1-6/create-cluster.html) topic for information about creating a cluster with Enterprise PKS.
+
+* The PKS version should be v1.6 or v1.7.
+* The underlying infrastructure provider should be vSphere.
+* The container networking should be Flannel.
+* The Kubernetes cluster should have at least 5 worker nodes.
+* Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
+* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images.
+
+After creating the cluster, run `pks get-credentials CLUSTER-NAME` to ensure that `kubectl` targets the cluster.
+
+
+### <a id='configuring-vsphere-storage'></a> Configuring Storage on vSphere
+
+Tanzu Application Service for Kubernetes requires persistent volumes for its internal Postgres database and Minio blobstore. To enable dynamic  PersistentVolume provisioning on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster.
+
+The Tanzu Application Service for Kubernetes installation bundle provides a vSphere provisioner storage class for you to use, as follows:
+
+1. Ensure that you have the Tanzu Application Service for Kubernetes installation bundle downloaded and extracted to your local workstation.
+
+1. Ensure that you have installed the `kapp` utility.
+
+1. Change to the `tanzu-application-service` directory in your terminal.
+
+1. Run the following command to install the storage class:
+  <pre><code>$ kapp deploy -a default-storage-class -f config-optional/vsphere-default-storage-class.yaml</code></pre>
