@@ -9,68 +9,10 @@ This topic describes how to deploy Tanzu Application Service for Kubernetes.
 
 <%= partial 'limitation_notes' %>
 
-## <a id='prerequisites'></a> Prerequisites
-
-### <a id='command-line-tools'></a> Command-Line Tools
-
-The installation procedure for Tanzu Application Service for Kubernetes requires a Linux or macOS workstation with the following command-line tools installed:
-
-* The Kubernetes CLI, `kubectl`. For more information, see the [Installing the Kubernetes CLI](https://docs.pivotal.io/pks/1-6/installing-kubectl-cli.html) topic.
-* The v2 BOSH CLI, `bosh`.
-* The `kapp` utility, version v0.22.0 or later.
-* The `kbld` utility, version v0.19.0 or later.
-* The `ytt` utility, version v0.26.0 or later.
-
-For more information about installing the BOSH CLI, `kapp`, `kbld`, or `ytt`, see the [Installing Command-Line Tools](installing-command-line-tools.html) topic.
+See the [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html) topic for details on preparing the Kubernetes cluster, app-image registry, and DNS names before installation.
 
 
-The system verification procedure for Tanzu Application Service for Kubernetes also requires that the CF CLI tool be installed.
-
-
-### <a id='kubernetes-cluster'></a> Kubernetes Cluster
-
-Tanzu Application Service for Kubernetes should be deployed to a Kubernetes cluster satisfying the following characteristics:
-
-* The version of the Kubernetes cluster should be 1.14.x, 1.15.x, or 1.16.x.
-* The Kubernetes cluster should have at least 5 worker nodes.
-* Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
-* The Kubernetes cluster should have a default storage class installed.
-* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images.
-
-See the [Preparing the Kubernetes Cluster](preparing-kubernetes-cluster.html) topic for more details.
-
-### <a id='app-container-registry'></a> Container Registry for App Images
-
-Tanzu Application Service for Kubernetes requires a container image registry to store images for buildpack-based apps. This registry must have a repository designated to store the app images and a user with push and pull access to the repository.
-
-See the [Configuring the App Image Registry](configuring-app-image-registry.html) topic for more details on how to configure container registries such as Harbor and Google Container Registry to be compatible with Tanzu Application Service for Kubernetes.
-
-
-### <a id='system-domain'></a> System Domain
-
-Select the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes (for example, `sys.tas.example.com`). This domain name should be one for which you can create DNS records in a DNS zone.
-
-
-Set up DNS records to establish ingress connectivity:
-
-1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
-  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
-  For example:
-  <pre><code>$ kubectl get nodes --output='wide'
-NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
-5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
-a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
-a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
-af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
-cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
-</code></pre>
-
-1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to the set of external IP addresses for the worker nodes.
-
-
-## <a id='deploy'></a> Deploying Tanzu Application Service
-
-### <a id='prepare-installation-resources'></a> Prepare the Installation Resources
+## <a id='prepare-installation-resources'></a> Prepare the Installation Resources
 
 Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
 
@@ -88,7 +30,7 @@ Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network
 $ tar xvf tanzu-application-service.tar -C tanzu-application-service
 ```
 
-### <a id='generate-configuration-values'></a> Generate Configuration Values
+## <a id='generate-configuration-values'></a> Generate Configuration Values
 
 
 1. Create a directory named `configuration-values` in the same directory as the `tanzu-application-service` directory. You will use this directory to store configuration values for this installation.
@@ -105,7 +47,7 @@ $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/de
   <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
 </p>
 
-### <a id='configure-system-registry-values'></a>Configure System Registry Values
+## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
 Tanzu Application Service retrieves container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
 
@@ -141,7 +83,7 @@ system_registry:
 Alternatively, you may create a separate `system-registry-values.yml` file in the `configuration-values` directory that contains these lines.
 
 
-### <a id='configure-app-registry-values'></a> Configure App Registry Values
+## <a id='configure-app-registry-values'></a> Configure App Registry Values
 
 Tanzu Application Service stores the container images for buildpack-based applications in a container image registry. It does so via the following required configuration parameters:
 
@@ -184,7 +126,7 @@ Alternatively, you may create a separate `app-registry-values.yml` file in the `
 
 
 
-### <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes
+## <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes
 
 <p class="note">
 	Deploying Tanzu Application Service for Kubernetes takes approximately 10 minutes.
@@ -199,7 +141,7 @@ $ ./bin/install-tas.sh ../configuration-values
 ```
 
 
-### <a id='post-installation-configuration'></a> Post-Installation Configuration
+## <a id='post-installation-configuration'></a> Post-Installation Configuration
 
 To enable buildpack-based apps to run on Tanzu Application Service for Kubernetes, you must configure the system correctly after the initial installation.
 
