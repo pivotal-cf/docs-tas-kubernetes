@@ -8,23 +8,25 @@ This topic describes how to create and configure Kubernetes clusters to support 
 
 ## <a id='enterprise-pks'></a> VMware Enterprise PKS
 
-See the [Creating Clusters](https://docs.pivotal.io/pks/1-6/create-cluster.html) topic for information about creating a cluster with Enterprise PKS.
+Ensure you have a Kubernetes cluster created with the following characteristics:
 
 * The PKS version should be v1.6 or v1.7.
-* The underlying infrastructure provider should be vSphere.
+* The infrastructure provider should be vSphere.
 * The container networking should be Flannel.
 * The Kubernetes cluster should have at least 5 worker nodes.
-* Each worker node should have at least 2 CPU and 7.5GB memory available for allocation.
-* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images.
+* Each worker node should have at least 2 CPU and 7.5 GB of memory available for allocation.
+* The worker nodes in the Kubernetes cluster should trust the [container image registry](configuring-app-image-registry.html) that Tanzu Application Service for Kubernetes will use to store buildpack-based app images.
+
+See the [Creating Clusters](https://docs.pivotal.io/pks/create-cluster.html) topic for information about creating a cluster with Enterprise PKS.
 
 After creating the cluster, run `pks get-credentials CLUSTER-NAME` to ensure that `kubectl` targets the cluster.
 
 
 ### <a id='configuring-vsphere-storage'></a> Configuring Storage on vSphere
 
-Tanzu Application Service for Kubernetes requires persistent volumes for its internal Postgres database and Minio blobstore. To enable dynamic  PersistentVolume provisioning on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster.
+Tanzu Application Service for Kubernetes requires the Kubernetes cluster to provide persistent volumes for its internal Postgres database and Minio blobstore. To enable dynamic provisioning of persistent volumes on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster. See the [Provision Dynamic PVs for Use with Enterprise PKS section](https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) of the Configuring and Using PersistentVolumes topic for more information.
 
-The Tanzu Application Service for Kubernetes installation bundle provides a vSphere provisioner storage class for you to use, as follows:
+For your convenience, the Tanzu Application Service for Kubernetes installation bundle provides a vSphere provisioner storage class for you to install:
 
 1. Ensure that you have the Tanzu Application Service for Kubernetes installation bundle downloaded and extracted to your local workstation.
 
