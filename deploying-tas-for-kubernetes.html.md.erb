@@ -67,7 +67,7 @@ $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/de
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-Tanzu Application Service retrieves container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
+Tanzu Application Service for Kubernetes retrieves container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
 
 * `system_registry.hostname`: This parameter stores the hostname of the Tanzu Network Registry. It should always be set to `registry.pivotal.io`.
 * `system_registry.username`: This parameter stores the username of the Tanzu Network Registry user that will pull system component images inside the Kubernetes cluster.
