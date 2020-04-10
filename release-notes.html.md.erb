@@ -5,7 +5,7 @@ owner: Tanzu Application Service Release Engineering
 
 ## <a id='0.1.0'></a> v0.1.0
 
-**Release Date:** April XXX, 2020
+**Release Date: April 14, 2020**
 
 <%= partial 'evaluation_only' %>
 
@@ -13,18 +13,25 @@ owner: Tanzu Application Service Release Engineering
 
 Key features in this release:
 
-- `cf push`, with the app instances now running as pods on Kubernetes
-- HTTP routing to app instances
-- `cf logs` for log streams from app instances
+- Supports building and running applications from source via `cf push` using system-provided cloud-native buildpacks.
+- Supports running applications packaged as Docker images.
+- Supports routing HTTP traffic to applications.
+- Supports retrieving logs from application-instance processes.
+- Supports retrieving logs from cloud-native buildpack builds.
+- Supports installation to Kubernetes clusters provisioned with VMware Enterprise PKS.
+- Uses the [k14s](https://k14s.io) toolchain (ytt, kbld, and kapp) for installation.
+- Supports integration with the Harbor container registry, Google Container Registry, and Dockerhub for storing app images.
+
 
 ### <a id='known-issues'></a> Known Issues
 
-- Custom buildpacks and cf cli buildpacks related commands are not supported.
-- `cf restage APP_NAME` fails to re-stage the app.
-- Upgrading existing Tanzu Application Service installation to a new version is not supported.
-- `cf push` does not show staging logs.
-- `cf buildpacks` shows empty build-packs list.
-- Pushing buildpack apps required the diego_docker feature flag to be set.
-- CF tail returns istio sidecar logs alongside app logs.
-- Apps not available via HTTPS.
+- Buildpack staging logs are not streamed during `cf push`.
+- Applications can receive ingress traffic only via HTTP and not HTTPS.
+- Application instance logs also include unfiltered logs from the Istio sidecar proxy process, and can be noisy as a result.
+- Running `cf restage` fails to re-stage the app.
+- The `cf buildpacks` command shows an empty list of buildpacks.
+- The CF CLI buildpack-administration commands are not supported.
+- App developers cannot select a buildpack for their buildpack-based app.
+- Running buildpack-based apps required the `diego_docker` feature flag to be set.
+- Upgrading an existing Tanzu Application Service installation to a new version is not supported.
 - Re-deploying Tanzu Application Service with different credentials is not supported.
