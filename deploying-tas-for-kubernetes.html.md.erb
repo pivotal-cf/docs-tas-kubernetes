@@ -103,7 +103,7 @@ Alternatively, you may create a separate `system-registry-values.yml` file in th
 
 Tanzu Application Service stores the container images for buildpack-based applications in a container image registry. It does so via the following required configuration parameters:
 
-* `app_registry.hostname`: This parameter stores the hostname of the application image registry used to store the application images.
+* `app_registry.hostname`: This parameter stores the hostname of the application image registry used to store the application images. This should be the fully qualified domain name of the registry, but without a URL scheme.
 * `app_registry.repository`: This parameter stores the repository in the image registry that will store the application images. It should include the hostname specified above.
 * `app_registry.username`: This parameter stores the username of the application image registry user that will push application images to the registry and pull them inside the Kubernetes cluster.
 * `app_registry.password`: This parameter stores the password of the application image registry user specified above.

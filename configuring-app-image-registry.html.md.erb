@@ -6,9 +6,9 @@ owner: Tanzu Application Service Release Engineering
 This topic describes how to configure certain container image registries to store the application images for Tanzu Application Service for Kubernetes.
 
 
-##<a id='harbor'></a> VMware Harbor Registry
+## <a id='harbor'></a> VMware Harbor Registry
 
-Before configuring Harbor, ensure that it is deployed in your environment. The [VMware Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) is one option to deploy it when using Ops Manager.
+Before configuring Harbor, ensure that it is deployed in your environment and is accessible at a domain name of your choice. The [VMware Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) is one option to deploy it when using Ops Manager.
 
 1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
 
@@ -16,21 +16,43 @@ Before configuring Harbor, ensure that it is deployed in your environment. The [
 
 1. [Grant that user the Master role](https://goharbor.io/docs/1.10/administration/managing-users/) in the `tas-app-images` project.
 
-Use this project name as the repository and the username and password for this user as the configuration values when [configuring the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) before deploying Tanzu Application Service for Kubernetes.
+To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
 
-<!--
+* Use the fully qualified domain name of the Harbor registry as the app registry hostname value.
+* Use `HARBOR-FQDN/tas-app-images` as the app registry repository value.
+* Use `tas-app-images-push-pull` as the app registry username value.
+* Use the password for the `tas-app-images-push-pull` user as the app registry password value.
+* Use the certificate of the CA that issued the Harbor certificate as the app registry CA value.
 
-## Google Container Registry
+<p class="note">
+  <strong>Note:</strong> You may choose different project and user names in the Harbor configuration as long as you apply them consistently in the configuration.
+</p>
 
- <ol><li>Navigate to <a href="https://network.pivotal.io/">Pivotal Network</a> and log in.</li>
-<li>Click <strong>VMware Tanzu Application Service for Kubernetes</strong>.</li>
-<li>Click <strong>BOSH CLI</strong>.</li>
-<li>Click <strong>BOSH CLI for Linux</strong> to download the BOSH CLI binary.</li>
-<li>Rename the downloaded binary to <code>bosh</code>.</li>
-<li>On the command line, run the following command to make the BOSH CLI binary executable:
-  <pre class="terminal">$ chmod +x bosh</pre></li>
-<li>Move the binary into your <code>PATH</code>. For example:
-  <pre class="terminal">$ mv bosh /usr/local/bin/bosh</pre></li>
-</ol>
+## <a id='harbor'></a> Google Container Registry
 
-keep this '<' here or stuff breaks, srsly ->< -->
+These steps require that you have the Google Cloud CLI, `gcloud`, installed and configured to target your GCP project.
+
+1. Obtain the ID of your current GCP project:
+  <pre><code>$ GCP\_PROJECT\_ID=$(gcloud config get-value core/project)</code></pre>
+
+1. Create a service account in your current project:
+  <pre><code>$ gcloud iam service-accounts create tas-app-images-push-pull</code></pre>
+
+1. Grant this service account `storage.admin` privileges so that it can push and pull images from GCR:
+  <pre><code>$ gcloud projects add-iam-policy-binding $GCP\_PROJECT\_ID \
+    --member serviceAccount:tas-app-images-push-pull@${GCP\_PROJECT\_ID}.iam.gserviceaccount.com \
+    --role roles/storage.admin</code></pre>
+
+1. Create a private authentication key for this service account and store it in a local file named `gcr-storage-admin.json`:
+  <pre><code>$ gcloud iam service-accounts keys create \
+  --iam-account "tas-app-images-push-pull@$GCP\_PROJECT\_ID.iam.gserviceaccount.com" \
+  gcr-storage-admin.json</code></pre>
+
+To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
+
+* Use `gcr.io` as the app registry hostname value.
+* Use `gcr.io/$GCP_PROJECT_ID/tas-app-images` as the app registry repository value.
+* Use `_json_key` as the app registry username value.
+* Use the contents of the `gcr-storage-admin.json` file as the app registry password value.
+* Leave the app registry CA value unset, or set to an empty string.
+
