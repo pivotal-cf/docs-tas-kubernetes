@@ -14,7 +14,7 @@ See the [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-k
 
 ## <a id='prepare-installation-resources'></a> Prepare the Installation Resources
 
-Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
+Download the Tanzu Application Service for Kubernetes installation resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
 
 1. Log into [VMware Tanzu Network](https://network.pivotal.io).
 
@@ -29,6 +29,22 @@ Download the Tanzu Application Service for Kubernetes from [VMware Tanzu Network
 ```bash
 $ tar xvf tanzu-application-service.tar -C tanzu-application-service
 ```
+
+## <a id='adjust-installation-resources-networking'></a> Adjust Installation Resources for Ingress Networking (Optional)
+
+If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may prefer to use that type of service to provide an ingress route to the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+
+<p class="note">
+  VMware Enterprise PKS supports LoadBalancer Services when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
+</p>
+
+To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
+
+1. In your terminal, change into the `tanzu-application-service` directory containing the installation resources.
+
+1. Move the `replace-loadbalancer-with-clusterip.yaml` file from the `custom-overlays` directory to the `config-optional` directory:
+  <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
+
 
 ## <a id='generate-configuration-values'></a> Generate Configuration Values
 
@@ -141,7 +157,42 @@ $ ./bin/install-tas.sh ../configuration-values
 ```
 
 
-## <a id='post-installation-configuration'></a> Post-Installation Configuration
+## <a id='post-installation-networking-configuration'></a> Post-Installation Networking Configuration
+
+### DNS Configuration for Kubernetes Load Balancers
+
+If you have deployed Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for ingress](#adjust-installation-resources-networking), set up DNS for your system domain to route to its external IP:
+
+1. Use `kubectl` to retrieve the value of the external IP assigned to the Istio ingress gateway service:
+  <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'</code></pre>
+  For example:
+  <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+10.193.105.162
+</code></pre>
+
+1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to this external IP address.
+
+
+### DNS Configuration for Worker Node Host Ports
+
+If you have deployed Tanzu Application Service for Kubernetes to a cluster that does not support LoadBalancer Services, set up your DNS records to establish ingress connectivity directly to the worker nodes:
+
+1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
+  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
+  For example:
+  <pre><code>$ kubectl get nodes --output='wide'
+NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
+5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
+a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
+a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
+af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
+cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
+</code></pre>
+
+1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to the set of external IP addresses for the worker nodes.
+
+
+## <a id='post-installation-system-configuration'></a> Post-Installation System Configuration
 
 To enable buildpack-based apps to run on Tanzu Application Service for Kubernetes, you must configure the system correctly after the initial installation.
 
