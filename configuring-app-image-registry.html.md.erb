@@ -8,7 +8,9 @@ This topic describes how to configure certain container image registries to stor
 
 ## <a id='harbor'></a> VMware Harbor Registry
 
-Before configuring Harbor, ensure that it is deployed in your environment and is accessible at a domain name of your choice. The [VMware Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) is one option to deploy it when using Ops Manager.
+These instructions assume that your Harbor registry is accessible at `https://HARBOR-FQDN/`, where `HARBOR-FQDN` is the fully qualified domain name for the Harbor installation.
+
+1. Navigate to `https://HARBOR-FQDN/` in your browser and log in with your administrative credentials.
 
 1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
 
