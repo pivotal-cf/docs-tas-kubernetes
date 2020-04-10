@@ -32,10 +32,11 @@ $ tar xvf tanzu-application-service.tar -C tanzu-application-service
 
 ## <a id='adjust-installation-resources-networking'></a> Adjust Installation Resources for Ingress Networking (Optional)
 
-If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may use that type of service to provide an ingress route to the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
 
 <p class="note">
   VMware Enterprise PKS supports LoadBalancer Services when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
+  It supports only ClusterIP and NodePort Services when deployed to vSphere with Flannel container networking.
 </p>
 
 To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
@@ -58,7 +59,7 @@ Tanzu Application Service for Kubernetes requires a small set of credentials and
 
 1. Change into the `tanzu-application-service` directory in your terminal.
 
-1. Run the value-generation script with the system domain you selected previous and store its output in the `configuration-values` directory:
+1. Run the value-generation script with the system domain you selected previously and store its output in the `configuration-values` directory:
 
 ```bash
 $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
@@ -67,7 +68,7 @@ $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/de
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-Tanzu Application Service for Kubernetes retrieves container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
+Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
 
 * `system_registry.hostname`: This parameter stores the hostname of the Tanzu Network Registry. It should always be set to `registry.pivotal.io`.
 * `system_registry.username`: This parameter stores the username of the Tanzu Network Registry user that will pull system component images inside the Kubernetes cluster.
@@ -168,7 +169,7 @@ $ ./bin/install-tas.sh ../configuration-values
 
 ### DNS Configuration for Kubernetes Load Balancers
 
-If you have deployed Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for ingress](#adjust-installation-resources-networking), set up DNS for your system domain to route to its external IP:
+If you have chosen to deploy Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for ingress](#adjust-installation-resources-networking), set up DNS for your system domain to route to its external IP:
 
 1. Use `kubectl` to retrieve the value of the external IP assigned to the Istio ingress gateway service:
   <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'</code></pre>
