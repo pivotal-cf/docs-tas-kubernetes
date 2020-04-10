@@ -9,51 +9,13 @@ This topic describes how to deploy Tanzu Application Service for Kubernetes.
 
 <%= partial 'limitation_notes' %>
 
-See the [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html) topic for details on installing required command-line tools and on preparing the Kubernetes cluster, app-image registry, and DNS names before installation.
-
-
-## <a id='prepare-installation-resources'></a> Prepare the Installation Resources
-
-Download the Tanzu Application Service for Kubernetes installation resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
-
-1. Log into [VMware Tanzu Network](https://network.pivotal.io).
-
-1. Navigate to the [VMware Tanzu Application Service for Kubernetes product listing](https://network.pivotal.io/products/tas-for-kubernetes).
-
-1. Download the "Tanzu Application Service" file to a local directory of your choice and rename it to `tanzu-application-service.tar`.
-
-1. Create a directory named `tanzu-application-service` next to the Tanzu Application Service file.
-
-1. Extract the contents of `tanzu-application-service.tar` into the `tanzu-application-service` directory:
-
-```bash
-$ tar xvf tanzu-application-service.tar -C tanzu-application-service
-```
-
-## <a id='adjust-installation-resources-networking'></a> Adjust Installation Resources for Ingress Networking (Optional)
-
-If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
-
-<p class="note">
-  VMware Enterprise PKS supports LoadBalancer Services when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
-  It supports only ClusterIP and NodePort Services when deployed to vSphere with Flannel container networking.
-</p>
-
-To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
-
-1. In your terminal, change into the `tanzu-application-service` directory containing the installation resources.
-
-1. Move the `replace-loadbalancer-with-clusterip.yaml` file from the `custom-overlays` directory to the `config-optional` directory:
-  <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
+See the [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html) topic for details on preparing the installation resources, on installing required command-line tools, and on preparing the Kubernetes cluster, app-image registry, and DNS names before installation.
 
 
 ## <a id='generate-configuration-values'></a> Generate Configuration Values
 
-Tanzu Application Service for Kubernetes requires a small set of credentials and certificates to coordinate its components, along with a certificate to terminate TLS at the ingress gateway. The `generate-values.sh` helper script in the installation resources generates these credentials and certificates to be supplied to the installation script.
+Tanzu Application Service for Kubernetes requires a small set of credentials and certificates to coordinate its components, along with a certificate to terminate TLS at the ingress gateway. A helper script in the installation resources generates these credentials and certificates to be supplied to the installation script.
 
-<p class="note">
-  <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
-</p>
 
 1. Create a directory named `configuration-values` in the same directory as the `tanzu-application-service` directory. You will use this directory to store configuration values for this installation.
 
@@ -65,6 +27,9 @@ Tanzu Application Service for Kubernetes requires a small set of credentials and
 $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
 ```
 
+<p class="note">
+  <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
+</p>
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
@@ -148,6 +113,22 @@ app_registry:
 
 Alternatively, you may create a separate `app-registry-values.yml` file in the `configuration-values` directory that contains these lines.
 
+
+## <a id='adjust-installation-resources-networking'></a> (Optional) Adjust Installation Resources for Ingress Networking
+
+If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+
+<p class="note">
+  VMware Enterprise PKS supports LoadBalancer Services <strong>only</strong> when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
+  It supports <strong>only</strong> ClusterIP and NodePort Services when deployed to vSphere with Flannel container networking.
+</p>
+
+To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
+
+1. In your terminal, change into the `tanzu-application-service` directory containing the installation resources.
+
+1. Move the `replace-loadbalancer-with-clusterip.yaml` file from the `custom-overlays` directory to the `config-optional` directory:
+  <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
 
 
 ## <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes

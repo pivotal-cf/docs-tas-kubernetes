@@ -16,7 +16,7 @@ Before configuring Harbor, ensure that it is deployed in your environment and is
 
 1. [Grant that user the Master role](https://goharbor.io/docs/1.10/administration/managing-users/) in the `tas-app-images` project.
 
-To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
+When you are ready to [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
 
 * Set the app registry hostname value to the fully qualified domain name of the Harbor registry.
 * Set the app registry repository value to `HARBOR-FQDN/tas-app-images`.
@@ -48,7 +48,7 @@ These steps require that you have the Google Cloud CLI, `gcloud`, installed and 
   --iam-account "tas-app-images-push-pull@$GCP\_PROJECT\_ID.iam.gserviceaccount.com" \
   gcr-storage-admin.json</code></pre>
 
-To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with GCR and this service account when deploying Tanzu Application Service for Kubernetes:
+When you are ready to [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with GCR and this service account when deploying Tanzu Application Service for Kubernetes:
 
 * Set the app registry hostname value to `gcr.io`.
 * Set the app registry repository value to `gcr.io/$GCP_PROJECT_ID/tas-app-images`.
@@ -61,7 +61,7 @@ To [configure the app registry values](deploying-tas-for-kubernetes.html#configu
 
 To use Dockerhub as a registry for app images, you must have a user account at Dockerhub.
 
-To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with Dockerhub and this user when deploying Tanzu Application Service for Kubernetes:
+When you are ready to [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with Dockerhub and this user when deploying Tanzu Application Service for Kubernetes:
 
 * Set the app registry hostname value to `https://index.docker.io/v1/`.
 * Set the app registry repository value to the account username.

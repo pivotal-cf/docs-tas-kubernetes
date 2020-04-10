@@ -20,10 +20,23 @@ See the [Creating Clusters](https://docs.pivotal.io/pks/create-cluster.html) top
 After creating the cluster, run `pks get-credentials CLUSTER-NAME` to ensure that `kubectl` targets the cluster.
 
 
-### <a id='configuring-vsphere-storage'></a> Configuring Storage on vSphere
+### <a id='configuring-vsphere-storage'></a> Configuring Default Storage on vSphere
 
 Tanzu Application Service for Kubernetes requires the Kubernetes cluster to provide persistent volumes for its internal Postgres database and Minio blobstore. To enable dynamic provisioning of persistent volumes on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster. See the [Provision Dynamic PVs for Use with Enterprise PKS section](https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) of the Configuring and Using PersistentVolumes topic for more information.
 
+To check whether your Kubernetes cluster already has a default storage class installed:
+
+1. Retrieve the list of StorageClass resources in the cluster:
+  <pre><code>$ kubectl get storageclass</code></pre>
+  For example:
+  <pre><code>$ kubectl get storageclass
+NAME             PROVISIONER                    AGE
+thin (default)   kubernetes.io/vsphere-volume   34h
+</code></pre>
+
+1. If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically.
+
+If the list does not include a default, you must install one before deploying Tanzu Application Service for Kubernetes.
 For your convenience, the Tanzu Application Service for Kubernetes installation bundle provides a vSphere provisioner storage class for you to install:
 
 1. Ensure that you have the Tanzu Application Service for Kubernetes installation bundle downloaded and extracted to your local workstation.
