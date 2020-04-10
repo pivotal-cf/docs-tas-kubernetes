@@ -92,6 +92,8 @@ $ export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-P
 Append the following lines to the `deployment-values.yml` file you generated above, replacing the placeholder values with the actual Tanzu Registry username and password:
 
 ```yaml
+#@data/values
+---
 system_registry:
   hostname: registry.pivotal.io
   username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
@@ -132,6 +134,8 @@ $ export YTT_TAS_app_registry__ca='PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTE
 Append the following lines to the `deployment-values.yml` file you generated above:
 
 ```yaml
+#@data/values
+---
 app_registry:
   hostname: my-registry.example.com
   repository: my-registry.example.com/tas-app-images
