@@ -18,11 +18,11 @@ Before configuring Harbor, ensure that it is deployed in your environment and is
 
 To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
 
-* Use the fully qualified domain name of the Harbor registry as the app registry hostname value.
-* Use `HARBOR-FQDN/tas-app-images` as the app registry repository value.
-* Use `tas-app-images-push-pull` as the app registry username value.
-* Use the password for the `tas-app-images-push-pull` user as the app registry password value.
-* Use the certificate of the CA that issued the Harbor certificate as the app registry CA value.
+* Set the app registry hostname value to the fully qualified domain name of the Harbor registry.
+* Set the app registry repository value to `HARBOR-FQDN/tas-app-images`.
+* Set the app registry username value to `tas-app-images-push-pull`.
+* Set the app registry password value to the password for the `tas-app-images-push-pull` user.
+* Set the app registry CA value to the certificate of the CA that issued the Harbor certificate, or the Harbor certificate itself if it is self-signed.
 
 <p class="note">
   <strong>Note:</strong> You may choose different project and user names in the Harbor configuration as long as you apply them consistently in the configuration.
@@ -48,11 +48,23 @@ These steps require that you have the Google Cloud CLI, `gcloud`, installed and 
   --iam-account "tas-app-images-push-pull@$GCP\_PROJECT\_ID.iam.gserviceaccount.com" \
   gcr-storage-admin.json</code></pre>
 
-To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with this registry and user when deploying Tanzu Application Service for Kubernetes:
+To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with GCR and this service account when deploying Tanzu Application Service for Kubernetes:
 
-* Use `gcr.io` as the app registry hostname value.
-* Use `gcr.io/$GCP_PROJECT_ID/tas-app-images` as the app registry repository value.
-* Use `_json_key` as the app registry username value.
-* Use the contents of the `gcr-storage-admin.json` file as the app registry password value.
-* Leave the app registry CA value unset, or set to an empty string.
+* Set the app registry hostname value to `gcr.io`.
+* Set the app registry repository value to `gcr.io/$GCP_PROJECT_ID/tas-app-images`.
+* Set the app registry username value to `_json_key`.
+* Set the app registry password value the contents of the `gcr-storage-admin.json` file.
+* Leave the app registry CA value unset, or set it to an empty string.
 
+
+## <a id='dockerhub'></a> Dockerhub
+
+To use Dockerhub as a registry for app images, you must have a user account at Dockerhub.
+
+To [configure the app registry values](deploying-tas-for-kubernetes.html#configure-app-registry-values) with Dockerhub and this user when deploying Tanzu Application Service for Kubernetes:
+
+* Set the app registry hostname value to `https://index.docker.io/v1/`.
+* Set the app registry repository value to the account username.
+* Set the app registry username value to the account username.
+* Set the app registry password value to the account password.
+* Leave the app registry CA value unset, or set it to an empty string.

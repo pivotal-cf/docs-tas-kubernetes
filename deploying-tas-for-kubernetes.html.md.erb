@@ -32,7 +32,7 @@ $ tar xvf tanzu-application-service.tar -C tanzu-application-service
 
 ## <a id='adjust-installation-resources-networking'></a> Adjust Installation Resources for Ingress Networking (Optional)
 
-If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may prefer to use that type of service to provide an ingress route to the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+If your Kubernetes cluster supports Kubernetes Services of type LoadBalancer, you may use that type of service to provide an ingress route to the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
 
 <p class="note">
   VMware Enterprise PKS supports LoadBalancer Services when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
@@ -48,6 +48,11 @@ To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service
 
 ## <a id='generate-configuration-values'></a> Generate Configuration Values
 
+Tanzu Application Service for Kubernetes requires a small set of credentials and certificates to coordinate its components, along with a certificate to terminate TLS at the ingress gateway. The `generate-values.sh` helper script in the installation resources generates these credentials and certificates to be supplied to the installation script.
+
+<p class="note">
+  <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
+</p>
 
 1. Create a directory named `configuration-values` in the same directory as the `tanzu-application-service` directory. You will use this directory to store configuration values for this installation.
 
@@ -59,9 +64,6 @@ To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service
 $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/deployment-values.yml
 ```
 
-<p class="note">
-  <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
-</p>
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
@@ -76,7 +78,7 @@ You may specify these values either by environment variables or by configuration
 
 #### Option 1: Environment Variables
 
-Run the following commands in your terminal to set these configuration parameters:
+Run the following commands in your terminal to set these configuration parameters, replacing the placeholder values with the actual Tanzu Registry username and password:
 
 ```bash
 $ export YTT_TAS_system_registry__hostname='registry.pivotal.io'
@@ -87,7 +89,7 @@ $ export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-P
 
 #### Option 2: Configuration File
 
-Append the following lines to the `deployment-values.yml` file you generated above:
+Append the following lines to the `deployment-values.yml` file you generated above, replacing the placeholder values with the actual Tanzu Registry username and password:
 
 ```yaml
 system_registry:
@@ -107,7 +109,8 @@ Tanzu Application Service stores the container images for buildpack-based applic
 * `app_registry.repository`: This parameter stores the repository in the image registry that will store the application images. It should include the hostname specified above.
 * `app_registry.username`: This parameter stores the username of the application image registry user that will push application images to the registry and pull them inside the Kubernetes cluster.
 * `app_registry.password`: This parameter stores the password of the application image registry user specified above.
-* `app_registry.ca`: This parameter stores the certificate of the certificate authority that issued the certificate for the app image registry. This is required for registry certificates not issued from a globally trusted root Certificate Authority.
+* `app_registry.ca`: This parameter stores the certificate of the certificate authority that issued the certificate for the app image registry. If the registry certificate has been issued from a globally trusted root Certificate Authority, this value may be left unset or set to an empty string.
+
 
 You may specify these values either by environment variables or by configuration file.
 
@@ -170,7 +173,7 @@ If you have deployed Tanzu Application Service for Kubernetes to [use a Kubernet
 10.193.105.162
 </code></pre>
 
-1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to this external IP address.
+1. In your DNS zone, create an `A` record for the wildcard system domain, `*.sys.tas.example.com`, resolving to this external IP address.
 
 
 ### DNS Configuration for Worker Node Host Ports
@@ -189,7 +192,7 @@ af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.8
 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
 </code></pre>
 
-1. Create an `A` record from the wildcard system domain, `*.sys.tas.example.com`, to the set of external IP addresses for the worker nodes.
+1. Create an `A` record for the wildcard system domain, `*.sys.tas.example.com`, resolving to the set of external IP addresses for the worker nodes.
 
 
 ## <a id='post-installation-system-configuration'></a> Post-Installation System Configuration
@@ -224,10 +227,7 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
   $ cf target -o test-org -s test-space
   </code></pre>
 
-1. Clone the Cloud Foundry test application from GitHub:
-  <pre><code>$ git clone https://github.com/cloudfoundry-samples/test-app</code></pre>
-
-1. Change into the `test-app` directory in your terminal.
+1. Clone the [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) from GitHub to your workstation and change into its directory.
 
 1. Push the test app to the installation:
   <pre><code>$ cf push test-app --hostname test-app</code></pre>
