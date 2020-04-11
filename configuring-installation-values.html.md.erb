@@ -33,29 +33,13 @@ $ ./bin/generate-values.sh -d "sys.tas.example.com" > ../configuration-values/de
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/). It does so via the following required configuration parameters:
+Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
 
-* `system_registry.hostname`: This parameter stores the hostname of the Tanzu Network Registry. It should always be set to `registry.pivotal.io`.
-* `system_registry.username`: This parameter stores the username of the Tanzu Network Registry user that will pull system component images inside the Kubernetes cluster.
-* `system_registry.password`: This parameter stores the password of the Tanzu Network Registry user specified above.
+To configure Tanzu Application Service for Kubernetes with these values:
 
-You may specify these values **either** by configuration file **or** by environment variables.
+1. Change into the `configuration-values` directory you created earlier.
 
-
-#### Option 1: Environment Variables
-
-Run the following commands in your terminal to set these configuration parameters, replacing the placeholder values with the actual Tanzu Registry username and password:
-
-```bash
-$ export YTT_TAS_system_registry__hostname='registry.pivotal.io'
-$ export YTT_TAS_system_registry__username='PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME'
-$ export YTT_TAS_system_registry__password='PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD'
-```
-
-
-#### Option 2: Configuration File
-
-Append the following lines to the `deployment-values.yml` file you generated above, replacing the placeholder values with the actual Tanzu Registry username and password:
+1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
 
 ```yaml
 #@data/values
@@ -66,59 +50,15 @@ system_registry:
   password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
 ```
 
-Alternatively, you may create a separate `system-registry-values.yml` file in the `configuration-values` directory that contains these lines.
-
 
 ## <a id='configure-app-registry-values'></a> Configure App Registry Values
 
-Tanzu Application Service stores the container images for buildpack-based applications in a container image registry. It does so via the following required configuration parameters:
-
-* `app_registry.hostname`: This parameter stores the hostname of the application image registry used to store the application images. This should be the fully qualified domain name of the registry, but without a URL scheme.
-* `app_registry.repository`: This parameter stores the repository in the image registry that will store the application images. It should include the hostname specified above.
-* `app_registry.username`: This parameter stores the username of the application image registry user that will push application images to the registry and pull them inside the Kubernetes cluster.
-* `app_registry.password`: This parameter stores the password of the application image registry user specified above.
-* `app_registry.ca`: This parameter stores the certificate of the certificate authority that issued the certificate for the app image registry. If the registry certificate has been issued from a globally trusted root Certificate Authority, this value may be left unset or set to an empty string.
-
-
-You may specify these values **either** by configuration file **or** by environment variables.
-
-
-#### Option 1: Environment Variables
-
-Run the following commands in your terminal to set these configuration parameters:
-
-```bash
-$ export YTT_TAS_app_registry__hostname='my-registry.example.com'
-$ export YTT_TAS_app_registry__repository='my-registry.example.com/tas-app-images'
-$ export YTT_TAS_app_registry__username='PLACEHOLDER-APP-REGISTRY-USERNAME'
-$ export YTT_TAS_app_registry__password='PLACEHOLDER-APP-REGISTRY-PASSWORD'
-$ export YTT_TAS_app_registry__ca='PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS'
-```
-
-#### Option 2: Configuration File
-
-
-
-Append the following lines to the `deployment-values.yml` file you generated above:
-
-```yaml
-#@data/values
----
-app_registry:
-  hostname: my-registry.example.com
-  repository: my-registry.example.com/tas-app-images
-  username: "PLACEHOLDER-APP-REGISTRY-USERNAME"
-  password: "PLACEHOLDER-APP-REGISTRY-PASSWORD"
-  ca: |
-    PLACEHOLDER-APP-REGISTRY-CA-CERTIFICATE-CONTENTS
-```
-
-Alternatively, you may create a separate `app-registry-values.yml` file in the `configuration-values` directory that contains these lines.
+Tanzu Application Service depends on an external image registry to store the images it builds for buildpack-based applications. See the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation. 
 
 
 ## <a id='adjust-installation-resources-networking'></a> (Optional) Use Load Balancer Service for Ingress Networking
 
-If your Kubernetes cluster supports Kubernetes Services of type `LoadBalancer`, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) of type `LoadBalancer`, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
 
 <p class="note">
   VMware Enterprise PKS supports LoadBalancer Services <strong>only</strong> when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
@@ -131,3 +71,8 @@ To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service
 
 1. Move the `replace-loadbalancer-with-clusterip.yaml` file from the `custom-overlays` directory to the `config-optional` directory:
   <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
+
+
+## <a id='deploy-tas-for-kubernetes'></a> Deploy Tanzu Application Service for Kubernetes
+
+Once you have completed the configuration steps above, proceed to the [Deploying Tanzu Application Service for Kubernetes](deploying-tas-for-kubernetes.html) topic.
