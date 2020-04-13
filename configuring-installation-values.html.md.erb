@@ -59,11 +59,13 @@ Tanzu Application Service depends on an external image registry to store the ima
 
 ## <a id='adjust-installation-resources-networking'></a> (Optional) Use Load Balancer Service for Ingress Networking
 
-If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) of type `LoadBalancer`, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) of type LoadBalancer, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
 
 <p class="note">
-  VMware Enterprise PKS supports LoadBalancer Services <strong>only</strong> when deployed to vSphere with NSX-T container networking, or when deployed to AWS, Azure, or GCP.
-  It supports <strong>only</strong> ClusterIP and NodePort Services when deployed to vSphere with Flannel container networking.
+  This option is recommended when deploying Tanzu Application Service for Kubernetes to VMware Enterprise PKS on AWS, Azure, or GCP, or on vSphere with NSX-T container networking.
+</p>
+<p class="note warning">
+  This option is <strong>not compatible</strong> with VMware Enterprise PKS to vSphere with Flannel container networking.
 </p>
 
 To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
