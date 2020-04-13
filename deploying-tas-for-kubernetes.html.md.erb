@@ -31,7 +31,7 @@ $ ./bin/install-tas.sh ../configuration-values
 
 ### DNS Configuration with Kubernetes Load Balancers
 
-If you have chosen to deploy Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for ingress](#adjust-installation-resources-networking), set up DNS for your system domain to route to its external IP:
+If you have optionally configured Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for ingress](#adjust-installation-resources-networking), set up DNS for your system domain to route to its external IP:
 
 1. Use `kubectl` to retrieve the value of the external IP assigned to the Istio ingress gateway service:
   <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'</code></pre>
