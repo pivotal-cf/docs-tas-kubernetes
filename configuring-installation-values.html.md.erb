@@ -54,12 +54,12 @@ system_registry:
 
 ## <a id='configure-app-registry-values'></a> Configure App Registry Values
 
-Tanzu Application Service depends on an external image registry to store the images it builds for buildpack-based applications. See the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation. 
+Tanzu Application Service for Kubernetes depends on an external image registry to store the images it builds for buildpack-based applications. See the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation.
 
 
-## <a id='adjust-installation-resources-networking'></a> (Optional) Use Load Balancer Service for Ingress Networking
+## <a id='adjust-installation-resources-networking'></a> (Optional) Use Load Balancer Service for Ingress Gateway
 
-If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) of type LoadBalancer, you may use that type of service to provision a load-balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
+If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) of type LoadBalancer, you may use that type of service to provision a load balancer automatically for the Istio ingress gateway in the Tanzu Application Service for Kubernetes deployment.
 
 <p class="note">
   This option is recommended when deploying Tanzu Application Service for Kubernetes to VMware Enterprise PKS on AWS, Azure, or GCP, or on vSphere with NSX-T container networking.
