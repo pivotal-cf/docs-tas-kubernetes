@@ -1,11 +1,12 @@
 ---
-title: Release Notes
+title: TAS for Kubernetes Release Notes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic contains release notes for Tanzu Application Service for Kubernetes.
+This topic contains release notes for Tanzu Application Service (TAS) for Kubernetes.
 
-## <a id='0.1.0'></a> 0.1.0
+
+## <a id='0-1-0'></a> v0.1.0
 
 **Release Date: April 14, 2020**
 
@@ -15,26 +16,29 @@ This topic contains release notes for Tanzu Application Service for Kubernetes.
 
 Key features in this release:
 
-- Supports building and running applications from source via `cf push` using system-provided cloud-native buildpacks for Java, Go, NodeJS, and .NET Core.
-- Supports running applications packaged as Docker images.
-- Supports routing HTTP traffic to applications.
-- Supports retrieving logs from application-instance processes.
+- Supports building and running apps from source files through `cf push`
+  using system-provided cloud-native buildpacks for Java, Go, NodeJS, and .NET Core.
+- Supports running apps packaged as Docker images.
+- Supports routing HTTP traffic to apps.
+- Supports retrieving logs from app-instance processes.
 - Supports retrieving logs from cloud-native buildpack builds.
 - Supports installation to Kubernetes clusters provisioned with VMware Enterprise PKS.
-- Uses the [k14s](https://k14s.io) toolchain (ytt, kbld, and kapp) for installation.
-- Supports integration with the Harbor container registry, Google Container Registry, and Dockerhub for storing app images.
-
+- Uses the k14s toolchain (ytt, kbld, and kapp) for installation.
+  For more information, see the [k14s](https://k14s.io) website.
+- Supports integration with VMware Harbor Registry, Google Container Registry, and DockerHub for storing app images.
 
 ### <a id='known-issues'></a> Known Issues
 
-- Applications can receive ingress traffic only via HTTP and not HTTPS.
-- Retrieving application and buildpack-staging logs via `cf logs` requires CF CLI 6.50.0 or later.
+This release has the following issues:
+
+- Apps can receive ingress traffic only through HTTP and not HTTPS.
+- Retrieving app and buildpack-staging logs with `cf logs` requires cf CLI v6.50.0 or later.
 - Buildpack-staging logs are not streamed during `cf push`.
-- Application instance logs also include unfiltered logs from the Istio sidecar proxy process, and can be noisy as a result.
+- App instance logs also include unfiltered logs from the Istio sidecar proxy process and can be noisy as a result.
 - Running `cf restage` fails to re-stage the app.
 - The `cf buildpacks` command shows an empty list of buildpacks.
-- The CF CLI buildpack-administration commands are not supported.
-- App developers cannot select a buildpack for their buildpack-based app.
+- Does not support cf CLI `buildpack-administration` commands.
+- App developers cannot select a buildpack for their buildpack-based apps.
 - Running buildpack-based apps requires the `diego_docker` feature flag to be set.
-- Upgrading an existing Tanzu Application Service installation to a new version is not supported.
-- Re-deploying Tanzu Application Service with different credentials is not supported.
+- Does not support upgrading an existing TAS installation to a new version.
+- Does not support re-deploying TAS with different credentials.
