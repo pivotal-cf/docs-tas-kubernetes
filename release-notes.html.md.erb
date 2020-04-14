@@ -15,7 +15,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes.
 
 Key features in this release:
 
-- Supports building and running applications from source via `cf push` using system-provided cloud-native buildpacks.
+- Supports building and running applications from source via `cf push` using system-provided cloud-native buildpacks for Java, Go, NodeJS, and .NET Core.
 - Supports running applications packaged as Docker images.
 - Supports routing HTTP traffic to applications.
 - Supports retrieving logs from application-instance processes.
@@ -27,8 +27,9 @@ Key features in this release:
 
 ### <a id='known-issues'></a> Known Issues
 
-- Buildpack staging logs are not streamed during `cf push`.
 - Applications can receive ingress traffic only via HTTP and not HTTPS.
+- Retrieving application and buildpack-staging logs via `cf logs` requires CF CLI 6.50.0 or later.
+- Buildpack-staging logs are not streamed during `cf push`.
 - Application instance logs also include unfiltered logs from the Istio sidecar proxy process, and can be noisy as a result.
 - Running `cf restage` fails to re-stage the app.
 - The `cf buildpacks` command shows an empty list of buildpacks.
