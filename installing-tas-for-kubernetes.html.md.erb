@@ -1,9 +1,9 @@
 ---
-title: Deploying Tanzu Application Service for Kubernetes
+title: Installing Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to deploy Tanzu Application Service for Kubernetes.
+This topic describes how to install Tanzu Application Service for Kubernetes.
 
 <%= partial 'evaluation_only' %>
 
@@ -12,7 +12,7 @@ This topic describes how to deploy Tanzu Application Service for Kubernetes.
 Before proceeding, review the [Configuring Installation Values](configuring-installation-values.html) topic to ensure that you have configured all of the required or recommended installation resources.
 
 
-## <a id='configure-app-registry-values'></a> Deploy Tanzu Application Service for Kubernetes
+## <a id='install-tas-for-k8s'></a> Installing Tanzu Application Service for Kubernetes
 
 <p class="note">
 	Deploying Tanzu Application Service for Kubernetes takes approximately 10 minutes.
@@ -20,7 +20,7 @@ Before proceeding, review the [Configuring Installation Values](configuring-inst
 
 1. Change into the `tanzu-application-service` directory in your terminal.
 
-2. Run the installation script, configured to use the deployment values above:
+2. Run the installation script, configured to use the deployment values you generated previously:
 
 ```bash
 $ ./bin/install-tas.sh ../configuration-values
