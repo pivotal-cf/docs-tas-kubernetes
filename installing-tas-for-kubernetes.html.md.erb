@@ -73,13 +73,15 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
 1. Use the CF CLI to target the installation at the `api` subdomain of the system domain:
   <pre><code>$ cf api api.PLACEHOLDER-SYSTEM-DOMAIN --skip-ssl-validation</code></pre>
 
+1. In your terminal, change into the directory containing the `tanzu-application-service` and `configuration-values` directories.
+
 1. Set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password, stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
   <pre><code>$ CF\_ADMIN\_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml --path /cf\_admin\_password)"</code></pre>
 
 1. Log into the installation as the admin user:
   <pre><code>$ cf auth admin "$CF\_ADMIN\_PASSWORD"</code></pre>
 
-1. Enable the Diego-Docker feature flag to allow pushing buildpack based apps to the Kubernetes cluster:
+1. Enable the Diego-Docker feature flag to allow pushing buildpack-based apps to the Kubernetes cluster:
   <pre><code>$ cf enable-feature-flag diego_docker</code></pre>
 
 
