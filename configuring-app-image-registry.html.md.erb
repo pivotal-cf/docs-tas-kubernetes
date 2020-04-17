@@ -53,7 +53,12 @@ To configure Tanzu Application Service for Kubernetes with these values for the 
 
 1. Change into the `configuration-values` directory you created earlier.
 
-1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Harbor fully qualified domain name, the password you submitted for the `tas-app-images-push-pull` user, and the CA certificate or self-signed certificate for Harbor you retrieved above.
+1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with:
+  * the Harbor fully qualified domain name,
+  * the password you submitted for the `tas-app-images-push-pull` user, and
+  * the CA certificate or self-signed certificate for Harbor you retrieved above.
+
+    Make sure that each line of the CA certificate value is indented four spaces, to match the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines below.
 
 
 ```yaml
@@ -66,12 +71,13 @@ app_registry:
   password: "PLACEHOLDER-APP-REGISTRY-PASSWORD"
   ca: |
     -----BEGIN CERTIFICATE-----
-    (PLACEHOLDER-CA-CERTIFICATE-CONTENTS: Make sure the indentation of all the lines is aligned correctly)
+    PLACEHOLDER-CA-CERTIFICATE-CONTENTS
+    (make sure each line is indented four spaces)
     -----END CERTIFICATE-----
 ```
 
 <p class="note">
-  <strong>Note:</strong> You may choose different project and user names in the Harbor configuration as long as you apply them consistently in the configuration.
+  <strong>Note:</strong> You may choose different project and user names in the Harbor configuration procedure above as long as you use the same names in the configuration file.
 </p>
 
 Once you have created this file, [resume the remaining configuration activities for your installation](configuring-installation-values.html#configure-app-registry-values).
