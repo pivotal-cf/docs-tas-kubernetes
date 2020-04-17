@@ -16,9 +16,9 @@ Follow instructions for **one** of the registry types below:
 
 ### <a id='harbor-project-user'></a> Creating a Harbor Project and User Account
 
-These instructions use `HARBOR-FQDN` to refer to the fully qualified domain name for the Harbor installation.
+These instructions use `PLACEHOLDER-HARBOR-FQDN` to refer to the fully qualified domain name for the Harbor installation.
 
-1. Navigate to `https://HARBOR-FQDN/` in your browser and log in with your administrative credentials.
+1. Navigate to `https://PLACEHOLDER-HARBOR-FQDN/` in your browser and log in with your administrative credentials.
 
 1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
 
@@ -53,15 +53,15 @@ To configure Tanzu Application Service for Kubernetes with these values for the 
 
 1. Change into the `configuration-values` directory you created earlier.
 
-1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the password you submitted for the `tas-app-images-push-pull` user and with the CA certificate or self-signed certificate for Harbor you retrieved above. 
+1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Harbor fully qualified domain name, the password you submitted for the `tas-app-images-push-pull` user, and the CA certificate or self-signed certificate for Harbor you retrieved above.
 
 
 ```yaml
 #@data/values
 ---
 app_registry:
-  hostname: "HARBOR-FQDN"
-  repository: "HARBOR-FQDN/tas-app-images"
+  hostname: "PLACEHOLDER-HARBOR-FQDN"
+  repository: "PLACEHOLDER-HARBOR-FQDN/tas-app-images"
   username: "tas-app-images-push-pull"
   password: "PLACEHOLDER-APP-REGISTRY-PASSWORD"
   ca: |
