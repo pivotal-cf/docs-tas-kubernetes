@@ -46,7 +46,8 @@ af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.8
 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
 </code></pre>
 
-1. Create an `A` record for the wildcard system domain, `*.sys.tas.example.com`, resolving to the set of external IP addresses for the worker nodes.
+1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the set of external IP addresses for the worker nodes.
+Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to these IP addresses.
 
 
 ### DNS Configuration with a Kubernetes Load Balancer for Ingress Gateway
@@ -60,7 +61,8 @@ If you have instead optionally configured Tanzu Application Service for Kubernet
 10.193.105.162
 </code></pre>
 
-1. In your DNS zone, create an `A` record for the wildcard system domain, `*.sys.tas.example.com`, resolving to this external IP address.
+1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this external IP address.
+Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to this IP address.
 
 
 
@@ -68,8 +70,8 @@ If you have instead optionally configured Tanzu Application Service for Kubernet
 
 To enable buildpack-based apps to run on Tanzu Application Service for Kubernetes, you must configure the system correctly after the initial installation.
 
-1. Use the CF CLI to target the installation at the system domain configured earlier:
-  <pre><code>$ cf api api.sys.tas.example.com --skip-ssl-validation</code></pre>
+1. Use the CF CLI to target the installation at the `api` subdomain of the system domain:
+  <pre><code>$ cf api api.PLACEHOLDER-SYSTEM-DOMAIN --skip-ssl-validation</code></pre>
 
 1. Set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password, stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
   <pre><code>$ CF\_ADMIN\_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml --path /cf\_admin\_password)"</code></pre>
@@ -105,4 +107,4 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
   <pre><code>$ cf logs test-app</code></pre>
 
 1. After the `cf push` command succeeds, make a request to the app:
-  <pre><code>$ curl test-app.sys.tas.example.com</code></pre>
+  <pre><code>$ curl test-app.PLACEHOLDER-SYSTEM-DOMAIN</code></pre>

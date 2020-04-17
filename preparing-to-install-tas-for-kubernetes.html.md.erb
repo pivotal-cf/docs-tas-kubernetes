@@ -56,7 +56,9 @@ If you are using Harbor as your container registry, ensure that it is deployed i
 
 ## <a id='system-domain'></a> System Domain
 
-Decide on the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes system domain (for example, `sys.tas.example.com`). This domain name should be one for which you can create DNS records in a DNS zone.
+Decide on the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes system domain (for example, `sys.tas.example.com`). This domain name should be one for which you can create DNS records in a DNS zone. This domain and its subdomains should not be in use for other services.
+
+This documentation will use `PLACEHOLDER-SYSTEM-DOMAIN` to refer to the value of this system domain.
 
 
 ## <a id='deploying-tas-kubernetes'></a> Next: Configuring and Deploying Tanzu Application Service for Kubernetes
