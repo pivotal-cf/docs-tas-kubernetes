@@ -13,6 +13,18 @@ Before proceeding, review the [Preparing to Install TAS for Kubernetes](preparin
 * Choosing a system domain DNS name.
 
 
+## <a id='overview'></a> Overview
+
+Configuring Tanzu Application Service for Kubernetes for installation entails several steps:
+
+* Generating internal configuration values using a helper script,
+* Configuring values for the system component registry,
+* Configuring the application image registry,
+* Optionally using a Kubernetes LoadBalancer service for the ingress gateway.
+
+The following sections and topics explain these steps in detail.
+
+
 ## <a id='generate-configuration-values'></a> Generate Configuration Values
 
 Tanzu Application Service for Kubernetes requires a small set of credentials and certificates to coordinate its components, along with a certificate to terminate TLS at the ingress gateway. A helper script in the installation resources generates these credentials and certificates to be supplied to the installation script.
@@ -31,30 +43,6 @@ $ ./bin/generate-values.sh -d "PLACEHOLDER-SYSTEM-DOMAIN" > ../configuration-val
 <p class="note">
   <strong>Note:</strong> The TLS certificate that the value-generation script generates to terminate TLS traffic at the system ingress gateway is self-signed.
 </p>
-
-## <a id='configure-system-registry-values'></a>Configure System Registry Values
-
-Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
-
-To configure Tanzu Application Service for Kubernetes with these values:
-
-1. Change into the `configuration-values` directory you created earlier.
-
-1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
-
-```yaml
-#@data/values
----
-system_registry:
-  hostname: registry.pivotal.io
-  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
-  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
-```
-
-
-## <a id='configure-app-registry-values'></a> Configure App Registry Values
-
-Tanzu Application Service for Kubernetes depends on an external image registry to store the images it builds for buildpack-based applications. See the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation.
 
 
 ## <a id='adjust-installation-resources-networking'></a> (Optional) Use Load Balancer Service for Ingress Gateway
@@ -76,6 +64,26 @@ To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service
   <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
 
 
-## <a id='installing-tas-for-kubernetes'></a> Next: Installing Tanzu Application Service for Kubernetes
+## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-Once you have completed the configuration steps above, proceed to the [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
+Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
+
+To configure Tanzu Application Service for Kubernetes with these values:
+
+1. Change into the `configuration-values` directory you created earlier.
+
+1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
+
+```yaml
+#@data/values
+---
+system_registry:
+  hostname: registry.pivotal.io
+  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
+  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
+```
+
+
+## <a id='configure-app-registry-values'></a> Next: Configure App Registry Values
+
+Tanzu Application Service for Kubernetes depends on an external image registry to store the images it builds for buildpack-based applications. Proceed to the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation.
