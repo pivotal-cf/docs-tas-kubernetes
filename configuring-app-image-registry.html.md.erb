@@ -20,31 +20,51 @@ These instructions use `PLACEHOLDER-HARBOR-FQDN` to refer to the fully qualified
 
 1. Navigate to `https://PLACEHOLDER-HARBOR-FQDN/` in your browser and log in with your administrative credentials.
 
-1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
-
 1. [Create a new user](https://goharbor.io/docs/1.10/administration/managing-users/create-users-db/) named `tas-app-images-push-pull`. You will need to submit a password for the user you create.
 
-1. In the Harbor web UI, navigate back to the `tas-app-images` project you created, go to the Members tab.
-
-1. Click + USER button. In the Name field on the popup window, type `tas-app-images-push-pull`, and choose Master. See more information on [Master role](https://goharbor.io/docs/1.10/administration/managing-users/) in Harbor.
+1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
 
 
-### <a id='harbor-ca-cert'></a> Retrieving the Harbor CA Certificate
+Next, add the `tas-app-images-push-pull` user to the `tas-app-images` project:
 
-If your Harbor installation has a self-signed certificate, retrieve that certificate for use below.
+1. Click on the `tas-app-images` entry in the Projects list and then select the Members tab.
 
-If you used the [Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) to install Harbor in your Ops Manager environment and generated a certificate for it using Ops Manager, retrieve it from the Ops Manager web UI for use below:
+1. Click on the "+ USER" button to open the New Member dialog box.
 
-1. Log into Ops Manager as an administrative user.
+1. In the Name field on the dialog box, enter `tas-app-images-push-pull`.
 
-1. Under the dropdown with your user name in the upper-right corner, click on Settings.
+1. In the Role field, select the Master option. 
+
+1. Click the OK button on the dialog box to finish adding the user to the project.
+
+For more information on the Master role, see the [Managing Users](https://goharbor.io/docs/1.10/administration/managing-users/) topic in the Harbor documentation.
+
+
+### <a id='harbor-ca-cert'></a> Retrieving the Harbor CA Certificate from Ops Manager
+
+If you have deployed Harbor using the Ops Manager tile, retrieve the CA certificate or self-signed certificate from the tile configuration:
+
+1. Log into Ops Manager as an administrative user and navigate to the Installation Dashboard.
+
+1. Click on the VMware Harbor Registry tile.
+
+1. Navigate to the Certificate configuration pane and scroll down to the Certificate Authority (CA) field.
+
+If there is a PEM-encoded certificate value present in the CA field, use it as the certificate authority value in the [configuration file section below](#harbor-config-file).
+
+
+If instead there is no value present in the CA field, the certificate for the Harbor installation was likely issued from the Ops Manager root CA certificate. Retrieve that root CA certificate as follows:
+
+1. In the Ops Manager user interface, dropdown with your user name in the upper-right corner, click on Settings.
 
 1. In the Settings page, click on the Advanced Options pane.
 
-1. In the Advanced Options pane, click on the DOWNLOAD ROOT CA CERT to download the Ops Manager root CA certificate.
+1. In the Advanced Options pane, click on the DOWNLOAD ROOT CA CERT button to download the Ops Manager root CA certificate.
+
+Use this root CA certificate as the certificate authority in the [configuration file section below](#harbor-config-file).
 
 
-If instead your Harbor installation has a certificate issued from a different private certificate authority (CA), retrieve the certificate for that CA for use below.
+If you did not use the Ops Manager tile to deploy your Harbor installation, contact the administrator for the installation to obtain the CA certificate that issued the Harbor certificate.
 
 
 ### <a id='harbor-config-file'></a> Creating the Configuration File
