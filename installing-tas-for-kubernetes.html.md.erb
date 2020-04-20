@@ -29,10 +29,10 @@ $ ./bin/install-tas.sh ../configuration-values
 
 ## <a id='post-installation-networking-configuration'></a> Post-Installation Networking Configuration
 
-This section discusses configuring DNS entries and load balancers for traffic coming into the installation. Follow one of these options.
+This section discusses how to configure DNS entries and load balancers for the Tanzu Application Service for Kubernetes ingress gateway. Follow one of the configuration cases below, depending on your installation.
 
 
-### DNS Configuration with no Load Balancer for Ingress Gateway
+### DNS Configuration with No Load Balancer for Ingress Gateway
 
 By default, Tanzu Application Service for Kubernetes is configured not to create a Kubernetes LoadBalancer service for the ingress gateway.
 If you have deployed Tanzu Application Service for Kubernetes in this configuration, and do not have an external load balancer to use for ingress to the installation, set up your DNS records to establish ingress connectivity directly to the worker nodes:
