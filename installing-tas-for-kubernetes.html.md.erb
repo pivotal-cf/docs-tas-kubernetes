@@ -107,7 +107,7 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
 1. Log into the installation as the admin user:
   <pre><code>$ cf auth admin "$CF\_ADMIN\_PASSWORD"</code></pre>
 
-1. Enable the Diego-Docker feature flag to allow pushing buildpack-based apps to the Kubernetes cluster:
+1. Enable the Diego-Docker feature flag to enable buildpack-based apps to run on the Kubernetes cluster:
   <pre><code>$ cf enable-feature-flag diego_docker</code></pre>
 
 
