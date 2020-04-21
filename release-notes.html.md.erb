@@ -40,5 +40,7 @@ This release has the following issues:
 - Does not support cf CLI `buildpack-administration` commands.
 - App developers cannot select a buildpack for their buildpack-based apps.
 - Running buildpack-based apps requires the `diego_docker` feature flag to be set.
+- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
 - Does not support upgrading an existing TAS installation to a new version.
 - Does not support re-deploying TAS with different credentials.
