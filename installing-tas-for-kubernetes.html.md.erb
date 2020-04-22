@@ -18,9 +18,11 @@ Before proceeding, review the [Configuring Installation Values](configuring-inst
 	Installing Tanzu Application Service for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
 </p>
 
+1. Run `kubectl cluster-info` and inspect the output to ensure that your Kubernetes client configuration targets the intended cluster for installation.
+
 1. Change into the `tanzu-application-service` directory in your terminal.
 
-2. Run the installation script, configured to use the deployment values you generated previously:
+1. Run the installation script, configured to use the deployment values you generated previously:
 
 ```bash
 $ ./bin/install-tas.sh ../configuration-values
