@@ -30,7 +30,7 @@ Always make changes you want carried forward in the master branch. This includes
 |------------| -------|----------|
 | master     | in development | v0.2 (staged here: http://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/) |
 | 0.1        | live, published | v0.1 (http://docs.pivotal.io/tas-kubernetes/0-1/) |
-| 2.6.0      | obsolete | v2.6.0-alpha.1 obsolete and needs removal from docs.pivotal.io and redirect made. Keep branch for historical record. Pipeline already down. (https://docs.pivotal.io/pas-kubernetes/2-6-0-alpha-1) |
+| 2.6.0      | obsolete | v2.6.0-alpha.1 obsolete and removed from docs.pivotal.io and redirect made. Keep branch for historical record. Pipeline already down. (https://docs.pivotal.io/pas-kubernetes/2-6-0-alpha-1 redirects to new docs.) |
 | wip.       | obsolete | Okay to delete? Over 10 months old. |
 
 ### Cherry picking to and from MASTER
