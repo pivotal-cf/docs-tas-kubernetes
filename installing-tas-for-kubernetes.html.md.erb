@@ -82,15 +82,19 @@ Make sure you include the `*.` wildcard prefix so that all subdomains of the sys
 
 If you have instead optionally configured Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for the ingress gateway](#adjust-installation-resources-networking), set up DNS for your system domain to resolve to the external IP of the load balancer:
 
-1. Use `kubectl` to retrieve the value of the external IP assigned to the Istio ingress gateway service:
-  <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'</code></pre>
+1. Use `kubectl` to retrieve the value of the external IP or hostname assigned to the Istio ingress gateway service:
+<pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'</code></pre>
   For example:
   <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
 10.193.105.162
+$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+ae7b1093f9c3b44fd9982b828b32ccad-2445920965.us-west-2.elb.amazonaws.com
 </code></pre>
 
-1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this external IP address.
-Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to this IP address.
+1. In your DNS zone, create a entry for your system domain. If you have an external ip, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this external IP address.
+If you have a hostname, create a wildcard CNAME record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this hostname.
+Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to the load balancer.
 
 
 

@@ -72,30 +72,6 @@ $ ./bin/install-tas.sh ../configuration-values
 This section discusses how to configure DNS entries and load balancers for the Tanzu Application Service for Kubernetes ingress gateway. Follow one of the configuration cases below, depending on your installation.
 
 
-### DNS Configuration with No Load Balancer for Ingress Gateway
-
-By default, Tanzu Application Service for Kubernetes is configured not to create a Kubernetes LoadBalancer service for the ingress gateway.
-If you have deployed Tanzu Application Service for Kubernetes in this configuration, and do not have an external load balancer to use for ingress to the installation, set up your DNS records to establish ingress connectivity directly to the worker nodes:
-
-1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
-  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
-  For example:
-  <pre><code>$ kubectl get nodes --output='wide'
-NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
-5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
-a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
-a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
-af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
-cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
-</code></pre>
-
-1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the set of external IP addresses for the worker nodes.
-Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to these IP addresses.
-
-
-
-
-
 
 ### Post-Installation Networking Configuration
 
