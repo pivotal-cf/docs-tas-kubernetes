@@ -1,0 +1,91 @@
+---
+title: Relocating Tanzu Application Service for Kubernetes Images
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to relocate Tanzu Application Service for Kubernetes Images.
+
+<%= partial 'evaluation_only' %>
+
+<%= partial 'limitation_notes' %>
+
+
+
+## <a id='relocate-tas-for-k8s-images'></a> Relocating Tanzu Application Service for Kubernetes Images
+
+### Why?
+- If you are interested in reducing the external runtime dependencies of your Tanzu Application Service install. In Kuberenetes, containers can be recreated at various times and the image registry must be available if the container is started on a new host.
+- If your deployment has limited network egress capabilities due to firewall or network bandwidth.
+
+### Pre-requisites
+You must have write access to a container registry. We have validated the following instructions on Google Container Registry and Harbor, but many Docker-like image registries may work.
+
+Follow all instructions in [Preparing](preparing-to-install-tas-for-kubernetes.html) and [Configuration](configuring-installation-values.html) sections of Tanzu Applications Service for Kubernetes documentation.
+
+The docker CLI must be installed.
+
+
+
+### <a id='downloading-the-images'></a> Downloading the Tanzu Application Service Images from Tanzu Network
+
+1. Change into the `tanzu-application-service` directory in your terminal.
+
+1. Login into the source registry using your username and password for Tanzu Network.
+
+	```
+	$ docker login registry.pivotal.io -u YOUR-USERNAME -p YOUR-PASSWORD
+	```
+
+1. Package the images into a tarball.
+> Note: this process takes about 5 min
+
+	```
+	$ kbld package -f <(ytt -f config/image_overrides.yml -f config/values.yml ) --output /tmp/images.tar
+
+	```
+
+
+### Uploading the Tanzu Application Service Images to your own registry
+1. Login into the target registry.
+
+   ```
+	$ docker login registry.example.com/org-name/repository -u YOUR-USERNAME -p YOUR-PASSWORD
+	```
+1. Unpackage the images tarball and upload to target registry.
+
+	```
+	$ kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
+	                 -i /tmp/images.tar \
+	                 -r registry.example.com/org-name/repository \
+	                 --lock-output relocated_images.yml
+	```
+	>Note: This assumes your client has the right ca registry certificates. Otherwise, you can add --registry-verify-certs=false to the kbld unpackage command above.
+
+### Post Image Relocation Installation Procedure
+
+Now that the images have been located in your registry, Tanzu Application Service can be installed with modified installation procedure to use the images.
+
+
+1. Move the config/image_overrides.yml outside of the config/ directory.
+1. Update the system registry variables to point to the target registry in configuration-values/system-registry-values.yml .
+
+    ```
+    #@data/values
+    ---
+    system_registry:
+      hostname: "PLACEHOLDER-TARGET-REGISTRY-HOSTNAME"
+      username: "PLACEHOLDER-TARGET-REGISTRY-USERNAME"
+      password: "PLACEHOLDER-TARGET-REGISTRY-PASSWORD"
+    ```
+
+1. Deploy Tanzu Application Service for Kubernetes using the relocated images.
+
+	```
+	$ ytt -f config \
+	      -f ../configuration-values | \
+	      kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
+	$ kapp deploy -a cf -f /tmp/final_deployment.yml
+	```
+	>Note: This assumes your client has the right ca registry certificates. Otherwise, you can add --registry-verify-certs=false to the kbld unpackage command above.
+
+Please follow the instructions in [Post-Installation Validation](installing-tas-for-kubernetes.html#post-installation-configuration) to validate your installation.
