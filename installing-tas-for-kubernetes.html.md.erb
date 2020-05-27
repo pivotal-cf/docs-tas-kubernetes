@@ -74,9 +74,10 @@ cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.8
 
 1. Configure your external load balancer to forward traffic on TCP ports 80 and 443 to the set of internal IP addresses for the Kubernetes worker nodes.
 
-1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the external IP address of the load balancer.
-Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to this IP address.
+1. Configure DNS records in your DNS zone
+   1. If your load balancer has a static IP, then create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the external IP address of the load balancer. Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to this IP address.
 
+   1. If your load balancer has a DNS name instead of static IP (such as AWS load balancers), then create a wildcard `CNAME` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the external IP address of the load balancer. Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to this IP address.
 
 ### DNS Configuration with a Kubernetes Load Balancer for Ingress Gateway
 
