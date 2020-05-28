@@ -1,20 +1,38 @@
 ---
-title: Configuring the Application Image Registry
+title: Configuring the Image Registries
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure certain container image registries to store the application images for Tanzu Application Service for Kubernetes.
+This topic describes how to configure the system image registry values from Tanzu Network container registry, as well as how to configure certain container image registries to store the application images for Tanzu Application Service for Kubernetes.
 
-Follow instructions for **one** of the registry types below:
+## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-* [VMware Harbor Registry](#harbor)
-* [Google Container Registry (GCR)](#gcr)
-* [Dockerhub](#dockerhub)
+Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
 
+To configure Tanzu Application Service for Kubernetes with these values:
 
-## <a id='harbor'></a> VMware Harbor Registry
+1. Change into the `configuration-values` directory you created earlier.
 
-### <a id='harbor-project-user'></a> Creating a Harbor Project and User Account
+1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
+
+```yaml
+#@data/values
+---
+system_registry:
+  hostname: registry.pivotal.io
+  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
+  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
+```
+
+## <a id='configure-app-registry'></a> Configuring Application Image Registry 
+First you need to decide what service to use as your application registry. Our recommendation is to use VMware Harbor Registry. Follow [the instruction below to configure Harbor](#harbor). 
+
+We also included instructions for configuring public container registries in this document. Follow the links to configuring the [Google Container Registry (GCR)](#gcr) or the [Dockerhub](#dockerhub).
+
+### <a id='harbor'></a> VMware Harbor Registry
+You'll need to first create a Harbor project and a user account, then retrieve the Harbor CA Certificate, and in the end create the configuration file.
+
+#### <a id='harbor-project-user'></a> Creating a Harbor Project and User Account
 
 These instructions use `PLACEHOLDER-HARBOR-FQDN` to refer to the fully qualified domain name for the Harbor installation.
 
@@ -40,7 +58,7 @@ Next, add the `tas-app-images-push-pull` user to the `tas-app-images` project:
 For more information on the Master role, see the [Managing Users](https://goharbor.io/docs/1.10/administration/managing-users/) topic in the Harbor documentation.
 
 
-### <a id='harbor-ca-cert'></a> Retrieving the Harbor CA Certificate from Ops Manager
+#### <a id='harbor-ca-cert'></a> Retrieving the Harbor CA Certificate
 
 If you have deployed Harbor using the Ops Manager tile, retrieve the CA certificate or self-signed certificate from the tile configuration:
 
@@ -67,7 +85,7 @@ Use this root CA certificate as the certificate authority in the [configuration 
 If you did not use the Ops Manager tile to deploy your Harbor installation, contact the administrator for the installation to obtain the CA certificate that issued the Harbor certificate.
 
 
-### <a id='harbor-config-file'></a> Creating the Configuration File
+#### <a id='harbor-config-file'></a> Creating the Configuration File
 
 To configure Tanzu Application Service for Kubernetes with these values for the application image registry:
 
@@ -103,9 +121,11 @@ app_registry:
 Once you have created this file, proceed to the [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
 
 
-## <a id='gcr'></a> Google Container Registry
+### <a id='gcr'></a> Google Container Registry
 
-### <a id='gcr-service-account'></a> Creating a Service Account for GCR
+You need to first create a service account for GCR, and then create the configuration file.
+
+#### <a id='gcr-service-account'></a> Creating a Service Account for GCR
 
 These steps require that you have the Google Cloud CLI, `gcloud`, installed and configured to target your Google Cloud Platform (GCP) project.
 
@@ -126,7 +146,7 @@ These steps require that you have the Google Cloud CLI, `gcloud`, installed and 
   gcr-storage-admin.json</code></pre>
 
 
-### <a id='gcr-config-file'></a> Creating the Configuration File
+#### <a id='gcr-config-file'></a> Creating the Configuration File
 
 To configure Tanzu Application Service for Kubernetes with these values for the application image registry:
 
@@ -150,14 +170,9 @@ app_registry:
 Once you have created this file, proceed to the [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
 
 
-## <a id='dockerhub'></a> Dockerhub
+### <a id='dockerhub'></a> Dockerhub
 
-To use Dockerhub as a registry for app images, you must first have a user account at Dockerhub.
-
-
-### <a id='dockerhub-config-file'></a> Creating the Configuration File
-
-To configure Tanzu Application Service for Kubernetes with these values for the application image registry:
+To use Dockerhub as a registry for app images, you must first have a user account at Dockerhub. Then you need to create the configuration file.
 
 1. Change into the `configuration-values` directory you created earlier.
 

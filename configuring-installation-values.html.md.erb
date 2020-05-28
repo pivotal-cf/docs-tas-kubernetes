@@ -12,7 +12,6 @@ Before proceeding, review the [Preparing to Install TAS for Kubernetes](preparin
 * Preparing the Kubernetes cluster and application-image registry dependencies, and
 * Choosing a system domain DNS name.
 
-
 ## <a id='overview'></a> Overview
 
 Configuring Tanzu Application Service for Kubernetes for installation entails several steps:
@@ -69,26 +68,6 @@ enable_load_balancer: True
 ```
 
 
-## <a id='configure-system-registry-values'></a>Configure System Registry Values
+## <a id='configure-app-registry-values'></a> Next: Configure System Registry and App Registry Values
 
-Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
-
-To configure Tanzu Application Service for Kubernetes with these values:
-
-1. Change into the `configuration-values` directory you created earlier.
-
-1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
-
-```yaml
-#@data/values
----
-system_registry:
-  hostname: registry.pivotal.io
-  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
-  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
-```
-
-
-## <a id='configure-app-registry-values'></a> Next: Configure App Registry Values
-
-Tanzu Application Service for Kubernetes depends on an external image registry to store the images it builds for buildpack-based applications. Proceed to the [Configuring the Application Image Registry](configuring-app-image-registry.html) topic for details on configuring Harbor, GCR, or Dockerhub as this registry for the installation.
+Tanzu Application Service for Kubernetes pulls the system component images from the Tanzu Network image registry, and it stores the application images it builds for buildpack-based applications in a user-provided image registry. Proceed to the [Configuring the Image Registries](configuring-image-registries.html) topic for details on configuring both the system and application registries.
