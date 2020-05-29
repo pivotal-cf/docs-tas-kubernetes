@@ -8,7 +8,7 @@ This topic contains release notes for Tanzu Application Service (TAS) for Kubern
 
 ## <a id='0-2-0'></a> v0.2.0
 
-**Release Date: MMM DD, 2020**
+**Release Date: May 29, 2020**
 
 <%= partial 'evaluation_only' %>
 
@@ -16,33 +16,30 @@ This topic contains release notes for Tanzu Application Service (TAS) for Kubern
 
 New features and changes in this release:
 
-- Feature 1
-- Change 1
-- Ingress routing without a load balancer no longer needs the istio-ingressgateway service (config/remove-ingressgateway-service.yml)
+- The `cf app` command now displays CPU and memory usage metrics for app instances.
+- Component metrics for Cloud Controller are now available for Prometheus to scrape via conventional `prometheus.io` annotations.
+- Load-balancer options are now configured via the `enable_load_balancer` template parameter instead of via moving template overlay files.
+- Ingress routing without a Kubernetes-provisioned load balancer no longer creates the `istio-ingressgateway` Kubernetes service.
 
 
 ### Resolved Issues
 
 This release has the following fixes:
 
-- Fix 1
-- Fix 2
+- Apps can now receive ingress traffic through both HTTP and HTTPS.
+- Buildpack-staging logs are now streamed during `cf push`.
+- Running `cf restage` now restages the app successfully.
+- Running buildpack-based apps no longer requires the `diego_docker` feature flag to be set.
 
 ### <a id='known-issues'></a> Known Issues
 
-[//]: # (This list is copied from v0.1, maybe some will be fixed in 0.2)
-
 This release has the following issues:
 
-- Apps can receive ingress traffic only through HTTP and not HTTPS.
 - Retrieving app and buildpack-staging logs with `cf logs` requires cf CLI v6.50.0 or later.
-- Buildpack-staging logs are not streamed during `cf push`.
 - App instance logs also include unfiltered logs from the Istio sidecar proxy process and can be noisy as a result.
-- Running `cf restage` fails to re-stage the app.
 - The `cf buildpacks` command shows an empty list of buildpacks.
 - Does not support cf CLI `buildpack-administration` commands.
 - App developers cannot select a buildpack for their buildpack-based apps.
-- Running buildpack-based apps requires the `diego_docker` feature flag to be set.
 - The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
 - TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
 - Does not support upgrading an existing TAS installation to a new version.
