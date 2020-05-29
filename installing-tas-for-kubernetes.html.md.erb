@@ -40,9 +40,9 @@ By default, Tanzu Application Service for Kubernetes is configured not to create
 If you have deployed Tanzu Application Service for Kubernetes in this configuration, and do not have an external load balancer to use for ingress to the installation, set up your DNS records to establish ingress connectivity directly to the worker nodes:
 
 1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
-  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
+  <pre><code>$ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide</code></pre>
   For example:
-  <pre><code>$ kubectl get nodes --output='wide'
+  <pre><code>$ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
 NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
 5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
 a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
