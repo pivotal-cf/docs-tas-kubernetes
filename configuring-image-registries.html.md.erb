@@ -27,7 +27,7 @@ system_registry:
 ## <a id='configure-app-registry'></a> Configuring Application Image Registry 
 First you need to decide what service to use as your application registry. Our recommendation is to use VMware Harbor Registry. Follow [the instruction below to configure Harbor](#harbor). 
 
-We also included instructions for configuring public container registries in this document. Follow the links to configuring the [Google Container Registry (GCR)](#gcr) or the [Dockerhub](#dockerhub).
+We also included instructions for configuring public container registries in this document. Follow the links to configuring the [Google Container Registry (GCR)](#gcr) or the [Docker Hub](#dockerhub).
 
 ### <a id='harbor'></a> VMware Harbor Registry
 You'll need to first create a Harbor project and a user account, then retrieve the Harbor CA Certificate, and in the end create the configuration file.
@@ -73,7 +73,7 @@ If there is a PEM-encoded certificate value present in the CA field, use it as t
 
 If instead there is no value present in the CA field, the certificate for the Harbor installation was likely issued from the Ops Manager root CA certificate. Retrieve that root CA certificate as follows:
 
-1. In the Ops Manager user interface, dropdown with your user name in the upper-right corner, click on Settings.
+1. In the Ops Manager user interface, drop-down with your user name in the upper-right corner, click on Settings.
 
 1. In the Settings page, click on the Advanced Options pane.
 
@@ -118,7 +118,8 @@ app_registry:
   <strong>Note:</strong> You may choose different project and user names in the Harbor configuration procedure above as long as you use the same names in the configuration file.
 </p>
 
-Once you have created this file, proceed to the [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
+Once you have created this file, proceed to the 
+[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
 
 
 ### <a id='gcr'></a> Google Container Registry
@@ -170,13 +171,13 @@ app_registry:
 Once you have created this file, proceed to the [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
 
 
-### <a id='dockerhub'></a> Dockerhub
+### <a id='dockerhub'></a> Docker Hub
 
-To use Dockerhub as a registry for app images, you must first have a user account at Dockerhub. Then you need to create the configuration file.
+To use Docker Hub as a registry for app images, you must first have a user account at Docker Hub. Then you need to create the configuration file.
 
 1. Change into the `configuration-values` directory you created earlier.
 
-1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the username and password of your Dockerhub account. Note that the repository is also the same as the username.
+1. Create a file named `app-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the username and password of your Docker Hub account. Note that the repository is also the same as the username.
 
 ```yaml
 #@data/values
