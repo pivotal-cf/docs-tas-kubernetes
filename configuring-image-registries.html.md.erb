@@ -55,6 +55,9 @@ These instructions use `PLACEHOLDER-HARBOR-FQDN` to refer to the fully qualified
 
 1. [Create a new private project](https://goharbor.io/docs/1.10/working-with-projects/create-projects/) named `tas-app-images`.
 
+<p class="note">
+  <strong>Note:</strong> You may choose different project and user names in the Harbor configuration procedure above as long as you use the same names in the <code>app-registry-values.yml</code> file.
+</p>
 
 Next, add the `tas-app-images-push-pull` user to the `tas-app-images` project:
 
@@ -126,10 +129,6 @@ app_registry:
     (make sure each line is indented four spaces)
     -----END CERTIFICATE-----
 ```
-
-<p class="note">
-  <strong>Note:</strong> You may choose different project and user names in the Harbor configuration procedure above as long as you use the same names in the configuration file.
-</p>
 
 Once you have created this file, proceed to the 
 [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
