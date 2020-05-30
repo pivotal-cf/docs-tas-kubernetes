@@ -23,6 +23,9 @@ system_registry:
   username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
   password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
 ```
+<p class="note">
+  <strong>Note:</strong> The first line <code>#@data/values</code> is part of the <code>ytt</code> syntax. Check <a href="https://get-ytt.io/#example:example-load-data-values" target="_blank">ytt website</a> for more details.
+</p>
 
 ## <a id='configure-app-registry'></a> Configuring Application Image Registry 
 First you need to decide what service to use as your application registry. Our recommendation is to use VMware Harbor Registry. Follow [the instruction below to configure Harbor](#harbor). 
