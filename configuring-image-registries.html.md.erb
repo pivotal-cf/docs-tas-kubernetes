@@ -24,28 +24,24 @@ system_registry:
   password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
 ```
 <p class="note">
-  <strong>Note:</strong> The first line <code>#@data/values</code> is part of the <code>ytt</code> syntax. Check <a href="https://get-ytt.io/#example:example-load-data-values" target="_blank">ytt website</a> for more details.
+  <strong>Note:</strong> The first line, <code>#@data/values</code>, uses <code>ytt</code> syntax.
+  For more information, see <a href="https://get-ytt.io/" target="_blank">ytt</a>.
 </p>
 
-## <a id='configure-app-registry'></a> Configuring Application Image Registry 
-We recommend using VMware Harbor Registry as your application image registry. This secion of the document describes the steps to set up Harbor for Tanzu Application Services for Kubernetes. 
+## <a id='configure-app-registry'></a> Configure Harbor Application Image Registry
 
-If you choose a different registry, please follow their instructions. Ultimately the installation script expects a file named `app-registry-values.yml` in the `configuration-values` direcotry that describes the application image registry configuration values:
+This section describes the steps to set up Harbor for Tanzu Application Services for Kubernetes.
+VMware recommends that you use VMware Harbor Registry as your application image registry.
 
-```yml
-#@data/values
----
-app_registry:
-  hostname: "PLACEHOLDER-HOST"
-  repository: "PLACEHOLDER-REPOSITORY"
-  username: "PLACEHOLDER-USERNAME"
-  password: "PLACEHOLDER-PASSWORD"
-```
+The procedures below guide you through configuring a Harbor registry:
 
+1. [Create a Harbor Project and User Account](#harbor-project-user)
+1. [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
+1. [Create the Configuration File](#harbor-config-file)
 
-When you use Harbor as your app image registry, you'll need to first create a Harbor project and a user account, then retrieve the Harbor CA Certificate, and in the end create the configuration file `app-registry-values.yml`.
+If you do not use a Harbor registry, see [Configure Other Application Image Registry](#configure-other-registry).
 
-### <a id='harbor-project-user'></a> Creating a Harbor Project and User Account
+### <a id='harbor-project-user'></a> Create a Harbor Project and User Account
 
 These instructions use `PLACEHOLDER-HARBOR-FQDN` to refer to the fully qualified domain name for the Harbor installation.
 
@@ -67,14 +63,14 @@ Next, add the `tas-app-images-push-pull` user to the `tas-app-images` project:
 
 1. In the Name field on the dialog box, enter `tas-app-images-push-pull`.
 
-1. In the Role field, select the Master option. 
+1. In the Role field, select the Master option.
 
 1. Click the OK button on the dialog box to finish adding the user to the project.
 
 For more information on the Master role, see the [Managing Users](https://goharbor.io/docs/1.10/administration/managing-users/) topic in the Harbor documentation.
 
 
-### <a id='harbor-ca-cert'></a> Retrieving the Harbor CA Certificate
+### <a id='harbor-ca-cert'></a> Retrieve the Harbor CA Certificate
 
 If you have deployed Harbor using the Ops Manager tile, retrieve the CA certificate or self-signed certificate from the tile configuration:
 
@@ -101,7 +97,7 @@ Use this root CA certificate as the certificate authority in the [configuration 
 If you did not use the Ops Manager tile to deploy your Harbor installation, contact the administrator for the installation to obtain the CA certificate that issued the Harbor certificate.
 
 
-### <a id='harbor-config-file'></a> Creating the Configuration File
+### <a id='harbor-config-file'></a> Create the Configuration File
 
 To configure Tanzu Application Service for Kubernetes with these values for the application image registry:
 
@@ -130,5 +126,23 @@ app_registry:
     -----END CERTIFICATE-----
 ```
 
-Once you have created this file, proceed to the 
+Once you have created this file, proceed to the
 [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
+
+## <a id='configure-other-registry'></a> Configure Other Application Image Registry
+
+You can use a different application image registry, such as Google Container Registry (GCR) or Docker Hub,
+as long as you create a file named `app-registry-values.yml` in the `configuration-values` directory.
+This file must describe the application image registry configuration values.
+
+The `app-registry-values.yml` file in the `configuration-values` directory must contain the following:
+
+```yml
+#@data/values
+---
+app_registry:
+  hostname: "PLACEHOLDER-HOST"
+  repository: "PLACEHOLDER-REPOSITORY"
+  username: "PLACEHOLDER-USERNAME"
+  password: "PLACEHOLDER-PASSWORD"
+```
