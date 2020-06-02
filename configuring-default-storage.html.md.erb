@@ -3,15 +3,28 @@ title: Configuring Default Storage
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure the default storage on Kubernetes clusters to support Tanzu Application Service for Kubernetes.
 Tanzu Application Service for Kubernetes requires the Kubernetes cluster to provide persistent volumes
 for its internal PostgreSQL database and Minio blobstore.
 
-## <a id='configuring-vsphere-storage'></a> Configuring Default Storage for PKS-provisioned Clusters
+This topic describes how to enable dynamic provisioning of persistent volumes on Kubernetes clusters
+by configuring default storage on Kubernetes clusters to support Tanzu Application Service for Kubernetes.
 
-### <a id='pks-vsphere'></a>For PKS-provisioned Clusters on vSphere
+## <a id='prerequisites'></a> Prerequisites
 
-To enable dynamic provisioning of persistent volumes on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster. See the [Provision Dynamic PVs for Use with Enterprise PKS section](https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) of the Configuring and Using PersistentVolumes topic for more information on how to install.
+Before you configure a default storage class for the Kubernetes cluster, you must have:
+
+* A default storage class in the Kubernetes cluster. 
+
+    If you are using a PKS-provisioned cluster, see [Provision Dynamic PVs for Use with Enterprise
+    PKS](https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) in _Configuring and Using PersistentVolumes_.
+
+* The `kapp` utility.
+  See [Installing Command-Line Tools](installing-command-line-tools.html).
+
+
+## <a id='configuring-vsphere-storage'></a> Configure Default Storage for PKS-provisioned Clusters on vSphere
+
+To configure a default storage class for a PKS-provisioned Clusters on vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below:
 <pre><code>---
@@ -23,19 +36,21 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: kubernetes.io/vsphere-volume</code></pre>
 
-1. Ensure that you have installed the `kapp` utility.
-
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml</code></pre>
 
 
-## <a id='configuring-aws-storage'></a> Configuring Default Storage for TKG-provisioned Clusters
+## <a id='configuring-aws-storage'></a> Configure Default Storage for TKG-provisioned Clusters
+
+The procedures below describe how to configure a default storage class on TKG-provisioned clusters.
+Follow the procedure that corresponds to your IaaS:
+
++ **AWS**: [For TKG-provisioned Clusters on AWS](#aws)
++ **vSphere**: [For TKG-provisioned Clusters on vSphere](#tkg-vsphere)
 
 ### <a id='aws'></a> For TKG-provisioned Clusters on AWS
 
-To enable dynamic provisioning of persistent volumes on a TKG-provisioned Kubernetes cluster, you must install a default StorageClass in the Kubernetes cluster.
-
-To configure a default storage class for AWS:
+To configure a default storage class on a TKG-provisioned Kubernetes cluster for AWS:
 
 1. Create a file named `aws-default-storage-class.yml` with the contents below:
 <pre><code>---
@@ -50,18 +65,15 @@ parameters:
   type: gp2
   fsType: ext4</code></pre>
 
-1. Ensure that you have installed the `kapp` utility.
-
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f aws-default-storage-class.yml</code></pre>
 
 ### <a id='tkg-vsphere'></a> For TKG-provisioned Clusters on vSphere
 
-To enable dynamic provisioning of persistent volumes on a TKG-provisioned Kubernetes cluster, you must install a default StorageClass in the Kubernetes cluster.
-
 To configure a default storage class for vSphere:
 
-1. Create a file named `vsphere-default-storage-class.yml` with the contents below, replacing the placeholder values with the CSI datastore you wish to use:
+1. Create a file named `vsphere-default-storage-class.yml` with the contents below and
+   replace the placeholder with your CSI datastore URL:
 <pre><code>---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -72,8 +84,6 @@ metadata:
 provisioner: csi.vsphere.vmware.com
 parameters:
   datastoreurl: "PLACEHOLDER-DATASTORE-URL"</code></pre>
-
-1. Ensure that you have installed the `kapp` utility.
 
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml</code></pre>
