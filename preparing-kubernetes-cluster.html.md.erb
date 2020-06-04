@@ -3,45 +3,77 @@ title: Preparing the Kubernetes Cluster
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to create and configure Kubernetes clusters to support Tanzu Application Service for Kubernetes.
+This topic describes how to create and configure Kubernetes clusters to support 
+Tanzu Application Service for Kubernetes.
 
 
-## <a id='enterprise-pks'></a> VMware Enterprise PKS
+## <a id='overview'></a> Overview
 
-Ensure you have a Kubernetes cluster created with the following characteristics:
+Before creating or configuring Kubernetes clusters, 
+ensure your environment and clusters support 
+Tanzu Application Service for Kubernetes.  
 
-* The PKS version should be v1.6 or v1.7.
-* The Kubernetes cluster should have at least 5 worker nodes.
-* Each worker node should have at least 2 CPU and 7.5 GB of memory available for allocation.
-* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images. If the registry has a certificate issued from a private certificate authority (CA), this typically entails configuring the worker nodes in the Kubernetes cluster to trust the certificate of that CA.
+Tanzu Application Service for Kubernetes 
+supports Kubernetes clusters in the following environments:
+* [VMware Enterprise PKS](#enterprise-pks)
+* [VMware Tanzu Kubernetes Grid](#grid)
 
-See the [Creating Clusters](https://docs.pivotal.io/pks/create-cluster.html) topic for information about creating a cluster with Enterprise PKS.
+### <a id='enterprise-pks'></a> VMware Enterprise PKS
 
-After creating the cluster, run `pks get-credentials CLUSTER-NAME` to ensure that `kubectl` targets the cluster.
+Ensure the following before creating or configuring Kubernetes clusters 
+for Tanzu Application Service for Kubernetes:
+
+* Your Enterprise PKS version is v1.6 or v1.7.
+* Your Kubernetes clusters have been created with the following characteristics:  
+    * The Kubernetes cluster has at least 5 worker nodes.
+    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
+    * The worker nodes in the Kubernetes clusters trust the container image registry that 
+    Tanzu Application Service for Kubernetes uses to store buildpack-based app images. 
+    If the registry has a certificate issued from a private certificate authority (CA), 
+    this typically entails configuring the worker nodes in the Kubernetes cluster to trust 
+    the certificate of that CA.
+
+For information about creating a cluster with Enterprise PKS, 
+see [Creating Clusters](https://docs.pivotal.io/pks/create-cluster.html) 
+in the _VMware Enterprise PKS_ documentation.
+
+After creating the cluster, 
+run `pks get-credentials CLUSTER-NAME` to ensure that kubectl targets the cluster.
 
 ## <a id='grid'></a> VMware Tanzu Kubernetes Grid
 
-Ensure you have a Kubernetes cluster created with the following characteristics:
+Ensure the following before creating or configuring Kubernetes clusters 
+for Tanzu Application Service for Kubernetes:
 
-* The Tanzu Kubernetes Grid version should be 1.0 or higher.
-* The Kubernetes cluster should have at least 5 worker nodes.
-* Each worker node should have at least 2 CPU and 7.5 GB of memory available for allocation.
-* The worker nodes in the Kubernetes cluster should trust the container image registry that Tanzu Application Service for Kubernetes will use to store buildpack-based app images. If the registry has a certificate issued from a private certificate authority (CA), this typically entails configuring the worker nodes in the Kubernetes cluster to trust the certificate of that CA.
-* TKG does not bundle `metrics-server`, which is required by Tanzu Application Service.
-  To deploy `metrics-server`, run:
+* Your Tanzu Kubernetes Grid environment:
+    * Is Tanzu Kubernetes Grid version is 1.0 or later.  
+    * Includes `metrics-server`. TKG does not bundle `metrics-server`, 
+    which is required by Tanzu Application Service.
+    To deploy `metrics-server`, run:
 
-	<pre><code>$ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml</code></pre>
+	    ```
+	    $ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
+        ```
+* Your Kubernetes clusters have been created with the following characteristics: 
+    * The Kubernetes cluster has at least 5 worker nodes.
+    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
+    * The worker nodes in the Kubernetes clusters trust the container image registry that 
+    Tanzu Application Service for Kubernetes uses to store buildpack-based app images. 
+    If the registry has a certificate issued from a private certificate authority (CA), 
+    this typically entails configuring the worker nodes in the Kubernetes cluster to trust 
+    the certificate of that CA.
 
-See the [Installing Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html) for information about setting up TKG
+For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
+(https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).  
 
 After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that `kubectl` targets the cluster.
 
-## <a id='configuring-vsphere-storage'></a> Configuring Default Storage
+## <a id='configuring-vsphere-storage'></a> Configure Default Storage
 
-Tanzu Application Service for Kubernetes requires the Kubernetes cluster to provide persistent volumes
-for its internal PostgreSQL database and Minio blobstore.
+Tanzu Application Service for Kubernetes requires each Kubernetes cluster 
+provide persistent volumes for its internal PostgreSQL database and Minio blobstore.
 
-To check whether your Kubernetes cluster already has a default storage class installed:
+To verify your Kubernetes cluster already has a default storage class installed:
 
 1. Retrieve the list of StorageClass resources in the cluster:
   <pre><code>$ kubectl get storageclass</code></pre>
@@ -58,4 +90,4 @@ See the [Configuring Default Storage](configuring-default-storage.html) topic fo
 
 ## <a id='deploying-tas-kubernetes'></a> Next: Configuring Tanzu Application Service for Kubernetes Installation Values
 
-Once you have completed the preparatory steps above, proceed to [configure Tanzu Application Service for Kubernetes](configuring-installation-values.html) for installation to the Kubernetes cluster.
+After you have completed the preparatory steps above, proceed to [configure Tanzu Application Service for Kubernetes](configuring-installation-values.html) for installation to the Kubernetes cluster.
