@@ -29,9 +29,11 @@ The following sections and topics explain these steps in detail.
 Tanzu Application Service for Kubernetes requires a small set of credentials and certificates to coordinate its components, along with a certificate to terminate TLS at the ingress gateway. A helper script in the installation resources generates these credentials and certificates to be supplied to the installation script.
 
 
-1. Create a directory named `configuration-values` in the same directory as the `tanzu-application-service` directory. You will use this directory to store configuration values for this installation.
+1. Create a directory named `configuration-values` in the same directory as the 
+`tanzu-application-service` directory. 
+You will use this directory to store configuration values for this installation.
 
-1. Change into the `tanzu-application-service` directory in your terminal.
+1. Navigate to the `tanzu-application-service` directory.
 
 1. Run the value-generation script with the system domain you selected previously and store its output in the `configuration-values` directory:
 
@@ -57,7 +59,7 @@ If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/
 
 To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
 
-1. Change into the `configuration-values` directory you created earlier.
+1. Navigate to the `configuration-values` directory you created earlier.
 
 1. Create a file named `load-balancer-values.yml` in that directory with the contents below:
 
