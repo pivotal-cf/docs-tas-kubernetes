@@ -13,13 +13,14 @@ to a registry and install Tanzu Application Service using the relocated images.
 
 ## <a id='overview'></a> Overview
 
+In Kuberenetes, containers can be recreated at various times and the image registry 
+must be available if the container is started on a new host. 
 You should install Tanzu Application Service for Kubernetes from a registry
 for the following situations:  
 
 * Your deployment has limited network egress capabilities due to firewall or network bandwidth.  
 * You want to reduce the external runtime dependencies of your Tanzu Application Service installation. 
-In Kuberenetes, containers can be recreated at various times and the image registry 
-must be available if the container is started on a new host.
+
 
 <p class="note"><strong>Note</strong>: The following procedure has been validated for 
   the Google Container Registry and Harbor registries. Other Docker-like image registries may also work. 
