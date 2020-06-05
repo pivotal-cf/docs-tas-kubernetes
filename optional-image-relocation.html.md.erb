@@ -1,10 +1,11 @@
 ---
-title: Installing Tanzu Application Service From a Registry
+title: Installing Tanzu Application Service from a Private Registry
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to relocate Tanzu Application Service for Kubernetes Images 
-to a registry and install Tanzu Application Service using the relocated images.
+This topic describes how to relocate VMware Tanzu Application Service for Kubernetes 
+(TAS for Kubernetes) images to a private container image registry 
+and install TAS for Kubernetes using the relocated images.  
 
 <%= partial 'evaluation_only' %>
 
@@ -13,47 +14,60 @@ to a registry and install Tanzu Application Service using the relocated images.
 
 ## <a id='overview'></a> Overview
 
-In Kuberenetes, containers can be recreated at various times and the image registry 
+In Kuberenetes, containers can be re-created at various times and the private registry 
 must be available if the container is started on a new host. 
-You should install Tanzu Application Service for Kubernetes from a registry
+You should install TAS for Kubernetes from a private registry
 for the following situations:  
 
-* Your deployment has limited network egress capabilities due to firewall or network bandwidth.  
-* You want to reduce the external runtime dependencies of your Tanzu Application Service installation. 
+* Your deployment has limited network egress because of firewall or network bandwidth.  
+* You want to reduce the external runtime dependencies of your TAS for Kubernetes installation. 
 
 
-<p class="note"><strong>Note</strong>: The following procedure has been validated for 
-  the Google Container Registry and Harbor registries. Other Docker-like image registries may also work. 
+<p class="note"><strong>Note</strong>: The following procedure has been validated 
+  for the Google Container Registry and for Harbor registries. 
 </p>
 ## <a id='prerequisites'></a> Prerequisites
 
-The following are required to install Tanzu Application Service for Kubernetes from a registry:  
+Before you install TAS for Kubernetes 
+from a private registry, you must have:  
 
-* The docker CLI has been installed.  
-* You have write access to a container registry.  
-* You have completed the instruction in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
+* Installed the Docker CLI  
+* Write access to your private container image registry  
+* Completed the instructions in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
 and [Configuring Installation Values for Tanzu Application Service for Kubernetes]
-(configuring-installation-values.html).
+(configuring-installation-values.html)  
 
 
-## <a id='relocate-tas-for-k8s-images'></a> Relocate Tanzu Application Service for Kubernetes Images
+## <a id='relocate-tas-for-k8s-images'></a> Relocate TAS for Kubernetes Images
 
-### <a id='downloading-the-images'></a> Download the Tanzu Application Service Images
+Before you install TAS for Kubernetes from a private registry, 
+you have to relocate the image from the Tanzu Network Registry to the private registry:  
 
-To download the Tanzu Application Service Images from Tanzu Network:
+* [Download the TAS for Kubernetes Images](#downloading-the-images)
+* [Upload the TAS for Kubernetes Images to the Private Registry](#uploading-the-images)
+
+### <a id='downloading-the-images'></a> Download the TAS for Kubernetes Images
+
+To download the TAS for Kubernetes Images from Tanzu Network Registry:
 
 1. In your terminal, navigate to the `tanzu-application-service` directory.
 
-1. Log in to the source registry using your username and password for Tanzu Network.
+1. Log in to the Tanzu Network Registry.
 
     ```
-    $ docker login registry.pivotal.io -u YOUR-USERNAME -p YOUR-PASSWORD
+    docker login registry.pivotal.io \
+                       -u USERNAME \
+                       -p PASSWORD
     ```
+
+    Where:
+    * `USERNAME` is a Tanzu Network user account. 
+    * `PASSWORD` is the password for the Tanzu Network user account. 
 
 1. Package the images into a tarball.  
 
     ```
-    $ kbld package -f <(ytt \
+    kbld package -f <(ytt \
                    -f config/image_overrides.yml \
                    -f config/values.yml ) \
                    --output /tmp/images.tar
@@ -61,73 +75,85 @@ To download the Tanzu Application Service Images from Tanzu Network:
 
     Packing the image takes about 5 minutes to complete.
 
-### <a id='uploading-the-images'></a> Upload the Tanzu Application Service Images to Your Registry
+### <a id='uploading-the-images'></a> Upload the TAS for Kubernetes Images to the Private Registry
 
-To upload the Tanzu Application Service Images to your own registry:
+To upload the TAS for Kubernetes images to the private registry:
 
-1. Log in to the target registry.  
+1. Log in to the private registry.  
 
     ```
-    $ docker login registry.example.com/org-name/repository -u YOUR-USERNAME -p YOUR-PASSWORD
+    docker login registry.example.com/org-name/repository \
+                       -u USERNAME \
+                       -p PASSWORD
     ```
 
-1. Unpackage the images tarball and upload to target registry.  
-    * If your client has the required ca registry certificates, run the following command:  
+    Where:
+    * `USERNAME` is a user account with write access to the private registry. 
+    * `PASSWORD` is the password for the user account. 
 
-      ```
-      $ kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
-                       -i /tmp/images.tar \
-                       -r registry.example.com/org-name/repository \
-                       --lock-output relocated_images.yml
-      ```
-    * If your client does not have the required ca registry certificates, run the following command:  
+1. Unpackage the image tarball and upload to the private registry.  
+    * If your client has the private registry CA certificates:  
 
-      ```
-      $ kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
-                       -i /tmp/images.tar \
-                       -r registry.example.com/org-name/repository \
-                       --lock-output relocated_images.yml \
-                       --registry-verify-certs=false
-      ```
+        ```
+        kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
+                         -i /tmp/images.tar \
+                         -r registry.example.com/org-name/repository \
+                         --lock-output relocated_images.yml
+        ```
+    * If your client does not have the private registry CA certificates:  
 
-## <a id='post-image-relocation'></a> Install the Tanzu Application Service
+        ```
+        kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
+                         -i /tmp/images.tar \
+                         -r registry.example.com/org-name/repository \
+                         --lock-output relocated_images.yml \
+                         --registry-verify-certs=false
+        ```
 
-After uploading your Tanzu Application Service Images to your registry, you can install the 
-Tanzu Application Service using a modified  installation procedure.
+## <a id='post-image-relocation'></a> Install the TAS for Kubernetes
 
-To install the Tanzu Application Service: 
+After uploading your TAS for Kubernetes images to the private registry, 
+you can install the 
+TAS for Kubernetes using a modified installation procedure.
 
-1. Move the `config/image_overrides.yml` file outside of the `config/` directory.
-1. To point the system registry variables to the target registry 
-in configuration-values/system-registry-values.yml:
+To install TAS for Kubernetes: 
+
+1. Move the `config/image_overrides.yml` file out of the `config/` directory.
+1. To point the system registry variables to the private registry 
+modify the `configuration-values/system-registry-values.yml` as follows:
 
     ```
     #@data/values
     ---
     system_registry:
-      hostname: "PLACEHOLDER-TARGET-REGISTRY-HOSTNAME"
-      username: "PLACEHOLDER-TARGET-REGISTRY-USERNAME"
-      password: "PLACEHOLDER-TARGET-REGISTRY-PASSWORD"
+      hostname: "PRIVATE-REGISTRY-HOSTNAME"
+      username: "PRIVATE-REGISTRY-USERNAME"
+      password: "PRIVATE-REGISTRY-PASSWORD"
     ```
 
-1. To deploy Tanzu Application Service for Kubernetes using the relocated images:
-    * If your client has the required ca registry certificates, run the following command:  
+    Where:
+    * `PRIVATE-REGISTRY-HOSTNAME` is the hostname of your private registry.
+    * `PRIVATE-REGISTRY-USERNAME` is a user account with write access to the private registry. 
+    * `PRIVATE-REGISTRY-PASSWORD` is the password for the user account. 
 
-      ```
-      $ ytt -f config \
-            -f ../configuration-values | \
-            kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
-      $ kapp deploy -a cf -f /tmp/final_deployment.yml
-      ```
-    * If your client does not have the required ca registry certificates, run the following command:
+1. To deploy TAS for Kubernetes using the images in the private registry:
+    * If your client has the private registry CA certificates:  
 
-      ```
-      $ ytt -f config \
-            -f ../configuration-values | \
-            kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml \
-            --registry-verify-certs=false
-      $ kapp deploy -a cf -f /tmp/final_deployment.yml
-      ```
+        ```
+        ytt -f config \
+              -f ../configuration-values | \
+              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
+        kapp deploy -a cf -f /tmp/final_deployment.yml
+        ```
+    * If your client does not have the private registry CA certificates:
+
+        ```
+        ytt -f config \
+              -f ../configuration-values | \
+              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml \
+              --registry-verify-certs=false
+        kapp deploy -a cf -f /tmp/final_deployment.yml
+        ```
 
 1. To validate your installation, see 
 [Post-Installation Validation](installing-tas-for-kubernetes.html#post-installation-configuration). 
