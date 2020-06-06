@@ -13,6 +13,7 @@ for its internal PostgreSQL database and Minio blobstore.
 To enable dynamic provisioning of persistent volumes on a PKS-provisioned Kubernetes cluster on vSphere, you must install a default StorageClass in the Kubernetes cluster. See the [Provision Dynamic PVs for Use with Enterprise PKS section](https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) of the Configuring and Using PersistentVolumes topic for more information on how to install.
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -37,6 +38,7 @@ To enable dynamic provisioning of persistent volumes on a TKG-provisioned Kubern
 To configure a default storage class for AWS:
 
 1. Create a file named `aws-default-storage-class.yml` with the contents below:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -62,6 +64,7 @@ To configure a default storage class for vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below and
    replace the placeholder with your CSI datastore URL:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
