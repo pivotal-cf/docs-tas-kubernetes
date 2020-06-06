@@ -27,6 +27,7 @@ Before you configure a default storage class for the Kubernetes cluster, you mus
 To configure a default storage class for a PKS-provisioned Clusters on vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -54,6 +55,7 @@ Follow the procedure that corresponds to your IaaS:
 To configure a default storage class on a TKG-provisioned Kubernetes cluster for AWS:
 
 1. Create a file named `aws-default-storage-class.yml` with the contents below:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -76,6 +78,7 @@ To configure a default storage class for vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below and
    replace the placeholder with your CSI datastore URL:
+
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
