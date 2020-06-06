@@ -28,15 +28,15 @@ To configure a default storage class for a PKS-provisioned Clusters on vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below:
 
-```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: thin
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: kubernetes.io/vsphere-volume
-```
+  ```yaml
+  kind: StorageClass
+  apiVersion: storage.k8s.io/v1
+  metadata:
+    name: thin
+    annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
+  provisioner: kubernetes.io/vsphere-volume
+  ```
 
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml</code></pre>
@@ -56,18 +56,18 @@ To configure a default storage class on a TKG-provisioned Kubernetes cluster for
 
 1. Create a file named `aws-default-storage-class.yml` with the contents below:
 
-```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: gp2
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: kubernetes.io/aws-ebs
-parameters:
-  type: gp2
-  fsType: ext4
-```
+  ```yaml
+  kind: StorageClass
+  apiVersion: storage.k8s.io/v1
+  metadata:
+    name: gp2
+    annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
+  provisioner: kubernetes.io/aws-ebs
+  parameters:
+    type: gp2
+    fsType: ext4
+  ```
 
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f aws-default-storage-class.yml</code></pre>
@@ -79,17 +79,17 @@ To configure a default storage class for vSphere:
 1. Create a file named `vsphere-default-storage-class.yml` with the contents below and
    replace the placeholder with your CSI datastore URL:
 
-```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: thin-csi
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: csi.vsphere.vmware.com
-parameters:
-  datastoreurl: "PLACEHOLDER-DATASTORE-URL"
-```
+  ```yaml
+  kind: StorageClass
+  apiVersion: storage.k8s.io/v1
+  metadata:
+    name: thin-csi
+    annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
+  provisioner: csi.vsphere.vmware.com
+  parameters:
+    datastoreurl: "PLACEHOLDER-DATASTORE-URL"
+  ```
 
 1. Run the following command to install the storage class:
   <pre><code>$ kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml</code></pre>
