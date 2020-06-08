@@ -7,13 +7,13 @@ This topic describes how to configure the system image registry values from Tanz
 
 ## <a id='configure-system-registry-values'></a>Configure System Registry Values
 
-Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io).
+Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io). Make sure this is the same account you used to download Tanzu Application Service for Kubernetes, so that the registry knows the EULA is signed.
 
 To configure Tanzu Application Service for Kubernetes with these values:
 
 1. Change into the `configuration-values` directory you created earlier.
 
-1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you wish to use:
+1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you used to download Tanzu Application Service for Kubernetes:
 
 ```yaml
 #@data/values
