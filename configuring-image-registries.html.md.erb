@@ -3,37 +3,56 @@ title: Configuring the Image Registries
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure the system image registry values from Tanzu Network container registry, as well as how to configure certain container image registries to store the application images for Tanzu Application Service for Kubernetes.
+This topic describes how to configure the system image registry values from Tanzu Network 
+container registry, as well as how to configure certain container image registries to store 
+the application images for Tanzu Application Service for Kubernetes.
 
-## <a id='configure-system-registry-values'></a>Configure System Registry Values
+## <a id='overview'></a>Overview
 
-Tanzu Application Service for Kubernetes pulls the container images for system components from the [Tanzu Network container registry](https://registry.pivotal.io/), using the credentials from a user registered with [Tanzu Network](https://network.pivotal.io). Make sure this is the same account you used to download Tanzu Application Service for Kubernetes, so that the registry knows the EULA is signed.
+Tanzu Application Service for Kubernetes pulls the container images for system components 
+from the [Tanzu Network container registry](https://registry.pivotal.io/), 
+using the credentials from a user registered with the 
+[Tanzu Network](https://network.pivotal.io). 
 
-To configure Tanzu Application Service for Kubernetes with these values:
+## <a id='configure-system-registry-values'></a>Configure Tanzu Network Account Credentials
 
-1. Change into the `configuration-values` directory you created earlier.
+To configure Tanzu Application Service for Kubernetes with Tanzu Network user credentials:
 
-1. Create a file named `system-registry-values.yml` in that directory with the contents below, replacing the placeholder values with the Tanzu Network user credentials you used to download Tanzu Application Service for Kubernetes:
+1. Change directory into the `configuration-values` directory you created earlier.
 
-```yaml
-#@data/values
----
-system_registry:
-  hostname: registry.pivotal.io
-  username: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-USERNAME"
-  password: "PLACEHOLDER-TANZU-NETWORK-REGISTRY-PASSWORD"
-```
-<p class="note">
-  <strong>Note:</strong> The first line, <code>#@data/values</code>, uses <code>ytt</code> syntax.
-  For more information, see <a href="https://get-ytt.io/" target="_blank">ytt</a>.
-</p>
+1. Create a file named `system-registry-values.yml` in the `configuration-values` directory.  
+1. Populate the `system-registry-values.yml` file with the following contents:
 
-## <a id='configure-app-registry'></a> Configure Harbor Application Image Registry
+    ```yaml
+    #@data/values
+    ---
+    system_registry:
+      hostname: registry.pivotal.io
+      username: "USERNAME"
+      password: "PASSWORD"
+    ```
 
-This section describes the steps to set up Harbor for Tanzu Application Services for Kubernetes.
-VMware recommends that you use VMware Harbor Registry as your application image registry.
+    Where:
+    * `USERNAME` is the Tanzu Network Registry username for the account used to download 
+Tanzu Application Service for Kubernetes.  
+    * `PASSWORD` is the password for the account you specified.  
 
-The procedures below guide you through configuring a Harbor registry:
+    <p class="note"><strong>Note:</strong> To ensure you provide the registry with an account with a signed 
+      Tanzu Application Service for Kubernetes EULA, 
+      provide only the username and password for the account you used to download 
+      Tanzu Application Service for Kubernetes.
+    </p>
+    
+    The first line of the `system-registry-values.yml` YAML file, `#@data/values`, 
+    uses `ytt` syntax. For more information, see [ytt](https://get-ytt.io/).
+
+## <a id='configure-app-registry'></a> Configure a Harbor Application Image Registry
+
+This section describes the steps to set up a Harbor registry as your application image registry 
+for Tanzu Application Services for Kubernetes. 
+VMware recommends that you use a VMware Harbor Registry.
+
+To configure a Harbor registry for Tanzu Application Services for Kubernetes:
 
 1. [Create a Harbor Project and User Account](#harbor-project-user)
 1. [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
