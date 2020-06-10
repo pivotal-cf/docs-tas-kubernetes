@@ -3,21 +3,27 @@ title: Configuring the Image Registries
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure the system image registry values from Tanzu Network 
-container registry, as well as how to configure certain container image registries to store 
-the application images for Tanzu Application Service for Kubernetes.
+This topic describes how to configure Tanzu Application Service for Kubernetes to 
+access container image registries, 
+and how to create and configure a new private registry 
+for Tanzu Application Service for Kubernetes.
 
 ## <a id='overview'></a>Overview
 
 Tanzu Application Service for Kubernetes pulls system component container images 
 from the [Tanzu Network container registry](https://registry.pivotal.io/), 
-and retains those images in a private application image registry. 
+and retains those images in a private container image registry. 
+    
+<p class="note"><strong>Note:</strong> The YAML files in this topic use 
+  <code>ytt</code> syntax in their first line. 
+  For more information about <code>ytt</code>, see <a href="https://get-ytt.io/">ytt</a>.
+</p>
 
 ## <a id='prerequisites'></a>Prerequisites 
 
 Before you begin this procedure, ensure that you have 
-created a private application image registry. VMware recommends that you use a VMware Harbor registry 
-as your application image registry.
+created a private container image registry. VMware recommends that you use a VMware Harbor registry 
+as your container image registry.
 
 ## <a id='configure-system-registry-values'></a>Configure Tanzu Network Account Credentials
 
@@ -30,7 +36,7 @@ To configure Tanzu Application Service for Kubernetes with Tanzu Network user cr
 1. Change directory into the `configuration-values` directory you created earlier.
 
 1. Create a file named `system-registry-values.yml` in the `configuration-values` directory.  
-1. Populate the `system-registry-values.yml` file with the following contents:
+1. Populate the `system-registry-values.yml` file with the following:
 
     ```yaml
     #@data/values
@@ -42,41 +48,41 @@ To configure Tanzu Application Service for Kubernetes with Tanzu Network user cr
     ```
 
     Where:
-    * `USERNAME` is the Tanzu Network Registry username for the account used to download 
-Tanzu Application Service for Kubernetes. Ensure this account has a signed 
-      Tanzu Application Service for Kubernetes EULA.
+    * `USERNAME` is the username of the account to use to download 
+    container images from the Tanzu Network Registry. 
+    Ensure this account has a signed Tanzu Application Service for Kubernetes EULA.
     * `PASSWORD` is the password for the account you specified.  
 
     <p class="note"><strong>Note:</strong> VMware recommends you 
-      provide credentials for the Tanzu Network account you used to download 
+      provide the Tanzu Network account credentials you used to download 
       Tanzu Application Service for Kubernetes.
     </p>
-    
-    The first line of the `system-registry-values.yml` YAML file, `#@data/values`, 
-    uses `ytt` syntax. For more information, see [ytt](https://get-ytt.io/).
 
-## <a id='configure-app-registry'></a> Configure a Harbor Application Image Registry
+
+## <a id='configure-app-registry'></a> Configure a Harbor Container Image Registry
 
 Tanzu Application Service for Kubernetes retains system component container images 
-in a private application image registry. VMware recommends that you use a VMware Harbor registry 
-as your application image registry.
+in a private container image registry. VMware recommends that you use a VMware Harbor registry 
+as your container image registry.
 
-* To configure a Harbor registry as an image registry for Tanzu Application Services for Kubernetes:
+To configure a container image registry for Tanzu Application Services for Kubernetes:
+
+* Configure a Harbor registry:
     1. [Create a Harbor Project and User Account](#harbor-project-user)
     1. [Configure the Harbor Project](#harbor-project-configure)
     1. [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
     1. [Create the Configuration File](#harbor-config-file)
 
-* To configure a different registry as an image registry for Tanzu Application Services for Kubernetes:
+* Configure a different type of registry:
     1. [Create the Configuration File for a Different Image Registry]
     (#configure-other-registry)
 
 ### <a id='harbor-project-user'></a> Create a Harbor Project and User Account
 
-Harbor requires that your create a Harbor project before you push application images to harbor. 
-Your Harbor project retains all of the container images for your application.  
+Harbor requires that your create a Harbor project before pushing container images 
+to Harbor. 
 
-To create a Harbor project:  
+To create a Harbor project for your Tanzu Application Service for Kubernetes container images:  
 
 1. Open your browser and navigate to your Harbor registry.
 
@@ -85,10 +91,10 @@ To create a Harbor project:
     ```
     Where `HARBOR-FQDN` is  the fully qualified domain name for your Harbor installation.
 
-1. Log in with your administrative credentials.  
+1. Log in with your Harbor administrative credentials.  
 
 1. Create a new Harbor user named `tas-app-images-push-pull`. 
-You must provide a password for the user you create. 
+You must provide a username and password to create the account. 
 For more information, see [Create a new user]
 (https://goharbor.io/docs/1.10/administration/managing-users/create-users-db/) 
 in the Harbor documentation. 
@@ -98,9 +104,9 @@ For more information, see [Create a new private project]
 (https://goharbor.io/docs/1.10/working-with-projects/create-projects/)
 in the Harbor documentation. 
 
-<p class="note">
-  <strong>Note:</strong> If you specify different project and user names in the 
-  Harbor configuration procedure above, use the same names when configuring the 
+<p class="note"><strong>Note:</strong> 
+  If you specify custom project and user names in the 
+  Harbor configuration procedure above, be sure to use the same names when configuring the 
   <code>app-registry-values.yml</code> file. See <a href="#harbor-config-file">
     Create the Image Registry Configuration File</a>, below. 
 </p>
@@ -129,11 +135,18 @@ in the Harbor documentation.
 
 ### <a id='harbor-ca-cert'></a> Retrieve the Harbor CA Certificate
 
-Your Harbor registry's CA certificate or self-signed certificate is required to configure 
-Tanzu Application Service for Kubernetes to access your Harbor registry.    
+Tanzu Application Service for Kubernetes must use your 
+Harbor registry's CA certificate or self-signed certificate 
+to access the registry.  
 
-To retrieve the CA certificate or self-signed certificate from an  
-Ops Manager deployed Harbor tile:
+<p class="note"><strong>Note:</strong> 
+If you did not use the Ops Manager tile to deploy your Harbor installation, 
+contact your Harbor installation administrator to obtain the CA certificate 
+that issued the Harbor certificate. 
+</p>
+
+To retrieve the CA certificate or self-signed certificate from an 
+Ops Manager-deployed Harbor tile:
 
 1. Log in to Ops Manager as an administrative user and navigate to the **Installation Dashboard**.
 
@@ -143,9 +156,9 @@ Ops Manager deployed Harbor tile:
 scroll down to the **Certificate Authority (CA)** field.
 
 1. Copy the CA certificate:  
-    * If a PEM-encoded certificate value is present in the CA field, 
+    * If the **Certificate Authority (CA)** field contains a PEM-encoded certificate value, 
     copy this value.  
-    * If the CA field is blank, the certificate for the Harbor installation was 
+    * If the **Certificate Authority (CA)** field is blank, the certificate for the Harbor installation was 
     likely issued from the Ops Manager root CA certificate.  
 <br>
         To download the Ops Manager root CA certificate:  
@@ -158,18 +171,16 @@ scroll down to the **Certificate Authority (CA)** field.
     configuring Tanzu Application Service for Kubernetes. See 
     [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
 
-If you did not use the Ops Manager tile to deploy your Harbor installation, 
-contact your Harbor installation administrator to obtain the CA certificate 
-that issued the Harbor certificate.  
+ 
 
 ### <a id='harbor-config-file'></a> Create the Harbor Image Registry Configuration File
 
-To configure Tanzu Application Service for Kubernetes to use your application image registry:
+To configure Tanzu Application Service for Kubernetes to use your private container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 
 1. Create a file named `app-registry-values.yml` in the `configuration-values` directory.
-1. Populate the `configuration-values` file with the following contents:  
+1. Populate the `configuration-values` file with the following:  
 
     ```yaml
     #@data/values
@@ -197,15 +208,15 @@ To configure Tanzu Application Service for Kubernetes to use your application im
 
 ### <a id='configure-other-registry'></a> Create the Configuration File for a Different Image Registry
 
-In addition to supporting the VMware recommended VMware Harbor Registry,
-Tanzu Application Service for Kubernetes also supports using other image registries, 
-such as Google Container Registry (GCR) and Docker Hub. 
+In addition to supporting a VMware Harbor registry as a container image registry,
+Tanzu Application Service for Kubernetes also supports using other container image 
+registries, such as a Google Container Registry (GCR) or Docker Hub registry. 
 
-To use an application image registry other than a Harbor registry:
+To use a container image registry other than a Harbor registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 1. Create a file named `app-registry-values.yml` in the `configuration-values` directory.
-1. Populate the `configuration-values` file with the following contents: 
+1. Populate the `configuration-values` file with the following: 
 
     ```yml
     #@data/values
@@ -223,7 +234,6 @@ To use an application image registry other than a Harbor registry:
     project within your registry.  
     * `APP-REGISTRY-USERNAME` is the username for an account with access to the 
     Tanzu Application Service for Kubernetes project within your registry. 
-    user.
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
 1. Save the file.
 1. After creating the image registry configuration file, proceed to the
