@@ -10,7 +10,7 @@ This topic describes how to prepare dependencies and your local workstation to i
 
 <%= partial 'limitation_notes' %>
 
-## <a id='preparing-installation-resources'></a> Preparing the Installation Resources
+## <a id='preparing-installation-resources'></a> Prepare Your Installation Resources
 
 Download the Tanzu Application Service for Kubernetes installation resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
 
@@ -22,41 +22,57 @@ Download the Tanzu Application Service for Kubernetes installation resources fro
 
 1. Extract the contents of `tanzu-application-service.tar` into the `tanzu-application-service` directory:
 
-```bash
-$ tar xvf tanzu-application-service.tar
-```
+    ```bash
+    tar xvf tanzu-application-service.tar
+    ```
 
 
-## <a id='app-container-registry'></a> Container Registry for App Images
+## <a id='app-container-registry'></a> Ensure Your Container Registry is Accessible
 
-Tanzu Application Service for Kubernetes depends on a container image registry to store images for buildpack-based applications. Supported registries include Harbor, Google Container Registry (GCR), and Docker Hub.
+Tanzu Application Service for Kubernetes depends on a container image registry to 
+store images for buildpack-based applications. 
+Supported registries include Harbor, Google Container Registry (GCR), and Docker Hub.
 
-If you are using Harbor as your container registry, ensure that it is deployed in your environment and is accessible at a domain name of your choice. The [VMware Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) is one option to deploy it when using Ops Manager.
-
-
-## <a id='system-domain'></a> System Domain Name
-
-Decide on the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes system domain (for example, `sys.tas.example.com`). Neither this domain nor any of its subdomains should be in use for other services.
-
-This domain name should be one for which you can create DNS records in a DNS zone. You will create these DNS records later in the installation procedure. 
-
-This documentation will use `PLACEHOLDER-SYSTEM-DOMAIN` to refer to the value of this system domain.
+If you are using Harbor as your container registry, ensure that it is deployed in your 
+environment and is accessible at a domain name of your choice. 
+The [VMware Harbor Registry tile](https://network.pivotal.io/products/harbor-container-registry) 
+is one option to deploy it when using Ops Manager.
 
 
-## <a id='command-line-tools'></a> Command-Line Tools
+## <a id='system-domain'></a> Select a System Domain Name
 
-The installation procedure for Tanzu Application Service for Kubernetes requires a Linux or macOS workstation with the following command-line tools installed.
+Decide on the DNS domain name you intend to use for the Tanzu Application Service for Kubernetes 
+system domain (for example, `sys.tas.example.com`). 
+Neither this domain nor any of its subdomains should be in use for other services.
 
-For more information about installing the BOSH CLI, `kapp`, `kbld`, and `ytt` tools from VMware Tanzu Network, see the [Installing Command-Line Tools](installing-command-line-tools.html) topic.
+This domain name should be one for which you can create DNS records in a DNS zone. 
+You will create these DNS records later in the installation procedure. 
+
+This documentation will use `SYSTEM-DOMAIN` to refer to the value of this 
+system domain.
+
+
+## <a id='command-line-tools'></a> Ensure Command-Line Tools Are Installed
+
+The installation procedure for Tanzu Application Service for Kubernetes requires a 
+Linux or macOS workstation with the following command-line tools installed.
+
+For more information about installing the BOSH CLI, `kapp`, `kbld`, and `ytt` tools 
+from VMware Tanzu Network, see  
+[Installing Command-Line Tools](installing-command-line-tools.html).
 
 * The Kubernetes CLI, `kubectl`. For more information, see the [Installing the Kubernetes CLI](https://docs.pivotal.io/pks/installing-kubectl-cli.html) topic.
 * The BOSH CLI, `bosh`.
 * The `kapp` utility, version v0.26.0 or later.
 * The `kbld` utility, version v0.22.0 or later.
 * The `ytt` utility, version v0.26.0 or later.
-* The cf CLI, version v6.50.0 or later. For more information, see the [Installing the cf CLI](https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html) topic.
+* The cf CLI, version v6.50.0 or later. For more information, see 
+[Installing the cf CLI](https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html).
 
 
 ## <a id='kubernetes-cluster'></a> Next: Preparing the Kubernetes Cluster
 
-Tanzu Application Service for Kubernetes requires that the Kubernetes cluster satisfy certain minimum resource requirements and capabilities. Proceed to the [Preparing the Kubernetes Cluster](preparing-kubernetes-cluster.html) topic for more details.
+Tanzu Application Service for Kubernetes requires that the Kubernetes cluster 
+satisfy certain minimum resource requirements and capabilities. 
+For more information, see [Preparing the Kubernetes Cluster]
+(preparing-kubernetes-cluster.html).
