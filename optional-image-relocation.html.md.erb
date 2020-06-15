@@ -73,7 +73,7 @@ To download the TAS for Kubernetes Images from Tanzu Network Registry:
                    --output /tmp/images.tar
     ```
 
-    Packing the image takes about 5 minutes to complete.
+    Packaging the image takes about 5 minutes to complete.
 
 ### <a id='uploading-the-images'></a> Upload the TAS for Kubernetes Images to the Private Registry
 
@@ -82,12 +82,16 @@ To upload the TAS for Kubernetes images to the private registry:
 1. Log in to the private registry.  
 
     ```
-    docker login registry.example.com/org-name/repository \
+    docker login registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
                        -u USERNAME \
                        -p PASSWORD
     ```
 
     Where:
+    * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, you previously selected for your 
+    Tanzu Application Service for Kubernetes installation.
+    * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
+    * `REPOSITORY` is the private registry repository to log in to.
     * `USERNAME` is a user account with write access to the private registry. 
     * `PASSWORD` is the password for the user account. 
 
@@ -119,22 +123,22 @@ TAS for Kubernetes using a modified installation procedure.
 To install TAS for Kubernetes: 
 
 1. Move the `config/image_overrides.yml` file out of the `config/` directory.
-1. To point the system registry variables to the private registry 
+1. To point the system registry variables to the private registry, 
 modify the `configuration-values/system-registry-values.yml` as follows:
 
     ```
     #@data/values
     ---
     system_registry:
-      hostname: "PRIVATE-REGISTRY-HOSTNAME"
-      username: "PRIVATE-REGISTRY-USERNAME"
-      password: "PRIVATE-REGISTRY-PASSWORD"
+      hostname: "REGISTRY-HOSTNAME"
+      username: "REGISTRY-USERNAME"
+      password: "REGISTRY-PASSWORD"
     ```
 
     Where:
-    * `PRIVATE-REGISTRY-HOSTNAME` is the hostname of your private registry.
-    * `PRIVATE-REGISTRY-USERNAME` is a user account with write access to the private registry. 
-    * `PRIVATE-REGISTRY-PASSWORD` is the password for the user account. 
+    * `REGISTRY-HOSTNAME` is the hostname of your private registry.
+    * `REGISTRY-USERNAME` is a user account with write access to the private registry. 
+    * `REGISTRY-PASSWORD` is the password for the user account. 
 
 1. To deploy TAS for Kubernetes using the images in the private registry:
     * If your client has the private registry CA certificates:  
