@@ -28,12 +28,11 @@ for the following situations:
 </p>
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install TAS for Kubernetes 
-from a private registry, you must have:  
+Before you install TAS for Kubernetes from a private registry, you must:  
 
-* Installed the Docker CLI  
-* Write access to your private container image registry  
-* Completed the instructions in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
+* Install the Docker CLI  
+* Grant write access to your private container image registry  
+* Complete the procedures in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
 and [Configuring Installation Values for Tanzu Application Service for Kubernetes]
 (configuring-installation-values.html)  
 
@@ -88,8 +87,8 @@ To upload the TAS for Kubernetes images to the private registry:
     ```
 
     Where:
-    * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, you previously selected for your 
-    Tanzu Application Service for Kubernetes installation.
+    * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
+    TAS for Kubernetes installation.
     * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
     * `REPOSITORY` is the private registry repository to log in to.
     * `USERNAME` is a user account with write access to the private registry. 
@@ -99,22 +98,37 @@ To upload the TAS for Kubernetes images to the private registry:
     * If your client has the private registry CA certificates:  
 
         ```
-        kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
+        kbld unpackage -f <(ytt -f config/image_overrides.yml \
+                         -f config/values.yml) \
                          -i /tmp/images.tar \
-                         -r registry.example.com/org-name/repository \
+                         -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
                          --lock-output relocated_images.yml
         ```
+
+        Where:
+        * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
+        TAS for Kubernetes installation.
+        * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
+        * `REPOSITORY` is the private registry repository to log in to.  
+<br>
     * If your client does not have the private registry CA certificates:  
 
         ```
-        kbld unpackage -f <(ytt -f config/image_overrides.yml -f config/values.yml) \
+        kbld unpackage -f <(ytt -f config/image_overrides.yml \
+                         -f config/values.yml) \
                          -i /tmp/images.tar \
-                         -r registry.example.com/org-name/repository \
+                         -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
         ```
 
-## <a id='post-image-relocation'></a> Install the TAS for Kubernetes
+        Where:
+        * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
+        TAS for Kubernetes installation.
+        * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
+        * `REPOSITORY` is the private registry repository to log in to.  
+
+## <a id='post-image-relocation'></a> Install TAS for Kubernetes
 
 After uploading your TAS for Kubernetes images to the private registry, 
 you can install the 
