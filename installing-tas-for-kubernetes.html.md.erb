@@ -17,12 +17,10 @@ all of the required or recommended installation resources.
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
-<p class="note">
-	Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
-</p>
+To install TAS for Kubernetes:  
 
-1. To ensure that your Kubernetes client configuration targets the intended cluster for installation, 
-run the following command and inspect the output:  
+1. Ensure that your Kubernetes client configuration targets the intended cluster for installation 
+by running the following command and inspecting the output:  
 
     ```bash
     kubectl cluster-info
@@ -35,6 +33,10 @@ run the following command and inspect the output:
     ```bash
     ./bin/install-tas.sh ../configuration-values
     ```
+
+<p class="note">
+  Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
+</p>
 
 ## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
