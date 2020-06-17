@@ -3,7 +3,7 @@ title: Installing Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to install Tanzu Application Service for Kubernetes.
+This topic describes how to install Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 <%= partial 'evaluation_only' %>
 
@@ -15,10 +15,10 @@ Before proceeding, review the [Configuring Installation Values]
 (configuring-installation-values.html) topic to ensure that you have configured 
 all of the required or recommended installation resources.
 
-## <a id='install-tas-for-k8s'></a> Install Tanzu Application Service for Kubernetes
+## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
 <p class="note">
-	Installing Tanzu Application Service for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
+	Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
 </p>
 
 1. To ensure that your Kubernetes client configuration targets the intended cluster for installation, 
@@ -36,23 +36,31 @@ run the following command and inspect the output:
     ./bin/install-tas.sh ../configuration-values
     ```
 
+## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
-## <a id='post-installation-networking-configuration'></a> Configure Networking
+To configure DNS entries for the TAS for Kubernetes ingress gateway:
 
-To configure DNS entries and load balancers for the Tanzu Application Service for Kubernetes 
-ingress gateway, follow one of the configuration cases below, depending on your installation:
+* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
+    1. Follow the instructions in
+    [Use Load Balancer Service for Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking). 
+    By default, TAS for Kubernetes does not create a Kubernetes `LoadBalancer` service 
+    for the ingress gateway. 
+    1. Follow the instructions in [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway](#post-installation-dns-with-k8s-lb) below. 
 
-* [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb)
-* [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb) 
-* [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway](#post-installation-dns-with-k8s-lb)
+* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway, do one of the following:  
+  * To configure DNS when using an external load balancer for the ingress gateway, follow
+  the instructions in [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb) below.
+  * To configure DNS when not using an external load balancer for the ingress gateway, follow
+  the instructions in [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb) below.  
 
 ### <a id='post-installation-dns-no-lb'></a> Configure DNS Without a Load Balancer for Ingress Gateway
 
-By default, Tanzu Application Service for Kubernetes is configured to not create a Kubernetes LoadBalancer service 
-for the ingress gateway.
-If you have deployed Tanzu Application Service for Kubernetes in this configuration, 
-and do not have an external load balancer to use for ingress to the installation, 
-set up your DNS records to establish ingress connectivity directly to the worker nodes:
+This section describes how to configure your DNS 
+if you do not have an external load balancer to use for ingress and 
+have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service 
+for the ingress gateway. 
+
+To set up your DNS records to establish ingress connectivity directly to the worker nodes:
 
 1. To retrieve the list of existing worker nodes with their external IP addresses:  
 
@@ -81,11 +89,12 @@ resolving to the set of external IP addresses for the worker nodes:
 
 ### <a id='post-installation-dns-with-lb'></a> Configure DNS With an External Load Balancer for Ingress Gateway
 
-By default, Tanzu Application Service for Kubernetes is configured to not create a Kubernetes LoadBalancer service 
-for the ingress gateway.
-If you have deployed Tanzu Application Service for Kubernetes in this configuration, 
-and have an external load balancer to use for ingress to the 
-TAS for Kubernetes installation, configure the external load balancer to forward HTTP and HTTPS traffic to the Kubernetes worker nodes.
+This section describes how to configure DNS 
+if you have an external load balancer to use for ingress to the TAS for Kubernetes installation and
+have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service 
+for the ingress gateway. 
+
+To configure the external load balancer to forward HTTP and HTTPS traffic to the Kubernetes worker nodes:  
 
 1. To retrieve the list of existing worker nodes with their internal IP addresses:
 
@@ -107,23 +116,22 @@ cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.8
 internal IP addresses for the Kubernetes worker nodes.
 
 1. Configure DNS records in your DNS zone:
-    * If your load balancer has a static IP:
-        1. Create a wildcard `A` record for the system domain, 
+    * If your load balancer has a static IP, create a wildcard `A` record for the system domain, 
         resolving to the external IP address of the load balancer:  
 
-            ```
-            *.SYSTEM-DOMAIN
-            ```
-            Where `SYSTEM-DOMAIN` is the system domain.  
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain.  
 <br>
-    * If your load balancer has a DNS name instead of static IP, such as an AWS load balancer:
-        1. Create a wildcard `CNAME` record for the system domain, 
+    * If your load balancer has a DNS name instead of static IP, such as an AWS load balancer, 
+        create a wildcard `CNAME` record for the system domain, 
         resolving to the external IP address of the load balancer:  
 
-            ```
-            *.SYSTEM-DOMAIN
-            ```
-            Where `SYSTEM-DOMAIN` is the system domain.  
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain.  
 
 
     Ensure you include the `*.` wildcard prefix in the new record 
@@ -131,9 +139,10 @@ internal IP addresses for the Kubernetes worker nodes.
 
 ### <a id='post-installation-dns-with-k8s-lb'></a> Configure DNS With a Kubernetes Load Balancer for Ingress Gateway
 
-If you have configured Tanzu Application Service for Kubernetes to 
-[Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking), 
-set up DNS for your system domain to resolve to the external IP of the load balancer:
+This section describes how to configure DNS if you have configured TAS for Kubernetes to 
+use a Kubernetes LoadBalancer Service for the ingress gateway.  
+
+To configure DNS with your system domain resolving to the external IP of the load balancer:
 
 1. To retrieve the value of the external IP or hostname assigned to the Istio ingress gateway service:
 
@@ -150,34 +159,31 @@ set up DNS for your system domain to resolve to the external IP of the load bala
     </pre>
 
 1. In your DNS zone, create an entry for your system domain:  
-    * If you have an external ip:
-        1. Create a wildcard `A` record for the system domain, 
+    * If you have an external ip, create a wildcard `A` record for the system domain, 
         resolving to the external IP address:  
 
-            ```
-            *.SYSTEM-DOMAIN
-            ```
-            Where `SYSTEM-DOMAIN` is the system domain.  
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain.  
     <br>
-    * If you have a hostname:
-        1. Create a wildcard CNAME record for the system domain, 
+    * If you have a hostname, create a wildcard CNAME record for the system domain, 
         resolving to the hostname:  
 
-            ```
-            *.SYSTEM-DOMAIN
-            ```
-            Where `SYSTEM-DOMAIN` is the system domain. 
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain. 
 
     Ensure you include the `*.` wildcard prefix in the new record so that all subdomains of the system domain also resolve to the load balancer.
 
-For information on configuring Tanzu Application Service for Kubernetes to 
+For information on configuring TAS for Kubernetes to 
 use a Kubernetes LoadBalancer Service for the ingress gateway, see 
 [Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
 
-## <a id='post-installation-system-configuration'></a> Post-Installation System Configuration
+## <a id='post-installation-system-configuration'></a> Enable Buildpack-Based Apps to Run in Kubernetes Clusters
 
-The configure the system must be correctly configured in order for buildpack-based apps to run on 
-Tanzu Application Service for Kubernetes.
+You must configure TAS for Kubernetes to support buildpack-based apps.
 
 To ensure the system is configured correctly for buildpack-based apps:
 
@@ -187,22 +193,22 @@ To ensure the system is configured correctly for buildpack-based apps:
     cf api api.SYSTEM-DOMAIN --skip-ssl-validation
     ```
 
-    Where `SYSTEM-DOMAIN` is your Tanzu Application Service for Kubernetes installation system domain.  
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
 1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values` 
 directories.
 
-1. Set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password, 
+1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password 
 stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
 
     ```
-    CF\_ADMIN\_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml \
-            --path /cf\_admin\_password)"
+    CF_ADMIN_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml \
+            --path /cf_admin_password)"
     ```
 
 1. Log into the installation as the admin user:
 
     ```
-    cf auth admin "$CF\_ADMIN\_PASSWORD"
+    cf auth admin "$CF_ADMIN_PASSWORD"
     ```
 
 1. Enable the Diego-Docker feature flag to enable buildpack-based apps to run on the Kubernetes cluster:
@@ -211,15 +217,15 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
     cf enable-feature-flag diego_docker
     ```
 
-## <a id='post-installation-configuration'></a> Validate Your Installation
+## <a id='post-installation-configuration'></a> Validate Your TAS for Kubernetes Installation
 
 <p class="note">
   <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
 </p>
 
-To validate your Tanzu Application Service for Kubernetes:
+To validate your TAS for Kubernetes:
 
-1. Ensure that you are still logged in to the Tanzu Application Service for Kubernetes 
+1. Ensure that you are still logged in to the TAS for Kubernetes 
 installation as the admin user.
 
 1. Create and target an organization and space for the verification application. 
@@ -242,7 +248,7 @@ installation as the admin user.
 1. Change directory into the resulting `test-app` directory.
 
 
-1. To push the test app to your Tanzu Application Service for Kubernetes installation:
+1. To push the test app to your TAS for Kubernetes installation:
 
     ```
     cf push test-app --hostname test-app
@@ -254,4 +260,4 @@ installation as the admin user.
     curl test-app.apps.SYSTEM-DOMAIN
     ```
 
-    Where `SYSTEM-DOMAIN` is your Tanzu Application Service for Kubernetes installation system domain.
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.
