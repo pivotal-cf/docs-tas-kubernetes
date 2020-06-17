@@ -24,9 +24,9 @@ Before proceeding, review the [Configuring Installation Values](configuring-inst
 
 1. Run the installation script, configured to use the deployment values you generated previously:
 
-```bash
-$ ./bin/install-tas.sh ../configuration-values
-```
+    ```bash
+    ./bin/install-tas.sh ../configuration-values
+    ```
 
 
 ## <a id='post-installation-networking-configuration'></a> Post-Installation Networking Configuration
@@ -40,16 +40,19 @@ By default, Tanzu Application Service for Kubernetes is configured not to create
 If you have deployed Tanzu Application Service for Kubernetes in this configuration, and do not have an external load balancer to use for ingress to the installation, set up your DNS records to establish ingress connectivity directly to the worker nodes:
 
 1. Use the `kubectl` CLI to retrieve the list of worker nodes with their external IP addresses:
-  <pre><code>$ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide</code></pre>
-  For example:
-  <pre><code>$ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
+
+    ```
+    kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
+    ```
+    For example:
+    <pre class="terminal">$ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide  
 NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
 5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
 a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
 a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
 af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
-</code></pre>
+    </pre>
 
 1. In your DNS zone, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to the set of external IP addresses for the worker nodes.
 Make sure you include the `*.` wildcard prefix so that all subdomains of the system domain also resolve to these IP addresses.
@@ -61,9 +64,13 @@ If you have deployed Tanzu Application Service for Kubernetes not to create a Ku
 
 
 1. Use the `kubectl` CLI to retrieve the list of worker nodes with their internal IP addresses:
-  <pre><code>$ kubectl get nodes --output='wide'</code></pre>
-  For example:
-  <pre><code>$ kubectl get nodes --output='wide'
+
+    ```
+    kubectl get nodes --output='wide'
+    ```
+    For example:
+    <pre class="terminal">
+$ kubectl get nodes --output='wide'  
 NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
 5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
 a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
@@ -84,14 +91,19 @@ cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.8
 If you have instead optionally configured Tanzu Application Service for Kubernetes to [use a Kubernetes LoadBalancer Service for the ingress gateway](#adjust-installation-resources-networking), set up DNS for your system domain to resolve to the external IP of the load balancer:
 
 1. Use `kubectl` to retrieve the value of the external IP or hostname assigned to the Istio ingress gateway service:
-<pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
-$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'</code></pre>
-  For example:
-  <pre><code>$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+
+    ```
+    kubectl -n istio-system get service istio-ingressgateway \
+            -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+    kubectl -n istio-system get service istio-ingressgateway \
+            -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+    ```
+    For example:
+    <pre class="terminal">$ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
 10.193.105.162
 $ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ae7b1093f9c3b44fd9982b828b32ccad-2445920965.us-west-2.elb.amazonaws.com
-</code></pre>
+</pre>
 
 1. In your DNS zone, create a entry for your system domain. If you have an external ip, create a wildcard `A` record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this external IP address.
 If you have a hostname, create a wildcard CNAME record for the system domain, `*.PLACEHOLDER-SYSTEM-DOMAIN`, resolving to this hostname.
@@ -104,18 +116,33 @@ Make sure you include the `*.` wildcard prefix so that all subdomains of the sys
 To enable buildpack-based apps to run on Tanzu Application Service for Kubernetes, you must configure the system correctly after the initial installation.
 
 1. Use the CF CLI to target the installation at the `api` subdomain of the system domain:
-  <pre><code>$ cf api api.PLACEHOLDER-SYSTEM-DOMAIN --skip-ssl-validation</code></pre>
+
+    ```
+    cf api api.SYSTEM-DOMAIN --skip-ssl-validation
+    ```
+
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
 
 1. In your terminal, change into the directory containing the `tanzu-application-service` and `configuration-values` directories.
 
 1. Set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password, stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
-  <pre><code>$ CF\_ADMIN\_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml --path /cf\_admin\_password)"</code></pre>
+
+    ```
+    CF_ADMIN_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml \
+                      --path /cf_admin_password)"
+    ```
 
 1. Log into the installation as the admin user:
-  <pre><code>$ cf auth admin "$CF\_ADMIN\_PASSWORD"</code></pre>
+
+    ```
+    cf auth admin "$CF_ADMIN_PASSWORD"
+    ```
 
 1. Enable the Diego-Docker feature flag to enable buildpack-based apps to run on the Kubernetes cluster:
-  <pre><code>$ cf enable-feature-flag diego_docker</code></pre>
+
+    ```
+    cf enable-feature-flag diego_docker
+    ```
 
 
 ## <a id='post-installation-configuration'></a> Post-Installation Validation
@@ -127,17 +154,31 @@ To enable buildpack-based apps to run on Tanzu Application Service for Kubernete
 
 1. Ensure that you are still logged into the Tanzu Application Service for Kubernetes installation as the admin user.
 
-1. Create and target an organization and space for the verification application:
-  <pre><code>$ cf create-org test-org
-  $ cf create-space -o test-org test-space
-  $ cf target -o test-org -s test-space
-  </code></pre>
+1. Create and target an organization and space for the verification application:  
 
-1. Clone the [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) from GitHub to your workstation and change into the resulting `test-app` directory.
-<pre><code>$ git clone https://github.com/cloudfoundry-samples/test-app.git && cd test-app</code></pre>
+    ```
+    cf create-org test-org
+    cf create-space -o test-org test-space
+    cf target -o test-org -s test-space
+    ```
 
-1. Push the test app to the installation:
-  <pre><code>$ cf push test-app --hostname test-app</code></pre>
+1. Clone the [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) 
+from GitHub to your workstation and change into the resulting `test-app` directory.  
 
-1. After the `cf push` command succeeds, make a request to the app:
-  <pre><code>$ curl test-app.apps.PLACEHOLDER-SYSTEM-DOMAIN</code></pre>
+    ```
+    git clone https://github.com/cloudfoundry-samples/test-app.git && cd test-app
+    ```
+
+1. Push the test app to the installation:  
+
+    ```
+    cf push test-app --hostname test-app
+    ```
+
+1. After the `cf push` command succeeds, make a request to the app:  
+
+    ```
+    curl test-app.apps.SYSTEM-DOMAIN
+    ```
+
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.
