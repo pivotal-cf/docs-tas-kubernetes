@@ -18,13 +18,18 @@ Before proceeding, complete the following sections in [Preparing to Install TAS 
 
 ## <a id='overview'></a> Overview
 
-Configuring TAS for Kubernetes for installation entails several steps:  
+To configure installation values for TAS for Kubernetes, 
+generate credentials and certificates for the installation scripts, 
+configure an image registry, and
+optionally configure a LoadBalancer service.
 
-* This topic details the following steps:  
-    * [Generate Internal Configuration Values](#generate-configuration-values)  
-    * [Use a LoadBalancer Service for the Ingress Gateway](#adjust-installation-resources-networking)  
-* See the following topics for additional needed steps:  
-    * [Configuring Image Registries](configuring-image-registries.html)  
+This topic includes the following procedures:
+ 
+* [Generate Internal Configuration Values](#generate-configuration-values)  
+* [Use a LoadBalancer Service for the Ingress Gateway](#adjust-installation-resources-networking)  
+
+For more information about configuring image registries, see 
+[Configuring Image Registries](configuring-image-registries.html)  
 
 ## <a id='generate-configuration-values'></a> Generate Internal Configuration Values
 
@@ -63,16 +68,14 @@ you may configure the TAS for Kubernetes deployment to
 provision a load balancer for the Istio ingress gateway 
 using a service of type LoadBalancer.  
 
-<p class="note"><strong>Note:</strong> 
-  This option is recommended when deploying TAS for Kubernetes to 
-  VMware Enterprise PKS on AWS, Azure, or GCP, or on vSphere with NSX-T container networking. 
-  This option is also recommended when deploying TAS for Kubernetes to 
-  Tanzu Kubernetes Grid on AWS.
-</p>
+This option is recommended when deploying TAS for Kubernetes to 
+VMware Enterprise PKS on AWS, Azure, or GCP, or on vSphere with NSX-T container networking. 
+This option is also recommended when deploying TAS for Kubernetes to 
+Tanzu Kubernetes Grid on AWS.
 
 <p class="note warning"><strong>Warning:</strong> 
-  This option is not compatible with VMware Enterprise PKS to vSphere with Flannel 
-  container networking or Tanzu Kubernetes Grid on vSphere.
+  This option is not compatible with  Tanzu Kubernetes Grid on vSphere or 
+  VMware Enterprise PKS on vSphere with Flannel container networking.
 </p>
 
 To enable using a LoadBalancer service for the Istio ingress gateway:
@@ -95,7 +98,7 @@ For more information, see [Kubernetes Services]
 (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) 
 in the Kubernetes documentation.
 
-## <a id='configure-app-registry-values'></a> Next: Configure System Registry and App Registry Values
+## <a id='configure-app-registry-values'></a> Next: Configure an Image Registry
 
 TAS for Kubernetes pulls system component images from the Tanzu Network image registry, 
 builds app images for buildpack-based applications, and stores the app images in a user-provided image registry. 
