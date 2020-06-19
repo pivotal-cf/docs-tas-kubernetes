@@ -6,14 +6,44 @@ owner: Tanzu Application Service Release Engineering
 This topic contains release notes for Tanzu Application Service for Kubernetes
 (TAS for Kubernetes).
 
+<%= partial 'evaluation_only' %>
+
+<%= partial 'limitation_notes' %>
+
+## <a id='0-3-0'></a> v0.3.0
+
+**Release Date: June 30, 2020**
+
+
+### <a id='features'></a> Features
+
+New features and changes in this release:
+
+-
+
+### Resolved Issues
+
+This release has the following fixes:
+
+- 
+
+### <a id='known-issues'></a> Known Issues
+
+This release has the following issues:
+
+- Retrieving app and buildpack-staging logs with `cf logs` requires cf CLI v6.50.0 or later.
+- App instance logs also include unfiltered logs from the Istio sidecar proxy process and can be noisy as a result.
+- The `cf buildpacks` command shows an empty list of buildpacks.
+- Does not support cf CLI `buildpack-administration` commands.
+- App developers cannot select a buildpack for their buildpack-based apps.
+- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
+- Does not support upgrading an existing TAS for Kubernetes installation to a new version.
+- Does not support re-deploying TAS for Kubernetes with different credentials.
 
 ## <a id='0-2-0'></a> v0.2.0
 
 **Release Date: May 29, 2020**
-
-<%= partial 'evaluation_only' %>
-
-<%= partial 'limitation_notes' %>
 
 ### <a id='features'></a> Features
 
@@ -47,3 +77,40 @@ This release has the following issues:
 - TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
 - Does not support upgrading an existing TAS for Kubernetes installation to a new version.
 - Does not support re-deploying TAS for Kubernetes with different credentials.
+
+## <a id='0-1-0'></a> v0.1.0
+
+**Release Date: April 14, 2020**
+
+### <a id='features'></a> Features
+
+Key features in this release:
+
+- Supports building and running apps from source files through `cf push`
+  using system-provided cloud-native buildpacks for Java, Go, NodeJS, and .NET Core.
+- Supports running apps packaged as Docker images.
+- Supports routing HTTP traffic to apps.
+- Supports retrieving logs from app-instance processes.
+- Supports retrieving logs from cloud-native buildpack builds.
+- Supports installation to Kubernetes clusters provisioned with VMware Enterprise PKS.
+- Uses the k14s toolchain (ytt, kbld, and kapp) for installation.
+  For more information, see the [k14s](https://k14s.io) website.
+- Supports integration with VMware Harbor Registry, Google Container Registry, and DockerHub for storing app images.
+
+### <a id='known-issues'></a> Known Issues
+
+This release has the following issues:
+
+- Apps can receive ingress traffic only through HTTP and not HTTPS.
+- Retrieving app and buildpack-staging logs with `cf logs` requires cf CLI v6.50.0 or later.
+- Buildpack-staging logs are not streamed during `cf push`.
+- App instance logs also include unfiltered logs from the Istio sidecar proxy process and can be noisy as a result.
+- Running `cf restage` fails to re-stage the app.
+- The `cf buildpacks` command shows an empty list of buildpacks.
+- Does not support cf CLI `buildpack-administration` commands.
+- App developers cannot select a buildpack for their buildpack-based apps.
+- Running buildpack-based apps requires the `diego_docker` feature flag to be set.
+- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
+- Does not support upgrading an existing TAS installation to a new version.
+- Does not support re-deploying TAS with different credentials.
