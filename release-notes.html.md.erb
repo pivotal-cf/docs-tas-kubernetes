@@ -3,7 +3,8 @@ title: TAS for Kubernetes Release Notes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic contains release notes for Tanzu Application Service (TAS) for Kubernetes.
+This topic contains release notes for Tanzu Application Service for Kubernetes
+(TAS for Kubernetes).
 
 
 ## <a id='0-2-0'></a> v0.2.0
@@ -11,6 +12,8 @@ This topic contains release notes for Tanzu Application Service (TAS) for Kubern
 **Release Date: May 29, 2020**
 
 <%= partial 'evaluation_only' %>
+
+<%= partial 'limitation_notes' %>
 
 ### <a id='features'></a> Features
 
@@ -42,5 +45,5 @@ This release has the following issues:
 - App developers cannot select a buildpack for their buildpack-based apps.
 - The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
 - TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
-- Does not support upgrading an existing TAS installation to a new version.
-- Does not support re-deploying TAS with different credentials.
+- Does not support upgrading an existing TAS for Kubernetes installation to a new version.
+- Does not support re-deploying TAS for Kubernetes with different credentials.
