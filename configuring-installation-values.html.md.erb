@@ -33,12 +33,14 @@ For more information about configuring image registries, see
 
 ## <a id='generate-configuration-values'></a> Generate Internal Configuration Values
 
-TAS for Kubernetes requires a certificate to terminate TLS 
-at the ingress gateway and an additional set of credentials and 
-certificates to coordinate its components. 
-These credentials and certificates must be supplied to the installation script.  
+TAS for Kubernetes requires internal configuration values, credentials and 
+certificates to coordinate its components. Additionally, it requires a 
+certificate to terminate TLS at the ingress gateway. 
+These configuration values, credentials and certificates must be supplied to the 
+TAS for Kubernetes installation script.  
 
-To generate these credentials and certificates, use  a helper script in the installation resources:
+To generate the internal values, credentials and certificates needed during TAS for Kubernetes installation, 
+use a helper script in the installation resources:
 
 1. Create a directory named `configuration-values` in the same directory as the 
 `tanzu-application-service` directory. 
