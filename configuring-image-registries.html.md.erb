@@ -186,14 +186,19 @@ To configure Tanzu Application Service for Kubernetes to use your private contai
     #@data/values
     ---
     app_registry:
-      hostname: "HARBOR-FQDN"
-      repository: "HARBOR-FQDN/tas-app-images"
-      username: "tas-app-images-push-pull"
-      password: "APP-REGISTRY-PASSWORD"
       ca: |
         -----BEGIN CERTIFICATE-----
         CA-CERTIFICATE-CONTENT
         -----END CERTIFICATE-----
+
+    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
+    #@data/values
+    ---
+    app_registry:
+      hostname: "HARBOR-FQDN"
+      repository: "HARBOR-FQDN/tas-app-images"
+      username: "tas-app-images-push-pull"
+      password: "APP-REGISTRY-PASSWORD"
     ```
 
     Where:
@@ -219,6 +224,15 @@ To use a container image registry other than a Harbor registry:
 1. Populate the `configuration-values` file with the following: 
 
     ```yml
+    #@data/values
+    ---
+    app_registry:
+      ca: |
+        -----BEGIN CERTIFICATE-----
+        CA-CERTIFICATE-CONTENT
+        -----END CERTIFICATE-----
+
+    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
     #@data/values
     ---
     app_registry:
