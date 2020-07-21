@@ -49,25 +49,52 @@ system domain.
 
 ## <a id='command-line-tools'></a> Ensure Command-Line Tools Are Installed
 
-The installation procedure for Tanzu Application Service for Kubernetes requires a 
-Linux or macOS workstation with the following command-line tools installed.
+Tanzu Application Service for Kubernetes installation procedures require a 
+Linux or macOS workstation with the following command-line tools installed:  
 
-For more information about installing the BOSH CLI, `kapp`, `kbld`, and `ytt` tools 
-from VMware Tanzu Network, see 
-[Installing Command-Line Tools](installing-command-line-tools.html).
+<table class="nice">
+  <tr>
+    <th width=40%>Component</th>
+    <th>Installation Instructions</th>
+  </tr>
+  <tr>
+    <td>Cloud Foundry CLI: <code>cf</code></td>
+    <td><a href="https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html">Installing the cf CLI</a></td>
+  </tr>
+  <tr>
+    <td>Kubernetes CLI: <code>kubectl</code></td>
+    <td><a href="https://docs.pivotal.io/pks/installing-kubectl-cli.html">Installing the Kubernetes CLI</a></td>
+  </tr>
+  <tr>
+    <td>BOSH CLI: <code>bosh</code></td>
+    <td><a href="installing-command-line-tools.html">Installing Command-Line Tools</a></td>
+  </tr>  
+  <tr>
+    <td>k14s utilities: <code>kapp</code>, <code>kbld</code>, <code>ytt</code></td>
+    <td><a href="installing-command-line-tools.html">Installing Command-Line Tools</a></td>
+  </tr>
+</table>
 
-* The Kubernetes CLI, `kubectl`. For more information, see the [Installing the Kubernetes CLI](https://docs.pivotal.io/pks/installing-kubectl-cli.html) topic.
+<!--
+* The Kubernetes CLI, `kubectl`. For more information, see the [Installing the Kubernetes CLI]
+(https://docs.pivotal.io/pks/installing-kubectl-cli.html) topic.
 * The BOSH CLI, `bosh`.
-* The `kapp` utility, version v0.26.0 or later.
-* The `kbld` utility, version v0.22.0 or later.
-* The `ytt` utility, version v0.26.0 or later.
-* The cf CLI, version v6.50.0 or later. For more information, see 
-[Installing the cf CLI](https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html).
+* The cf CLI. For more information, see [Installing the cf CLI]
+(https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html).
+* The following k14s utilities: `kapp`,  `kbld`, and `ytt`.
 
 
+For information about the required versions of these component, see [Required Additional Components](#0-3-0-additional) in the _Release Notes_.
+
+For information about installing the BOSH CLI, `kapp`, `kbld`, and `ytt` tools 
+from VMware Tanzu Network, see 
+[Installing Command-Line Tools](installing-command-line-tools.html).-->
+
+<!--
 ## <a id='kubernetes-cluster'></a> Next: Preparing the Kubernetes Cluster
 
 Tanzu Application Service for Kubernetes requires that the Kubernetes cluster 
 satisfy certain minimum resource requirements and capabilities. 
 For more information, see [Preparing the Kubernetes Cluster]
 (preparing-kubernetes-cluster.html).
+-->
