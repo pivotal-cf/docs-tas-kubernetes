@@ -1,5 +1,5 @@
 ---
-title: Configuring Image Registries
+title: Configuring Your App Image Registry
 owner: Tanzu Application Service Release Engineering
 ---
 
@@ -24,40 +24,6 @@ and retains those images in a private container image registry.
 Before you begin this procedure, ensure that you have 
 created a private container image registry. VMware recommends that you use a VMware Harbor registry 
 as your container image registry.
-
-## <a id='configure-system-registry-values'></a>Configure Tanzu Network Account Credentials
-
-Tanzu Application Service for Kubernetes requires a registered 
-[Tanzu Network](https://network.pivotal.io) account to pull container images for 
-system components from the [Tanzu Network container registry](https://registry.pivotal.io/).
-
-To configure Tanzu Application Service for Kubernetes with Tanzu Network user credentials:
-
-1. Change directory into the `configuration-values` directory you created earlier.
-
-1. Create a file named `system-registry-values.yml` in the `configuration-values` directory.  
-1. Populate the `system-registry-values.yml` file with the following:
-
-    ```yaml
-    #@data/values
-    ---
-    system_registry:
-      hostname: registry.pivotal.io
-      username: "USERNAME"
-      password: "PASSWORD"
-    ```
-
-    Where:
-    * `USERNAME` is the username of the account to use to download 
-    container images from the Tanzu Network Registry. 
-    Ensure this account has a signed Tanzu Application Service for Kubernetes EULA.
-    * `PASSWORD` is the password for the account you specified.  
-
-    <p class="note"><strong>Note:</strong> VMware recommends you 
-      provide the Tanzu Network account credentials you used to download 
-      Tanzu Application Service for Kubernetes.
-    </p>
-
 
 ## <a id='configure-app-registry'></a> Configure a Harbor Container Image Registry
 

@@ -3,7 +3,8 @@ title: Installing Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to install Tanzu Application Service for Kubernetes (TAS for Kubernetes).  
+This topic describes how to install Tanzu Application Service for Kubernetes (TAS for Kubernetes) 
+from the Tanzu Network and from a relocated image in a private container image registry.  
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -13,7 +14,18 @@ all of the required or recommended installation resources.
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
-To install TAS for Kubernetes:  
+To install TAS for Kubernetes, complete the procedure appropriate for the configuration you created:
+
+* [Install TAS for Kubernetes from the Tanzu Network](#install-tas-for-k8s-from-network)
+* [Install TAS for Kubernetes from a Private System Registry](#post-image-relocation)
+
+<p class="note">
+  Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
+</p>
+
+### <a id='install-tas-for-k8s-from-network'></a> Install TAS for Kubernetes from the Tanzu Network
+
+To install TAS for Kubernetes from the Tanzu Network:  
 
 1. Ensure that your Kubernetes client configuration targets the intended cluster for installation 
 by running the following command and inspecting the output:  
@@ -30,26 +42,63 @@ by running the following command and inspecting the output:
     ./bin/install-tas.sh ../configuration-values
     ```
 
-<p class="note">
-  Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
-</p>
+1. To validate your installation, see 
+[Validate Your TAS for Kubernetes Installation](installing-tas-for-kubernetes.html#post-installation-configuration). 
+
+
+### <a id='post-image-relocation'></a> Install TAS for Kubernetes from a Private System Registry
+
+After uploading your TAS for Kubernetes images to the private registry, 
+you can install the 
+TAS for Kubernetes using a modified installation procedure.
+
+To install TAS for Kubernetes: 
+
+1. **Change directory to the location where you saved the `image_overrides.yml` file.**
+
+1. To deploy TAS for Kubernetes using the images in the private registry:
+    * If your client has the private registry CA certificates:  
+
+        ```
+        ytt -f config \
+              -f ../configuration-values | \
+              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
+        kapp deploy -a cf -f /tmp/final_deployment.yml
+        ```
+    * If your client does not have the private registry CA certificates:
+
+        ```
+        ytt -f config \
+              -f ../configuration-values | \
+              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml \
+              --registry-verify-certs=false
+        kapp deploy -a cf -f /tmp/final_deployment.yml
+        ```
+
+1. To validate your installation, see 
+[Validate Your TAS for Kubernetes Installation](installing-tas-for-kubernetes.html#post-installation-configuration). 
+
 
 ## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
-To configure DNS entries for the TAS for Kubernetes ingress gateway:
+To configure DNS entries for the TAS for Kubernetes ingress gateway:  
 
-* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
-    1. Follow the instructions in
-    [Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking). 
+* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:  
+<br>
     By default, TAS for Kubernetes does not create a Kubernetes `LoadBalancer` service 
-    for the ingress gateway. 
-    1. Follow the instructions in [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway](#post-installation-dns-with-k8s-lb) below. 
-
-* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway, do one of the following:  
-  * To configure DNS when using an external load balancer for the ingress gateway, follow
-  the instructions in [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb) below.
-  * To configure DNS when not using an external load balancer for the ingress gateway, follow
-  the instructions in [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb) below.  
+    for the ingress gateway. Complete the following:  
+    1. [Use a LoadBalancer Service for the Ingress Gateway]
+    (configuring-installation-values.html#adjust-installation-resources-networking) 
+    1. [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway]
+    (#post-installation-dns-with-k8s-lb)  
+<br>
+* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:  
+<br>
+    To configure DNS, complete one of the following:  
+    * If using an external load balancer for the ingress gateway: 
+    [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb)
+    * If not using an external load balancer for the ingress gateway: 
+    [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb)  
 
 ### <a id='post-installation-dns-no-lb'></a> Configure DNS Without a Load Balancer for Ingress Gateway
 
