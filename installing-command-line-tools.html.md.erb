@@ -7,193 +7,85 @@ This topic describes how to install command-line tools required to install Tanzu
 
 ## <a id='overview'></a> Overview
 
-Command-line tools required to install Tanzu Application Service for Kubernetes include the BOSH CLI (`bosh`), and the k14s utilities `kapp`, `kbld`, and `ytt`.
-
-* The `kapp` utility is a deployment tool with the concept of a "Kubernetes application": a set of resources with the same label.
-  For more information about `kapp`, consult [get-kapp.io](https://get-kapp.io/).
-
-* The `kbld` utility manipulates and replaces container images used in Kubernetes configuration files.
-  For more information about `kbld`, consult [get-kbld.io](https://get-kbld.io/).
-
-* The `ytt` utility is a YAML templating and overlay tool that works on YAML structure instead of text.
-  For more information about `ytt`, consult [get-ytt.io](https://get-ytt.io/).
-
-For more information about the k14s utilities, consult [k14s.io](https://k14s.io).
-
-To install these tools, follow the procedures below for your operating system to obtain them from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes). Binaries are provided only for 64-bit architectures.
-
-
-## <a id='macos'></a> macOS
-
-This section describes how to install the BOSH CLI, `kapp`, `kbld`, and `ytt` on macOS.
-
-
-### <a id='macos-bosh-cli'></a> BOSH CLI
-
-This section describes how to install the BOSH Command Line Interface tool (`bosh`) on macOS.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **VMware Tanzu Application Service for Kubernetes**.
-
-1. Click **BOSH CLI**.
-
-1. Click **BOSH CLI for macOS** to download the BOSH CLI binary.
-
-1. Rename the downloaded binary to <code>bosh</code>.
-
-1. On the command line, run the following command to make the BOSH CLI binary executable:
-  <pre>$ chmod +x bosh</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv bosh /usr/local/bin/bosh</pre>
-
-
-### <a id='macos-kapp'></a> kapp
-
-This section describes how to install the `kapp` utility on macOS.
-
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **kapp**.
-
-1. Click **kapp - macOS** to download the <code>kapp</code> binary.
-
-1. Rename the downloaded binary to <code>kapp</code>.
-
-1. On the command line, run the following command to make the <code>kapp</code> binary executable:
-  <pre>$ chmod +x kapp</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv kapp /usr/local/bin/kapp</pre>
-
-
-### <a id='macos-kbld'></a> kbld
-
-This section describes how to install the `kbld` utility on macOS.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **kbld**.
-
-1. Click **kbld - macOS** to download the <code>kbld</code> binary.
-
-1. Rename the downloaded binary to <code>kbld</code>.
-
-1. On the command line, run the following command to make the <code>kbld</code> binary executable:
-  <pre>$ chmod +x kbld</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv kbld /usr/local/bin/kbld</pre>
-
-
-
-### <a id='macos-ytt'></a> ytt
-
-This section describes how to install the `ytt` utility on macOS.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **ytt**.
-
-1. Click **ytt - macOS** to download the <code>ytt</code> binary.
-
-1. Rename the downloaded binary to <code>ytt</code>.
-
-1. On the command line, run the following command to make the <code>ytt</code> binary executable:
-  <pre>$ chmod +x ytt</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv ytt /usr/local/bin/ytt</pre>
-
-
-
-## <a id='linux'></a> Linux
-
-This section describes how to install the BOSH CLI, `kapp`, `kbld`, and `ytt` on Linux.
-
-
-### <a id='linux-bosh-cli'></a> BOSH CLI
-
-This section describes how to install the BOSH Command Line Interface tool (`bosh`) on Linux.
-
-1. Navigate to <a href="https://network.pivotal.io/">Pivotal Network</a> and log in.
-
-1. Click **VMware Tanzu Application Service for Kubernetes**.
-
-1. Click **BOSH CLI**.
-
-1. Click **BOSH CLI for Linux** to download the BOSH CLI binary.
-
-1. Rename the downloaded binary to <code>bosh</code>.
-
-1. On the command line, run the following command to make the BOSH CLI binary executable:
-  <pre>$ chmod +x bosh</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv bosh /usr/local/bin/bosh</pre>
-
-
-### <a id='linux-kapp'></a> kapp
-
-This section describes how to install the `kapp` utility on Linux.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **kapp**.
-
-1. Click **kapp - Linux** to download the <code>kapp</code> binary.
-
-1. Rename the downloaded binary to <code>kapp</code>.
-
-1. On the command line, run the following command to make the <code>kapp</code> binary executable:
-  <pre>$ chmod +x kapp</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv kapp /usr/local/bin/kapp</pre>
-
-
-
-### <a id='linux-kbld'></a> kbld
-
-This section describes how to install the `kbld` utility on Linux.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **kbld**.
-
-1. Click **kbld - Linux** to download the <code>kbld</code> binary.
-
-1. Rename the downloaded binary to <code>kbld</code>.
-
-1. On the command line, run the following command to make the <code>kbld</code> binary executable:
-  <pre>$ chmod +x kbld</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv kbld /usr/local/bin/kbld</pre>
-
-
-
-### <a id='linux-ytt'></a> ytt
-
-This section describes how to install the `ytt` utility on Linux.
-
-1. Navigate to <a href="https://network.pivotal.io/">VMware Tanzu Network</a> and log in.
-
-1. Click **ytt**.
-
-1. Click **ytt - Linux** to download the <code>ytt</code> binary.
-
-1. Rename the downloaded binary to <code>ytt</code>.
-
-1. On the command line, run the following command to make the <code>ytt</code> binary executable:
-  <pre>$ chmod +x ytt</pre>
-
-1. Move the binary into your <code>PATH</code>. For example:
-  <pre>$ mv ytt /usr/local/bin/ytt</pre>
-
-
+Tanzu Application Service for Kubernetes installation procedures require a 
+Linux or macOS workstation with the following command-line tools installed:  
+
+* Cloud Foundry CLI
+* Kubernetes CLI
+* BOSH CLI
+* k14s utilities  
+
+The k14s utilities are Kubernetes support tools:
+
+<table class="nice">
+  <tr>
+    <th width=15%>Utility</th>
+    <th>Description</th>
+    <th width=17%>More Information</th>
+  </tr>
+  <tr><td><code>kapp</code></td>
+    <td>Deployment tool with the concept of a "Kubernetes application": a set of resources with the same label.</td>
+    <td><a href="https://get-kapp.io/">get-kapp.io</a></td>
+  </tr>
+  <tr><td><code>kbld</code></td>
+    <td>Utility used to manipulate and replace container images used in Kubernetes configuration files.</td>
+    <td><a href="https://get-kbld.io/">get-kbld.io</a></td>
+  </tr>
+  <tr><td><code>ytt</code></td>
+    <td>YAML templating and overlay tool that works on YAML structure instead of text.</td>
+    <td><a href="https://get-ytt.io/">get-ytt.io</a></td>
+  </tr>
+</table>
+
+## <a id='command-line-tools'></a> Install Your Command-Line Tools
+
+This section guides you through installing the necessary CLIs and k14 utilities on your workstation. 
+
+1. Review [Required Additional Components]
+(release-notes.html#additional-components) in _TAS for Kubernetes Release Notes_ 
+for the versions of the command line tools to install.
+
+1. Install the cf CLI. See [Installing the cf CLI]
+(https://docs.pivotal.io/platform/application-service/cf-cli/install-go-cli.html).
+
+1. Install the Kubernetes CLI. See [Installing the Kubernetes CLI]
+(https://docs.pivotal.io/pks/installing-kubectl-cli.html).
+
+1. Install the `BOSH CLI`:
+    1. Download the `BOSH CLI` binary for your version of TAS for Kubernetes from 
+    [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
+    1. Rename the downloaded binary to <code>bosh</code>.
+    1. On the command line, run the following command to make the BOSH CLI binary executable:
+    <pre>$ chmod +x bosh</pre>
+    1. Move the binary into your <code>PATH</code>. For example:
+    <pre>$ mv bosh /usr/local/bin/bosh</pre>
+
+1. Install `kapp`:
+    1. Download the `kapp` binary for your operating system from 
+    [VMware Tanzu Network](https://network.pivotal.io/products/kapp). 
+    1. Rename the downloaded binary to <code>kapp</code>.
+    1. On the command line, run the following command to make the <code>kapp</code> binary executable:
+    <pre>$ chmod +x kapp</pre>
+    1. Move the binary into your <code>PATH</code>. For example:
+    <pre>$ mv kapp /usr/local/bin/kapp</pre>
+
+1. Install `kbld`:
+    1. Download the `kbld` binary for your operating system from 
+    [VMware Tanzu Network](https://network.pivotal.io/products/kbld). 
+    1. Rename the downloaded binary to <code>kbld</code>.
+    1. On the command line, run the following command to make the <code>kbld</code> binary executable:
+    <pre>$ chmod +x kbld</pre>
+    1. Move the binary into your <code>PATH</code>. For example:
+    <pre>$ mv kbld /usr/local/bin/kbld</pre>
+
+1. Install `ytt`:
+    1. Download the `ytt` binary for your operating system from 
+    [VMware Tanzu Network](https://network.pivotal.io/products/ytt). 
+    1. Rename the downloaded binary to <code>ytt</code>.
+    1. On the command line, run the following command to make the <code>ytt</code> binary executable:
+    <pre>$ chmod +x ytt</pre>
+    1. Move the binary into your <code>PATH</code>. For example:
+    <pre>$ mv ytt /usr/local/bin/ytt</pre>
 
 <!-- restore this section once TAS for K8s supports a Windows installation procedure
 
