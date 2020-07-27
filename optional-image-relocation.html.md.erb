@@ -6,40 +6,48 @@ owner: Tanzu Application Service Release Engineering
 This topic describes how to relocate VMware Tanzu Application Service for Kubernetes 
 (TAS for Kubernetes) images to a private container image registry.  
 
+## <a id='prerequisites'></a> Prerequisites
+
+Before installing TAS for Kubernetes, complete the following: 
+
+* Ensure you have a [Tanzu Network](https://network.pivotal.io/) account to use to download container images from the Tanzu Network Registry. 
+  Ensure this account has a signed TAS for Kubernetes EULA.
+* Complete the procedures in:  
+    * [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
+    * [Configuring Installation Values for Tanzu Application Service for Kubernetes]
+    (configuring-installation-values.html) 
+* If installing TAS for Kubernetes from a private registry:  
+ 
+    * Grant write access to your private container image registry.  
+
 ## <a id='overview'></a> Overview
 
-In Kuberenetes, containers can be re-created at various times and the private registry 
-must be available if the container is started on a new host. 
-You should install TAS for Kubernetes from a private registry
-for the following situations:  
+In Kubernetes, containers can be re-created at various times and a system image for the new container will be pulled 
+from your system registry. The system registry you use for TAS for Kubernetes must always be available when a container is started on a new host.  
+
+You can use either the Tanzu Network or a private registry as your system registry.  
+
+You should install TAS for Kubernetes from a private registry for the following situations:  
 
 * Your deployment has limited network egress because of firewall or network bandwidth.  
 * You want to reduce the external runtime dependencies of your TAS for Kubernetes installation. 
 
+<br>
+To configure the Tanzu Network as your system registry, complete the procedures in 
+[Configure the Tanzu Network as Your System Registry](#configure-for-tanzu-network).
+
+To configure a private registry as your system registry, complete the procedures in 
+[Configure a Private Registry as Your System Registry](#configure-for-private).
 
 <p class="note"><strong>Note</strong>: The following procedure has been validated 
   for the Google Container Registry and for Harbor registries. 
 </p>
-## <a id='prerequisites'></a> Prerequisites
-
-Before you install TAS for Kubernetes, you must: 
-
-* For installing from the Tanzu Network, you must:  
-
-    * Install the Docker CLI   
-    * Complete the procedures in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
-    and [Configuring Installation Values for Tanzu Application Service for Kubernetes]
-    (configuring-installation-values.html) 
-
-* For installing from a private registry, you must:  
-
-    * Install the Docker CLI  
-    * Grant write access to your private container image registry  
-    * Complete the procedures in [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
-    and [Configuring Installation Values for Tanzu Application Service for Kubernetes]
-    (configuring-installation-values.html)  
 
 ## <a id='configure-for-tanzu-network'></a> Configure the Tanzu Network as Your System Registry
+
+To configure the Tanzu Network as your system registry:  
+
+* [Configure Tanzu Network Account Credentials](#configure-system-registry-values)
 
 ### <a id='configure-system-registry-values'></a>Configure Tanzu Network Account Credentials
 
@@ -76,10 +84,16 @@ To configure Tanzu Application Service for Kubernetes with Tanzu Network user cr
 
 ## <a id='configure-for-private'></a> Configure a Private Registry as Your System Registry
 
+To configure a private registry as your system registry:  
+
+* [Relocate TAS for Kubernetes Images](#relocate-tas-for-k8s-images)
+* [Customize Your Configuration to Use Your Private System Registry](#configure-for-private-registry)
+* [Validate Your Installation Configuration](#configure-for-private-registry)
+
 ### <a id='relocate-tas-for-k8s-images'></a> Relocate TAS for Kubernetes Images
 
-Before you install TAS for Kubernetes from a private registry, 
-you have to relocate the image from the Tanzu Network Registry to the private registry:  
+Before installing TAS for Kubernetes from a private registry, 
+you must relocate the TAS for Kubernetes image from the Tanzu Network Registry to the private registry:  
 
 * [Download the TAS for Kubernetes Images](#downloading-the-images)
 * [Upload the TAS for Kubernetes Images to the Private Registry](#uploading-the-images)
@@ -167,11 +181,11 @@ To upload the TAS for Kubernetes images to the private registry:
         * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
         * `REPOSITORY` is the private registry repository to log in to.  
 
-### <a id='configure-for-private-registry'></a> Customize Your Configuration for Your Private System Registry
+### <a id='configure-for-private-registry'></a> Customize Your Configuration to Use Your Private System Registry
 
 To customize your configuration files for your private registry: 
 
-1. Move the `config/image_overrides.yml` file out of the `config/` directory.
+1. Move the `config/image_overrides.yml` file to the `config-optional` directory.
 1. To point the system registry variables to the private registry, 
 modify the `configuration-values/system-registry-values.yml` as follows:
 
@@ -188,3 +202,15 @@ modify the `configuration-values/system-registry-values.yml` as follows:
     * `REGISTRY-HOSTNAME` is the hostname of your private registry.
     * `REGISTRY-USERNAME` is a user account with write access to the private registry. 
     * `REGISTRY-PASSWORD` is the password for the user account.  
+
+### <a id='configure-for-private-registry'></a> Validate Your Installation Configuration
+
+To verify your TAS for Kubernetes installation configuration: 
+
+1. Confirm your root TAS for Kubernetes directory contains the following subdirectories:
+    - `configuration-values`
+    - `tanzu-application-service`
+1. Confirm the `configuration-values` subdirectory contains the following files:
+    - `app-registry-values.yml`
+    - `system-registry-values.yml`
+    - all other customized installation YAML files you have created

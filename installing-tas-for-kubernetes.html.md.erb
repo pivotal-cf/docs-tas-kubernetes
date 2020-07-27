@@ -8,9 +8,13 @@ from the Tanzu Network and from a relocated image in a private container image r
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before proceeding, review the [Configuring Installation Values]
-(configuring-installation-values.html) topic to ensure that you have configured 
-all of the required or recommended installation resources.
+Before installing TAS for Kubernetes:  
+
+1. Ensure you have a [Tanzu Network](https://network.pivotal.io/) account to use to download container images from the Tanzu Network Registry. 
+   Ensure this account has a signed TAS for Kubernetes EULA.
+1. Ensure that you have configured all of the required or recommended 
+installation resources by reviewing 
+[Configuring Installation Values](configuring-installation-values.html).
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
@@ -22,8 +26,8 @@ To install TAS for Kubernetes:
     <p class="note">
       Installing TAS for Kubernetes takes approximately 15 minutes, depending on cluster resources and bandwidth.
     </p>
-1. [Validate Your TAS for Kubernetes Installation](installing-tas-for-kubernetes.html#post-installation-configuration)
 1. [Configure DNS for Ingress Gateway](#post-installation-networking-configuration)
+1. [Validate Your TAS for Kubernetes Installation](installing-tas-for-kubernetes.html#post-installation-configuration)
 1. [Enable Buildpack-Based Apps to Run in Kubernetes Clusters](#post-installation-system-configuration)
 
 
@@ -51,12 +55,11 @@ To install TAS for Kubernetes from the Tanzu Network:
 ### <a id='post-image-relocation'></a> Install TAS for Kubernetes from a Private System Registry
 
 After uploading your TAS for Kubernetes images to the private registry, 
-you can install the 
-TAS for Kubernetes using a modified installation procedure.
+you can install TAS for Kubernetes using a modified installation procedure.
 
 To install TAS for Kubernetes: 
 
-1. Change directory to the location where you saved the `image_overrides.yml` file.
+1. Change directory to the `tanzu-applications-service` folder.
 
 1. To deploy TAS for Kubernetes using the images in the private registry:
     * If your client has the private registry CA certificates:  
@@ -76,53 +79,6 @@ To install TAS for Kubernetes:
               --registry-verify-certs=false
         kapp deploy -a cf -f /tmp/final_deployment.yml
         ```
-
-## <a id='post-installation-configuration'></a> Validate Your TAS for Kubernetes Installation
-
-
-
-To validate your TAS for Kubernetes:
-
-1. Ensure that you are still logged in to the TAS for Kubernetes 
-installation as the admin user.
-
-1. Create and target an organization and space for the verification application. 
-
-    For example:
-    <pre class="terminal">$ cf create-org test-org
-    $ cf create-space -o test-org test-space
-    $ cf target -o test-org -s test-space
-    </pre>
-
-1. To clone the Cloud Foundry test application from GitHub to your workstation:
-
-    ```
-    git clone https://github.com/cloudfoundry-samples/test-app.git
-    ```
-
-    For more information see [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) 
-    on GitHub.  
-
-1. Change directory into the resulting `test-app` directory.
-
-
-1. To push the test app to your TAS for Kubernetes installation:
-
-    ```
-    cf push test-app --hostname test-app
-    ```
-
-1. To validate the test app is running, make a request to the app after the `cf push` command succeeds:  
-
-    ```
-    curl test-app.apps.SYSTEM-DOMAIN
-    ```
-
-    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
-
-    <p class="note">
-      <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
-    </p>
 
 ## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
@@ -272,6 +228,51 @@ To configure DNS with your system domain resolving to the external IP of the loa
 For information on configuring TAS for Kubernetes to 
 use a Kubernetes LoadBalancer Service for the ingress gateway, see 
 [Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
+
+## <a id='post-installation-configuration'></a> Validate Your TAS for Kubernetes Installation
+
+To validate your TAS for Kubernetes:
+
+1. Ensure that you are still logged in to the TAS for Kubernetes 
+installation as the admin user.
+
+1. Create and target an organization and space for the verification application. 
+
+    For example:
+    <pre class="terminal">$ cf create-org test-org
+    $ cf create-space -o test-org test-space
+    $ cf target -o test-org -s test-space
+    </pre>
+
+1. To clone the Cloud Foundry test application from GitHub to your workstation:
+
+    ```
+    git clone https://github.com/cloudfoundry-samples/test-app.git
+    ```
+
+    For more information see [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) 
+    on GitHub.  
+
+1. Change directory into the resulting `test-app` directory.
+
+
+1. To push the test app to your TAS for Kubernetes installation:
+
+    ```
+    cf push test-app --hostname test-app
+    ```
+
+1. To validate the test app is running, make a request to the app after the `cf push` command succeeds:  
+
+    ```
+    curl test-app.apps.SYSTEM-DOMAIN
+    ```
+
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
+
+    <p class="note">
+      <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
+    </p>
 
 ## <a id='post-installation-system-configuration'></a> Enable Buildpack-Based Apps to Run in Kubernetes Clusters
 
