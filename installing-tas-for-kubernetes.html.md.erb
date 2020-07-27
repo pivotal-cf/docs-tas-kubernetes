@@ -20,7 +20,7 @@ installation resources by reviewing
 
 To install TAS for Kubernetes:
 
-1. Complete the procedure appropriate for the configuration you created:
+1. Follow the procedure appropriate for the configuration you created:
     * [Install TAS for Kubernetes from the Tanzu Network](#install-tas-for-k8s-from-network)
     * [Install TAS for Kubernetes from a Private System Registry](#post-image-relocation)
     <p class="note">
@@ -28,8 +28,6 @@ To install TAS for Kubernetes:
     </p>
 1. [Configure DNS for Ingress Gateway](#post-installation-networking-configuration)
 1. [Validate Your TAS for Kubernetes Installation](installing-tas-for-kubernetes.html#post-installation-configuration)
-1. [Enable Buildpack-Based Apps to Run in Kubernetes Clusters](#post-installation-system-configuration)
-
 
 ### <a id='install-tas-for-k8s-from-network'></a> Install TAS for Kubernetes from the Tanzu Network
 
@@ -59,7 +57,7 @@ you can install TAS for Kubernetes using a modified installation procedure.
 
 To install TAS for Kubernetes: 
 
-1. Change directory to the `tanzu-applications-service` folder.
+1. Change directory to the `tanzu-applications-service` directory.
 
 1. To deploy TAS for Kubernetes using the images in the private registry:
     * If your client has the private registry CA certificates:  
@@ -190,9 +188,9 @@ internal IP addresses for the Kubernetes worker nodes.
 This section describes how to configure DNS if you have configured TAS for Kubernetes to 
 use a Kubernetes LoadBalancer Service for the ingress gateway.  
 
-To configure DNS with your system domain resolving to the external IP of the load balancer:
+To configure DNS with your system domain resolving to the external IP address of the load balancer:
 
-1. To retrieve the value of the external IP or hostname assigned to the Istio ingress gateway service:
+1. To retrieve the value of the external IP address or hostname assigned to the Istio ingress gateway service:
 
     ```
     kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
@@ -207,7 +205,7 @@ To configure DNS with your system domain resolving to the external IP of the loa
     </pre>
 
 1. In your DNS zone, create an entry for your system domain:  
-    * If you have an external ip, create a wildcard `A` record for the system domain, 
+    * If you have an external IP address, create a wildcard `A` record for the system domain, 
         resolving to the external IP address:  
 
         ```
@@ -225,7 +223,7 @@ To configure DNS with your system domain resolving to the external IP of the loa
 
     Ensure you include the `*.` wildcard prefix in the new record so that all subdomains of the system domain also resolve to the load balancer.
 
-For information on configuring TAS for Kubernetes to 
+For information about configuring TAS for Kubernetes to 
 use a Kubernetes LoadBalancer Service for the ingress gateway, see 
 [Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
 
@@ -233,8 +231,29 @@ use a Kubernetes LoadBalancer Service for the ingress gateway, see
 
 To validate your TAS for Kubernetes:
 
-1. Ensure that you are still logged in to the TAS for Kubernetes 
-installation as the admin user.
+1. Use cf CLI to target the installation at the `api` subdomain of the system domain:
+
+    ```
+    cf api api.SYSTEM-DOMAIN --skip-ssl-validation
+    ```
+
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
+1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values` 
+directories.
+
+1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password 
+stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
+
+    ```
+    CF_ADMIN_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml \
+            --path /cf_admin_password)"
+    ```
+
+1. Log into the installation as the admin user:
+
+    ```
+    cf auth admin "$CF_ADMIN_PASSWORD"
+    ```
 
 1. Create and target an organization and space for the verification application. 
 
@@ -273,39 +292,3 @@ installation as the admin user.
     <p class="note">
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
     </p>
-
-## <a id='post-installation-system-configuration'></a> Enable Buildpack-Based Apps to Run in Kubernetes Clusters
-
-You must configure TAS for Kubernetes to support buildpack-based apps.
-
-To ensure the system is configured correctly for buildpack-based apps:
-
-1. Use the CF CLI to target the installation at the `api` subdomain of the system domain:
-
-    ```
-    cf api api.SYSTEM-DOMAIN --skip-ssl-validation
-    ```
-
-    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
-1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values` 
-directories.
-
-1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password 
-stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
-
-    ```
-    CF_ADMIN_PASSWORD="$(bosh interpolate configuration-values/deployment-values.yml \
-            --path /cf_admin_password)"
-    ```
-
-1. Log into the installation as the admin user:
-
-    ```
-    cf auth admin "$CF_ADMIN_PASSWORD"
-    ```
-
-1. Enable the Diego-Docker feature flag to enable buildpack-based apps to run on the Kubernetes cluster:
-
-    ```
-    cf enable-feature-flag diego_docker
-    ```
