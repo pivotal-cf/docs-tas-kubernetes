@@ -31,6 +31,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
 </table>
 
+<%#
 #### <a id='installed-components'></a>Installed With 0.3.0
 <table class="nice">
   <tr>
@@ -46,12 +47,14 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
     <td>.</td>
   </tr>
 </table>
+#%>
 
 #### <a id='additional-components'></a>Required Additional Components
 <table class="nice">
+<%#
   <tr>
     <th>Component</th>
-    <th width=40%>Version</th>
+    <th>Version</th>
   </tr>
   <tr>
     <td>BOSH CLI</td>
@@ -73,9 +76,10 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
   </tr>
+#%>
   <tr>
     <th>k14s Component</th>
-    <th>Version</th>
+    <th width=40%>Version</th>
   </tr>
   <tr>
     <td>kapp</td>
@@ -91,11 +95,12 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
 </table>
 
+<%#
 #### <a id='optional-components'></a>Optional Components
 <table class="nice">
   <tr>
     <th>Component</th>
-    <th width=40%>Version</th>
+    <th>Version</th>
   </tr>
   <tr>
     <td>.</td>
@@ -106,6 +111,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
     <td>.</td>
   </tr>
 </table>
+#%>
 
 #### <a id='supported-environments'></a>Supported Environments
 <table class="nice">
@@ -115,15 +121,16 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
   <tr>
     <td>64-bit Mac OS</td>
-    <td>Desktop environment for command line functions</td>
+    <td>Desktop environment for command-line functions</td>
   </tr>
   <tr>
     <td>64-bit Linux OS</td>
-    <td>Desktop environment for command line functions</td>
+    <td>Desktop environment for command-line functions</td>
   </tr>
+<%#
   <tr>
     <th>Deployment Environment</th>
-    <th width=40%>Version</th>
+    <th >Version</th>
   </tr>
   <tr>
     <td>vSphere with Flannel</td>
@@ -131,12 +138,13 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
   <tr>
     <th>Supported IaaSs</th>
-    <th width=40%></th>
+    <th></th>
   </tr>
   <tr>
     <td>.</td>
     <td></td>
   </tr>
+#%> 
 </table>
 
 
@@ -156,7 +164,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
 </table>
 
-
+<%#
 ### <a id='features'></a> Features
 
 New features and changes in this release:
@@ -182,6 +190,7 @@ This release has the following issues:
 - TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
 - Does not support upgrading an existing TAS for Kubernetes installation to a new version.
 - Does not support re-deploying TAS for Kubernetes with different credentials.
+#%> 
 
 ## <a id='0-2-0'></a> v0.2.0
 
