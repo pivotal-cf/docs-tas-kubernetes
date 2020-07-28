@@ -68,7 +68,7 @@ follow the procedure for your IaaS:
           type: gp2
           fsType: ext4
         ```
-    1. To install the storage class, run the following command:
+    1. To install the storage class, run:
 
         ```
         kapp deploy -a default-storage-class -f aws-default-storage-class.yml
@@ -92,7 +92,7 @@ follow the procedure for your IaaS:
         ```
         Where `DATASTORE-URL` is the URL to your CSI datastore.  
 <br>
-    1. To install the storage class, run the following command:
+    1. To install the storage class, run:
     
         ```
         kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml

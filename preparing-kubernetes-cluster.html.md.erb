@@ -67,9 +67,9 @@ for Tanzu Application Service for Kubernetes:
 For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
 (https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).  
 
-After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that `kubectl` targets the cluster.
+After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that kubectl targets the cluster.
 
-## <a id='configuring-vsphere-storage'></a> Configure Default Storage
+## <a id='verify-default-storage'></a> Verify a Default Storage Exists
 
 Tanzu Application Service for Kubernetes requires each Kubernetes cluster 
 provide persistent volumes for its internal PostgreSQL database and Minio blobstore.
@@ -84,11 +84,14 @@ NAME             PROVISIONER                    AGE
 thin (default)   kubernetes.io/vsphere-volume   34h
 </code></pre>
 
-1. If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically.
-
-If the list does not include a default, you must install one before deploying Tanzu Application Service for Kubernetes.
+1. Review the returned list of StorageClass resources.
+    * If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically.
+    * If the list does not include a default, you must install one before deploying Tanzu Application Service for Kubernetes.
 See the [Configuring Default Storage](configuring-default-storage.html) topic for information about configuring the default storage class.
 
-## <a id='deploying-tas-kubernetes'></a> Next: Configuring Tanzu Application Service for Kubernetes Installation Values
+<!--
+## <a name='deploying-tas-kubernetes'></a> Next: Configuring Tanzu Application Service for Kubernetes Installation Values
 
 After you have completed the preparatory steps above, proceed to [configure Tanzu Application Service for Kubernetes](configuring-installation-values.html) for installation to the Kubernetes cluster.
+
+-->
