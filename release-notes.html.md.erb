@@ -33,10 +33,13 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 
 <%#
 #### <a id='installed-components'></a>Installed With 0.3.0
+
+TAS for Kubernetes uses the following components:
+
 <table class="nice">
   <tr>
-    <th>Component</th>
-    <th>Version</th>
+    <th>Element</th>
+    <th>Details</th>
   </tr>
   <tr>
     <td>.</td>
@@ -50,11 +53,14 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 #%>
 
 #### <a id='additional-components'></a>Required Additional Components
+
+TAS for Kubernetes requires the following components:
+
 <table class="nice">
 <%#
   <tr>
-    <th>Component</th>
-    <th>Version</th>
+    <th>Element</th>
+    <th>Details</th>
   </tr>
   <tr>
     <td>BOSH CLI</td>
@@ -78,8 +84,8 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
 #%>
   <tr>
-    <th>k14s Component</th>
-    <th width=40%>Version</th>
+    <th>Element</th>
+    <th width=40%>Details</th>
   </tr>
   <tr>
     <td>kapp</td>
@@ -97,10 +103,13 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 
 <%#
 #### <a id='optional-components'></a>Optional Components
+
+TAS for Kubernetes supports the following optional components:
+
 <table class="nice">
   <tr>
-    <th>Component</th>
-    <th>Version</th>
+    <th>Element</th>
+    <th>Details</th>
   </tr>
   <tr>
     <td>.</td>
@@ -113,21 +122,47 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 </table>
 #%>
 
-#### <a id='supported-environments'></a>Supported Environments
+#### <a id='supported-platforms'></a>Supported Platforms
+
+TAS for Kubernetes supports the following platforms:
+
 <table class="nice">
   <tr>
-    <th>Desktop Environment</th>
+    <th>Platform</th>
     <th width=40%>Version</th>
   </tr>
   <tr>
-    <td>64-bit Mac OS</td>
+    <td>Tanzu Kubernetes Grid</td>
+    <td>v1.0, with <code>metrics-server</code></td>
+  </tr>
+  <tr>
+    <td>VMware Enterprise PKS</td>
+    <td>v1.6 or v1.7</td>
+  </tr>
+</table>
+
+
+#### <a id='supported-environments'></a>Supported Environments
+
+TAS for Kubernetes can be deployed and managed from the following desktop OS environments:  
+
+* 64-bit Mac OS
+* 64-bit Linux OS
+
+<%#
+<table class="nice">
+  <tr>
+    <th>Desktop Environment</th>
+    <th>Version</th>
+  </tr>
+  <tr>
+    <td></td>
     <td>Desktop environment for command-line functions</td>
   </tr>
   <tr>
-    <td>64-bit Linux OS</td>
+    <td></td>
     <td>Desktop environment for command-line functions</td>
   </tr>
-<%#
   <tr>
     <th>Deployment Environment</th>
     <th >Version</th>
@@ -144,25 +179,8 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
     <td>.</td>
     <td></td>
   </tr>
+</table>
 #%> 
-</table>
-
-
-#### <a id='supported-platforms'></a>Supported Platforms
-<table class="nice">
-  <tr>
-    <th>Platform</th>
-    <th width=40%>Version</th>
-  </tr>
-  <tr>
-    <td>Tanzu Kubernetes Grid</td>
-    <td>v1.0, with <code>metrics-server</code></td>
-  </tr>
-  <tr>
-    <td>VMware Enterprise PKS</td>
-    <td>v1.6 or v1.7</td>
-  </tr>
-</table>
 
 <%#
 ### <a id='features'></a> Features
