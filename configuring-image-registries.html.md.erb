@@ -162,7 +162,7 @@ To configure Tanzu Application Service for Kubernetes to use your private contai
     ---
     app_registry:
       hostname: "HARBOR-FQDN"
-      repository: "HARBOR-FQDN/tas-app-images"
+      repository_prefix: "HARBOR-FQDN/tas-app-images"
       username: "tas-app-images-push-pull"
       password: "APP-REGISTRY-PASSWORD"
     ```
@@ -203,7 +203,7 @@ To use a container image registry other than a Harbor registry:
     ---
     app_registry:
       hostname: "HOST-FQDN"
-      repository: "REPOSITORY"
+      repository_prefix: "REPOSITORY"
       username: "APP-REGISTRY-USERNAME"
       password: "APP-REGISTRY-PASSWORD"
     ```
