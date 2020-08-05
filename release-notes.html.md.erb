@@ -10,6 +10,193 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 
 <%= partial 'limitation_notes' %>
 
+## <a id='0-4-0'></a> v0.4.0
+
+**Release Date**: TBD, 2020
+
+### <a id='product-snapshot'></a>Product Snapshot
+
+<table class="nice">
+  <tr>
+    <th>Release</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td>v0.4.0</td>
+  </tr>
+  <tr>
+    <td>Release date</td>
+    <td>TBD, 2020</td>
+  </tr>
+</table>
+To download VMware Tanzu Application Service for Kubernetes v0.4.0, see 
+[VMware Tanzu Application Service for Kubernetes]
+(https://network.pivotal.io/products/tas-for-kubernetes) 
+on the _VMware Tanzu Network_.
+
+#### <a id='installed-components'></a>Installed With 0.4.0
+
+TAS for Kubernetes uses the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>cf-for-k8s</td>
+    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/9854f5b0e250fbdf11b33abd956ae5a53efe7866">Commit 9854f5b</a></td>
+  </tr>
+  <tr>
+    <td>Istio</td>
+    <td>v1.4.5</td>
+  </tr>
+  <tr>
+    <td>kpack</td>
+    <td>v0.0.9</td>
+  </tr>
+</table>
+
+#### <a id='additional-components'></a>Required Additional Components
+
+TAS for Kubernetes requires the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>BOSH CLI</td>
+    <td>v6.3.1</td>
+  </tr>
+  <tr>
+    <td>cf CLI</td>
+    <td>v6.51.0</td>
+  </tr>
+<%#
+  <tr>
+    <td>Docker CLI</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <td>Harbor Registry</td>
+    <td>.</td>
+  </tr>   
+  <tr>
+    <td>kubectl, the Kubernetes CLI</td>
+    <td>.</td>
+  </tr>
+#%>
+  <tr>
+    <td>kapp</td>
+    <td>v0.29.0 or later</td>
+  </tr>
+  <tr>
+    <td>kbld</td>
+    <td>v0.23.0 or later</td>
+  </tr>
+  <tr>
+    <td>ytt</td>
+    <td>v0.28.0 or later</td>
+  </tr>
+</table>
+
+<%#
+#### <a id='optional-components'></a>Optional Components
+
+TAS for Kubernetes supports the following optional components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>.</td>
+  </tr>
+</table>
+#%>
+
+#### <a id='supported-platforms'></a>Supported Kubernetes Distributions
+
+TAS for Kubernetes supports the following Kubernetes distributions:
+
+<table class="nice">
+  <tr>
+    <th>Platform</th>
+    <th width=40%>Version</th>
+  </tr>
+  <tr>
+    <td>Tanzu Kubernetes Grid</td>
+    <td>v1.0, with <code>metrics-server</code></td>
+  </tr>
+  <tr>
+    <td>VMware Enterprise PKS</td>
+    <td>v1.6 or v1.7</td>
+  </tr>
+</table>
+
+
+#### <a id='supported-environments'></a>Supported Environments
+
+TAS for Kubernetes can be deployed and managed from the following desktop OS environments:  
+
+* 64-bit Mac OS
+* 64-bit Linux OS
+
+<%#
+<table class="nice">
+  <tr>
+    <th>Deployment Environment</th>
+    <th >Version</th>
+  </tr>
+  <tr>
+    <td>vSphere with Flannel</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <th>Supported IaaSs</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td></td>
+  </tr>
+</table>
+#%> 
+
+
+### <a id='features-0-4-0'></a> Features
+
+New features and changes in this release:
+
+- None
+
+### <a id='known-issues-0-4-0'></a> Breaking Changes
+
+This release has the following issues:
+
+ - The app registry configuration file 
+ used during prior beta versions is not compatible 
+ with TAS for Kubernetes v0.4.0 and later. See the current app registry configuration file
+ format in [Create the Harbor Image Registry Configuration File]
+ (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-image-registries.html#harbor-config-file)
+ and [Create the Configuration File for a Different Image Registry]
+ (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-image-registries.html#configure-other-registry).
+
+ ### <a id='known-issues-0-4-0'></a> Known Issues
+
+This release has the following issues:
+
+ - None
+
 ## <a id='0-3-0'></a> v0.3.0
 
 **Release Date**: July 30, 2020
