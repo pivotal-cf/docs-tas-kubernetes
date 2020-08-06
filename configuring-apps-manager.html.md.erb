@@ -1,0 +1,92 @@
+---
+title: Configuring Apps Manager Values for Tanzu Application Service for Kubernetes
+owner: Apps Manager
+---
+
+This topic describes how to configure the Apps Manager application before deploying TAS for Kubernetes.
+For more information on Apps Manager please refer to this doc: https://docs.run.pivotal.io/console/dev-console.html
+
+## <a id='prerequisites'></a> Prerequisites
+
+Before proceeding, ensure that you have followed the steps in [Configuring Installation Values for TAS for Kubernetes](configuring-installation-values.html).
+
+We will be using the `configuration-values` folder created inside the `tanzu-application-service` directory.
+
+## <a id='available-configurations'></a> Available Configurations
+
+Apps Manager on TAS for Kubernetes allows users to change whitelabeling and resource consumption.
+
+Here is a list of all the configurations users can change for "whitelabeling", "resources", and other various tooling.
+
+|Property|Default Value|Description                         |
+|-|-|-|
+|apps_manager.currency_lookup| '{"usd":"$","eur":"€"}'|Supported currency symbols|
+|apps_manager.display_plan_prices|false|Display Marketplace Service Plan Prices|
+|apps_manager.enable_invitations|true|Enable inviting users through the invitation service|
+|apps_manager.poll_interval|30|The Apps Manager poll interval. Enter value in seconds.|
+|apps_manager.app_details_poll_interval|10|The app details polling interval. Enter value in seconds.|
+|apps_manager.whitelabeling.app_icon|tanzu icon|Icon for apps manager UAA portal link|
+|apps_manager.whitelabeling.company_name|"VMware"|Custom company name to display.|
+|apps_manager.whitelabeling.product_name|"Apps Manager"|Custom product name to display.|
+|apps_manager.whitelabeling.accent_color|#00A79D|Custom color for the app. Enter a hexadecimal color code. For example, "#71ffda".|
+|apps_manager.whitelabeling.favicon|""|Custom favicon. Enter a base64-encoded PNG image string, leaving out the mime-typ (data:image/png;base64,) string.|
+|apps_manager.whitelabeling.footer_links|"[]"|Json array of links for the footer (format '[{"name":"link", "href": "https://google.com"}]'|
+|apps_manager.whitelabeling.footer_text|""|Custom footer text.|
+|apps_manager.whitelabeling.global_wrapper_bg_color|"#D6D6D6"|Classification header and footer background color. Enter a hexadecimal color code. For example, "#71ffda".|
+|apps_manager.whitelabeling.global_wrapper_text_color|"#333"|Classification header and footer text color. Enter a hexadecimal color code. For example, "#71ffda".|
+|apps_manager.whitelabeling.global_wrapper_footer_content|""|Classification footer content. Enter plain text or HTML markup.|
+|apps_manager.whitelabeling.global_wrapper_header_content|""|Classification header content. Enter plain text or HTML markup.|
+|apps_manager.whitelabeling.logo|""|Custom logo. Enter a base64-encoded PNG image string, leaving out the mime-typ (data:image/png;base64,) string.|
+|apps_manager.whitelabeling.marketplace_name|"Marketplace"|Name of the marketplace. Enter plain text or HTML markup|
+|apps_manager.whitelabeling.marketplace_url|"/marketplace"|Apps Manager Marketplace link to point to a custom marketplace.|
+|apps_manager.whitelabeling.secondary_navigation_links|'[{"name":"Docs","href":"https://docs.run.pivotal.io"},{"name":"Tools","href":"/tools"}]'|Apps Manager Marketplace link to point to a custom marketplace.|List of secondary navigation links of Apps Manager. Enter json string.|
+|apps_manager.resources.instances|1|Deployed Instances of Apps Manager|
+|apps_manager.resources.memory|128|Memory usage of Apps Manager in mb. (supports units i.e., 1GB, 512MB)|
+|search_server.resources.instances|2|Deployed Instances of Apps Manager|
+|search_server.resources.memory|256|Memory usage of the search server app in MB. (supports units i.e., 1GB, 512MB)|
+|invitations.resources.instances|2|Deployed Instances of Apps Manager|
+|invitations.resources.memory|256|Memory usage of the invitations apps in MB. (supports units i.e., 1GB, 512MB)|
+
+
+## <a id='configuring-apps-manager'></a> Configuring Apps Manager
+
+To configure the values for apps manager:
+
+1. Change directory to the `configuration-values` directory you created earlier.
+
+1. Create a file named `apps-manager-values.yml` in the `configuration-values` directory.
+
+1. Populate the `apps-manager-values.yml` file with the following content:
+
+    ```yaml
+    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+    #@data/values
+    ---
+    apps_manager:
+      currency_lookup: "{\"usd\":\"$\",\"eur\":\"€\"}"
+      display_plan_prices: "false"
+      enable_invitations: "true"
+      poll_interval: 30
+      app_details_poll_interval: 10
+
+      resources:
+        instances: 1
+        memory: 128
+
+      whitelabeling:
+        product_name: "Apps Manager"
+        accent_color: "#00A79D"
+        favicon: ""
+        footer_links: "[]"
+
+    search_server:
+      resources:
+        instances: 2
+        memory: 256
+
+    invitations:
+      resources:
+        instances: 2
+        memory: 256
+    ```
+    This is an example config file to change a few values.
