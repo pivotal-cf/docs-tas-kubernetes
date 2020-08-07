@@ -17,14 +17,28 @@ Before configuring Apps Manager, complete the following:
 in _Configuring Installation Values for TAS for Kubernetes_.  
 
 ## <a id='overview'></a> Overview
-Apps Manager on TAS for Kubernetes provides a UI for admins to configure allowlisting and resource consumption.
-
+Apps Manager on TAS for Kubernetes provides a UI for 
+creating and deleting orgs, domains, and spaces, and
+managing services, members and permissions. 
 For more information about Apps Manager, see 
 [Getting Started with Apps Manager](https://docs.run.pivotal.io/console/dev-console.html).
 
-## <a id='configure-apps-manager'></a> Configure Apps Manager
+You must create a configuration file for the Apps Manager included 
+with TAS for Kubernetes. 
+To create the Apps Manager configuration file, complete the steps in 
+[Create the Apps Manager Configuration File](#create-configuration).  
 
-Apps Manager configuration settings are stored in the `apps-manager-values.yml` configuration file.
+You can configure Apps Manager's resource consumption by modifying Apps Manager's configuration file. 
+You can also assign Apps Manager a custom Marketplace and customize 
+Apps Manager with a white-labeled UI. 
+To customize your Apps Manager's configuration, 
+complete the steps in [Configure Apps Manager](#configure-apps-manager).  
+
+## <a id='create-configuration'></a> Create the Apps Manager Configuration File
+
+Apps Manager configuration settings are stored in the 
+`apps-manager-values.yml` configuration file. 
+You must manually create the `apps-manager-values.yml` file.
 
 To create the `apps-manager-values` configuration file:
 
@@ -40,77 +54,262 @@ To create the `apps-manager-values` configuration file:
     #@data/values
     ---
     apps_manager:
-      currency_lookup: "{\"usd\":\"$\",\"eur\":\"€\"}"
-      display_plan_prices: "false"
-      enable_invitations: "true"
-      poll_interval: POLL-INTERVAL
-      app_details_poll_interval: DETAILS-POLL-INTERVAL
-
-      resources:
-        instances: 1
-        memory: MEM-SIZE
 
       whitelabeling:
         product_name: "Apps Manager"
-        accent_color: "#00A79D"
-        favicon: ""
-        footer_links: "[]"
 
-    search_server:
-      resources:
-        instances: INSTANCE-COUNT
-        memory: MEM-SIZE
-
-    invitations:
-      resources:
-        instances: INSTANCE-COUNT
-        memory: MEM-SIZE
     ```
 
-    Where:
-    * `POLL-INTERVAL` is the Apps Manager poll interval, in seconds.
-    * `DETAILS-POLL-INTERVAL` is the app details polling interval, in seconds.
-    * `INSTANCE-COUNT` is the number of deployed instances.
-    * `MEM-SIZE` is the memory usage for each instance, in MB. 
-    Supports units, for example, `1GB` and `512MB`.
+## <a id='configure-apps-manager'></a> Configure Apps Manager
+You can customize Apps Manager and configure resource usage by modifying 
+the `apps-manager-values.yml` configuration file. 
 
-1. Revise the configuration file with your preferred configuration settings. 
-For more information about configurable settings, see [Available Configurations](#available-configurations) below.
-<br>    
-    The following example `apps-manager-values` configuration file contains Apps Manager default configuration values: 
+The Apps Manager configuration file you create 
+should be a well formatted YAML file. For example:  
+
+```yaml
+#@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+#@data/values
+---
+apps_manager:
+  poll_interval: 30
+
+  resources:
+    memory: 128
+
+  whitelabeling:
+    accent_color: "#00A79D"
+
+search_server:
+  resources:
+    instances: 2
+
+invitations:
+  resources:
+    instances: 2
+    memory: 256
+```
+
+To customize Apps Manager:
+
+1. Change directory to the `configuration-values` directory.
+
+1. Edit the `apps-manager-values.yml` file.
+
+1. Complete one or more of the following: 
+    * [Configure Apps Manager Base Settings](#customize-apps-manager-configuration)  
+    * [Configure Apps Manager Resources](#customize-apps-manager-resources)  
+    * [Configure Apps Manager White-Labeling](#customize-apps-manager-white-label) 
+    * [Configure the Apps Manager Search Server](#customize-apps-manager-searchserver)
+    * [Configure Apps Manager Invitations](#customize-apps-manager-invitations)
+
+### <a id='customize-apps-manager-configuration'></a> Configure Apps Manager Base Settings
+
+To configure Apps Manager base settings:
+
+1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.    
+1. Add the desired property configuration, using `property: value` format. 
+See [Configurable Apps Manager Base Settings](#apps-manager-base-settings) below.  
+1. Review the completed file. The configuration file you create 
+should be a well formatted YAML file.  
+<br>
+    For example:  
 
     ```yaml
     #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
     #@data/values
     ---
     apps_manager:
-      currency_lookup: "{\"usd\":\"$\",\"eur\":\"€\"}"
+      currency_lookup: {"usd":"$","eur":"€"}
       display_plan_prices: "false"
       enable_invitations: "true"
       poll_interval: 30
       app_details_poll_interval: 10
+    ```
+
+#### <a id='apps-manager-base-settings'></a> Configurable Apps Manager Base Settings
+The following are all of the configurable Apps Manager base settings:
+<table class="nice">
+  <tr>
+    <th width="40%">Property</th>
+    <th widt="20%">Default Value</th>
+    <th width="40%">Description</th>
+  </tr>
+<tr><td>currency\_lookup</td><td>{"usd":"$","eur":"€"}</td><td>Supported currency symbols</td></tr>
+<tr><td>display\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
+<tr><td>enable\_invitations</td><td>true</td><td>Enable inviting users through the invitation service</td></tr>
+<tr><td>poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
+<tr><td>app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
+</table>
+
+
+### <a id='customize-apps-manager-resources'></a> Configure Apps Manager Resources
+
+To configure Apps Manager resource usage settings:
+
+1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.  
+1. Ensure the `apps_manager:` section includes a `resources:` sub-section.  
+1. Add the desired property configuration, using `property: value` format. 
+See [Configurable Apps Manager Resource Settings](#apps-manager-resource-settings) below.
+11. Review the completed file. The configuration file you create 
+should be a well formatted YAML file.  
+<br>
+    For example:  
+
+    ```yaml
+    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+    #@data/values
+    ---
+    apps_manager:
 
       resources:
         instances: 1
         memory: 128
+
+    ```
+1. Save the configuration file.
+
+#### <a id='apps-manager-resource-settings'></a> Configurable Apps Manager Resource Settings
+The following are all of the configurable Apps Manager resource usage settings:
+<table class="nice">
+  <tr>
+    <th width="40%">Property</th>
+    <th widt="20%">Default Value</th>
+    <th width="40%">Description</th>
+  </tr>
+<tr><td>instances</td><td>1</td><td>Deployed instances of Apps Manager.</td></tr>
+<tr><td>memory</td><td>128</td><td>Memory usage of Apps Manager in MB. Supports units, for example, `1GB`, `512MB`.</td></tr>
+</table>
+
+
+### <a id='customize-apps-manager-searchserver'></a> Configure Apps Manager Search Server
+
+To configure Apps Manager Search Server settings:
+
+1. Ensure the `apps-manager-values.yml` file has an `search_server:` section.  
+1. Ensure the `search_server:` section includes a `resources:` sub-section.  
+1. Add the desired property configuration, using `property: value` format. 
+See [Configurable Apps Manager Search Server Settings](#apps-manager-search-server) below.
+1. Review the completed file. The configuration file you create 
+should be a well formatted YAML file.  
+<br>
+    For example:  
+
+    ```yaml
+    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+    #@data/values
+    ---
+    search_server:
+      resources:
+        instances: 2
+        memory: 256
+    ```
+1. Save the configuration file.
+
+#### <a id='apps-manager-search-server'></a> Configurable Apps Manager Search Server Settings
+The following are all of the configurable Apps Manager Search Server settings:
+<table class="nice">
+  <tr>
+    <th width="40%">Property</th>
+    <th widt="20%">Default Value</th>
+    <th width="40%">Description</th>
+  </tr>
+<tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager Search Server.</td></tr>
+<tr><td>memory</td><td>256</td><td>Memory usage of the search server app in MB. Supports units, for example, `1GB`, `512MB`.</td></tr>
+</table>
+
+
+### <a id='customize-apps-manager-invitations'></a> Configure Apps Manager Invitations
+
+To configure Apps Manager Invitations settings:
+
+1. Ensure the `apps-manager-values.yml` file has an `invitations:` section.  
+1. Ensure the `invitations:` section includes a `resources:` sub-section.  
+1. Add the desired property configuration, using `property: value` format. 
+See [Configurable Apps Manager Invitations Settings](#apps-manager-invitations-settings) below.
+1. Review the completed file. The configuration file you create 
+should be a well formatted YAML file.  
+<br>
+    For example:  
+
+    ```yaml
+    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+    #@data/values
+    ---
+    invitations:
+      resources:
+        instances: 2
+        memory: 256
+    ```
+1. Save the configuration file.
+
+#### <a id='apps-manager-invitations-settings'></a> Configurable Apps Manager Invitations Settings
+The following are all of the configurable Apps Manager Invitations settings:
+<table class="nice">
+  <tr>
+    <th width="40%">Property</th>
+    <th widt="20%">Default Value</th>
+    <th width="40%">Description</th>
+  </tr>
+<tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager Invitations.</td></tr>
+<tr><td>memory</td><td>256</td><td>Memory usage of the invitations apps in MB. Supports units, for example, `1GB`, `512MB`.</td></tr>
+</table>
+
+
+
+### <a id='customize-apps-manager-white-label'></a> Configure Apps Manager White-Labeling
+
+To configure Apps Manager White-Labeling settings:
+
+1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.  
+1. Ensure the `apps_manager:` section includes a `whitelabeling:` sub-section.  
+1. Add the desired property configuration, using `property: value` format. 
+See [Configurable Apps Manager White-Label Settings](#apps-manager-white-label-settings) below.
+1. Review the completed file. The configuration file you create 
+should be a well formatted YAML file.  
+<br>
+    For example:  
+
+    ```yaml
+    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
+    #@data/values
+    ---
+    apps_manager:
 
       whitelabeling:
         product_name: "Apps Manager"
         accent_color: "#00A79D"
         favicon: ""
         footer_links: "[]"
-
-    search_server:
-      resources:
-        instances: 2
-        memory: 256
-
-    invitations:
-      resources:
-        instances: 2
-        memory: 256
     ```
+1. Save the configuration file.
 
+#### <a id='apps-manager-white-label-settings'></a> Configurable Apps Manager White-Label Settings
+The following are all of the configurable Apps Manager White-Label settings:
+<table class="nice">
+  <tr>
+    <th width="40%">Property</th>
+    <th widt="20%">Default Value</th>
+    <th width="40%">Description</th>
+  </tr>
+<tr><td>app\_icon</td><td>tanzu icon</td><td>Icon for apps manager UAA portal link</td></tr>
+<tr><td>company\_name</td><td>"VMware"</td><td>Custom company name to display.</td></tr>
+<tr><td>product\_name</td><td>"Apps Manager"</td><td>Custom product name to display.</td></tr>
+<tr><td>accent\_color</td><td>#00A79D</td><td>Custom color for the app. Enter a hexadecimal color code. For example, "#71ffda".</td></tr>
+<tr><td>favicon</td><td>""</td><td>Custom favicon. Enter a base64-encoded PNG image string, leaving out the mime-typ (data:image/png;base64,) string.</td></tr>
+<tr><td>footer\_links</td><td>"[]"</td><td>Json array of links for the footer (format '[{"name":"link", "href": "https://google.com"}]'</td></tr>
+<tr><td>footer\_text</td><td>""</td><td>Custom footer text.</td></tr>
+<tr><td>global\_wrapper\_bg\_color</td><td>"#D6D6D6"</td><td>Classification header and footer background color. Enter a hexadecimal color code. For example, "#71ffda".</td></tr>
+<tr><td>global\_wrapper\_text\_color</td><td>"#333"</td><td>Classification header and footer text color. Enter a hexadecimal color code. For example, "#71ffda".</td></tr>
+<tr><td>global\_wrapper\_footer\_content</td><td>""</td><td>Classification footer content. Enter plain text or HTML markup.</td></tr>
+<tr><td>global\_wrapper\_header\_content</td><td>""</td><td>Classification header content. Enter plain text or HTML markup.</td></tr>
+<tr><td>logo</td><td>""</td><td>Custom logo. Enter a base64-encoded PNG image string, leaving out the mime-typ (data:image/png;base64,) string.</td></tr>
+<tr><td>marketplace\_name</td><td>"Marketplace"</td><td>Name of the marketplace. Enter plain text or HTML markup</td></tr>
+<tr><td>marketplace\_url</td><td>"/marketplace"</td><td>Apps Manager Marketplace link to point to a custom marketplace.</td></tr>
+<tr><td>secondary\_navigation\_links</td><td>'[{"name":"Docs","href":"https&#58;//docs.run.pivotal.io"},{"name":"Tools","href"&#58;"/tools"}]'</td><td>List of secondary navigation links of Apps Manager. Enter json string.</td></tr>
+</table>
+
+<%#
 ### <a id='available-configurations'></a> Available Configurations
 
 The following are all of the configurable Apps Manager "whitelabeling", "resources", and other various tooling settings:
@@ -147,3 +346,4 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
 <tr><td>invitations.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
 <tr><td>invitations.resources.memory</td><td>256</td><td>Memory usage of the invitations apps in MB. Supports units, for example, `1GB`, `512MB`.</td></tr>
 </table>
+%>
