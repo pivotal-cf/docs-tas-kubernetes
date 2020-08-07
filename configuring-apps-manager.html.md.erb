@@ -49,11 +49,11 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
 <tr><td>apps\_manager.whitelabeling.marketplace\_url</td><td>"/marketplace"</td><td>Apps Manager Marketplace link to point to a custom marketplace.</td></tr>
 <tr><td>apps\_manager.whitelabeling.secondary\_navigation\_links</td><td>'[{"name":"Docs","href":"https&#58;//docs.run.pivotal.io"},{"name":"Tools","href"&#58;"/tools"}]'</td><td>List of secondary navigation links of Apps Manager. Enter json string.</td></tr>
 <tr><td>apps\_manager.resources.instances</td><td>1</td><td>Deployed Instances of Apps Manager</td></tr>
-<tr><td>apps\_manager.resources.memory</td><td>128</td><td>Memory usage of Apps Manager in mb. (supports units i.e., `1GB`, `512MB`)</td></tr>
+<tr><td>apps\_manager.resources.memory</td><td>128</td><td>Memory usage of Apps Manager in MB. Supports units i.e., `1GB`, `512MB`.</td></tr>
 <tr><td>search\_server.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
-<tr><td>search\_server.resources.memory</td><td>256</td><td>Memory usage of the search server app in MB. (supports units i.e., `1GB`, `512MB`)</td></tr>
+<tr><td>search\_server.resources.memory</td><td>256</td><td>Memory usage of the search server app in MB. Supports units i.e., `1GB`, `512MB`.</td></tr>
 <tr><td>invitations.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
-<tr><td>invitations.resources.memory</td><td>256</td><td>Memory usage of the invitations apps in MB. (supports units i.e., `1GB`, `512MB`)</td></tr>
+<tr><td>invitations.resources.memory</td><td>256</td><td>Memory usage of the invitations apps in MB. Supports units i.e., `1GB`, `512MB`.</td></tr>
 </table>
 <%#
 | Property | Default Value | Description  |  
@@ -106,7 +106,7 @@ To create the `apps-manager-values` configuration file for apps manager:
       display_plan_prices: "false"
       enable_invitations: "true"
       poll_interval: POLL-INTERVAL
-      app_details_poll_interval: APP-POLL-INTERVAL
+      app_details_poll_interval: DETAILS-POLL-INTERVAL
 
       resources:
         instances: 1
@@ -130,10 +130,11 @@ To create the `apps-manager-values` configuration file for apps manager:
     ```
 
     Where:
-    * `POLL-INTERVAL` is the poll interval.
-    * `APP-POLL-INTERVAL` is the app poll interval.
-    * `INSTANCE-COUNT` is the number of instances for the component.
-    * `MEM-SIZE` is the memory size for each instance in MB.
+    * `POLL-INTERVAL` is the Apps Manager poll interval, in seconds.
+    * `DETAILS-POLL-INTERVAL` is the app details polling interval, in seconds.
+    * `INSTANCE-COUNT` is the number of deployed instances.
+    * `MEM-SIZE` is the memory usage for each instance, in MB. 
+    Supports units i.e., `1GB` and `512MB`.
 
 1. Revise the content with your desired configuration values.
 <br>    
