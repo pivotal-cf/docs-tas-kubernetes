@@ -5,6 +5,24 @@ owner: Apps Manager
 
 This topic describes how to configure Apps Manager before deploying TAS for Kubernetes.
 
+## <a id='overview'></a> Overview
+Apps Manager on TAS for Kubernetes provides a UI for 
+creating and deleting orgs, domains, and spaces, and
+managing services, members and permissions. 
+For more information about Apps Manager, see 
+[Getting Started with Apps Manager](https://docs.run.pivotal.io/console/dev-console.html).
+
+If you want to customize Apps Manager you must create a configuration file for the Apps Manager included 
+with TAS for Kubernetes. 
+To create the Apps Manager configuration file, complete the steps in 
+[Create the Apps Manager Configuration File](#create-configuration).  
+
+You can configure Apps Manager's resource consumption by modifying Apps Manager's configuration file. 
+You can also assign Apps Manager a custom Marketplace and customize 
+Apps Manager with a white-labeled UI. 
+To customize your Apps Manager's configuration, 
+complete the steps in [Configure Apps Manager](#configure-apps-manager).  
+
 ## <a id='prerequisites'></a> Prerequisites
 
 Before configuring Apps Manager, complete the following:  
@@ -15,24 +33,6 @@ Before configuring Apps Manager, complete the following:
 `tanzu-application-service` directory. For more information, see 
 [Generate Internal Configuration Values](configuring-installation-values.html#generate-configuration-values) 
 in _Configuring Installation Values for TAS for Kubernetes_.  
-
-## <a id='overview'></a> Overview
-Apps Manager on TAS for Kubernetes provides a UI for 
-creating and deleting orgs, domains, and spaces, and
-managing services, members and permissions. 
-For more information about Apps Manager, see 
-[Getting Started with Apps Manager](https://docs.run.pivotal.io/console/dev-console.html).
-
-You must create a configuration file for the Apps Manager included 
-with TAS for Kubernetes. 
-To create the Apps Manager configuration file, complete the steps in 
-[Create the Apps Manager Configuration File](#create-configuration).  
-
-You can configure Apps Manager's resource consumption by modifying Apps Manager's configuration file. 
-You can also assign Apps Manager a custom Marketplace and customize 
-Apps Manager with a white-labeled UI. 
-To customize your Apps Manager's configuration, 
-complete the steps in [Configure Apps Manager](#configure-apps-manager).  
 
 ## <a id='create-configuration'></a> Create the Apps Manager Configuration File
 
