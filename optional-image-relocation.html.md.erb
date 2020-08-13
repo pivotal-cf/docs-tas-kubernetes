@@ -10,7 +10,8 @@ This topic describes how to relocate VMware Tanzu Application Service for Kubern
 
 Before installing TAS for Kubernetes, complete the following: 
 
-* Ensure you have a [Tanzu Network](https://network.pivotal.io/) account to use to download container images from the Tanzu Network Registry. 
+* Ensure you have a [VMware Tanzu Network](https://network.pivotal.io/) account to 
+use to download container images from the VMware Tanzu Network Registry. 
   Ensure this account has a signed TAS for Kubernetes EULA.
 * Follow the procedures in:  
     * [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
@@ -25,7 +26,7 @@ Before installing TAS for Kubernetes, complete the following:
 In Kubernetes, containers can be re-created at various times and a system image for the new container will be pulled 
 from your system registry. The system registry you use for TAS for Kubernetes must always be available when a container is started on a new host.  
 
-You can use either the Tanzu Network or a private registry as your system registry.  
+You can use either the VMware Tanzu Network or a private registry as your system registry.  
 
 You should install TAS for Kubernetes from a private registry for the following situations:  
 
@@ -33,8 +34,8 @@ You should install TAS for Kubernetes from a private registry for the following 
 * You want to reduce the external runtime dependencies of your TAS for Kubernetes installation. 
 
 <br>
-To configure the Tanzu Network as your system registry, follow the procedures in 
-[Configure the Tanzu Network as Your System Registry](#configure-for-tanzu-network).
+To configure the VMware Tanzu Network as your system registry, follow the procedures in 
+[Configure the VMware Tanzu Network as Your System Registry](#configure-for-tanzu-network).
 
 To configure a private registry as your system registry, follow the procedures in 
 [Configure a Private Registry as Your System Registry](#configure-for-private).
@@ -43,17 +44,17 @@ To configure a private registry as your system registry, follow the procedures i
   for the Google Container Registry and for Harbor registries. 
 </p>
 
-## <a id='configure-for-tanzu-network'></a> Configure the Tanzu Network as Your System Registry
+## <a id='configure-for-tanzu-network'></a> Configure the VMware Tanzu Network as Your System Registry
 
-To configure the Tanzu Network as your system registry:  
+To configure the VMware Tanzu Network as your system registry:  
 
-* [Configure Tanzu Network Account Credentials](#configure-system-registry-values)
+* [Configure VMware Tanzu Network Account Credentials](#configure-system-registry-values)
 
-### <a id='configure-system-registry-values'></a>Configure Tanzu Network Account Credentials
+### <a id='configure-system-registry-values'></a>Configure VMware Tanzu Network Account Credentials
 
 TAS for Kubernetes requires a registered 
-[Tanzu Network](https://network.pivotal.io) account to pull container images for 
-system components from the [Tanzu Network container registry](https://registry.pivotal.io/).
+[VMware Tanzu Network](https://network.pivotal.io) account to pull container images for 
+system components from the [VMware Tanzu Network container registry](https://registry.pivotal.io/).
 
 To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
 
@@ -73,7 +74,7 @@ To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
 
     Where:
     * `USERNAME` is the username of the account to use to download 
-    container images from the Tanzu Network Registry. 
+    container images from the VMware Tanzu Network Registry. 
     Ensure this account has a signed TAS for Kubernetes EULA.
     * `PASSWORD` is the password for the account you specified.  
 
@@ -93,18 +94,18 @@ To configure a private registry as your system registry:
 ### <a id='relocate-tas-for-k8s-images'></a> Relocate TAS for Kubernetes Images
 
 Before installing TAS for Kubernetes from a private registry, 
-you must relocate the TAS for Kubernetes image from the Tanzu Network Registry to the private registry:  
+you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private registry:  
 
 * [Download the TAS for Kubernetes Images](#downloading-the-images)
 * [Upload the TAS for Kubernetes Images to the Private Registry](#uploading-the-images)
 
 #### <a id='downloading-the-images'></a> Download the TAS for Kubernetes Images
 
-To download the TAS for Kubernetes Images from Tanzu Network Registry:
+To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
 
 1. In your terminal, navigate to the `tanzu-application-service` directory.
 
-1. Log in to the Tanzu Network Registry.
+1. Log in to the VMware Tanzu Network Registry.
 
     ```
     docker login registry.pivotal.io \
@@ -113,8 +114,8 @@ To download the TAS for Kubernetes Images from Tanzu Network Registry:
     ```
 
     Where:
-    * `USERNAME` is a Tanzu Network user account. 
-    * `PASSWORD` is the password for the Tanzu Network user account. 
+    * `USERNAME` is a VMware Tanzu Network user account. 
+    * `PASSWORD` is the password for the VMware Tanzu Network user account. 
 
 1. Package the images into a tarball.  
 
