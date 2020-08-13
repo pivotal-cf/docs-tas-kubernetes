@@ -4,16 +4,16 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to create and configure Kubernetes clusters to support 
-Tanzu Application Service for Kubernetes.
+Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 
 ## <a id='overview'></a> Overview
 
 Before creating or configuring Kubernetes clusters, 
 ensure your environment and clusters support 
-Tanzu Application Service for Kubernetes.  
+TAS for Kubernetes.  
 
-Tanzu Application Service for Kubernetes 
+TAS for Kubernetes 
 supports Kubernetes clusters in the following environments:
 
 * [VMware Enterprise PKS](#enterprise-pks)
@@ -22,14 +22,14 @@ supports Kubernetes clusters in the following environments:
 ### <a id='enterprise-pks'></a> VMware Enterprise PKS
 
 Ensure the following before creating or configuring Kubernetes clusters 
-for Tanzu Application Service for Kubernetes:
+for TAS for Kubernetes:
 
 * Your Enterprise PKS version is v1.6 or v1.7.
 * Your Kubernetes clusters have been created with the following characteristics:  
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that 
-    Tanzu Application Service for Kubernetes uses to store buildpack-based app images. 
+    TAS for Kubernetes uses to store buildpack-based app images. 
     If the registry has a certificate issued from a private certificate authority (CA), 
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust 
     the certificate of that CA.
@@ -44,7 +44,7 @@ run `pks get-credentials CLUSTER-NAME` to ensure that kubectl targets the cluste
 ## <a id='grid'></a> VMware Tanzu Kubernetes Grid
 
 Ensure the following before creating or configuring Kubernetes clusters 
-for Tanzu Application Service for Kubernetes:
+for TAS for Kubernetes:
 
 * Your Tanzu Kubernetes Grid environment:
     * Is Tanzu Kubernetes Grid version is 1.0 or later.  
@@ -59,7 +59,7 @@ for Tanzu Application Service for Kubernetes:
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that 
-    Tanzu Application Service for Kubernetes uses to store buildpack-based app images. 
+    TAS for Kubernetes uses to store buildpack-based app images. 
     If the registry has a certificate issued from a private certificate authority (CA), 
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust 
     the certificate of that CA.
@@ -71,7 +71,7 @@ After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the co
 
 ## <a id='verify-default-storage'></a> Verify a Default Storage Exists
 
-Tanzu Application Service for Kubernetes requires each Kubernetes cluster 
+TAS for Kubernetes requires each Kubernetes cluster 
 provide persistent volumes for its internal PostgreSQL database and Minio blobstore.
 
 To verify your Kubernetes cluster already has a default storage class installed:
@@ -86,7 +86,7 @@ thin (default)   kubernetes.io/vsphere-volume   34h
 
 1. Review the returned list of StorageClass resources.
     * If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically.
-    * If the list does not include a default, you must install one before deploying Tanzu Application Service for Kubernetes.
+    * If the list does not include a default, you must install one before deploying TAS for Kubernetes.
 See the [Configuring Default Storage](configuring-default-storage.html) topic for information about configuring the default storage class.
 
 <!--

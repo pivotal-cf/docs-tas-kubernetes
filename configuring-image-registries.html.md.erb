@@ -3,14 +3,14 @@ title: Configuring Your App Image Registry
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure Tanzu Application Service for Kubernetes to 
-access container image registries, 
+This topic describes how to configure Tanzu Application Service for Kubernetes (TAS for Kubernetes) 
+to access container image registries, 
 and how to create and configure a new private registry 
-for Tanzu Application Service for Kubernetes.
+for TAS for Kubernetes.
 
 ## <a id='overview'></a>Overview
 
-Tanzu Application Service for Kubernetes pulls system component container images 
+TAS for Kubernetes pulls system component container images 
 from the [Tanzu Network container registry](https://registry.pivotal.io/), 
 and retains those images in a private container image registry. 
     
@@ -27,7 +27,7 @@ as your container image registry.
 
 ## <a id='configure-app-registry'></a> Configure a Harbor Container Image Registry
 
-Tanzu Application Service for Kubernetes retains system component container images 
+TAS for Kubernetes retains system component container images 
 in a private container image registry. VMware recommends that you use a VMware Harbor registry 
 as your container image registry.
 
@@ -48,7 +48,7 @@ To configure a container image registry for Tanzu Application Services for Kuber
 Harbor requires that your create a Harbor project before pushing container images 
 to Harbor. 
 
-To create a Harbor project for your Tanzu Application Service for Kubernetes container images:  
+To create a Harbor project for your TAS for Kubernetes container images:  
 
 1. Open your browser and navigate to your Harbor registry.
 
@@ -101,7 +101,7 @@ in the Harbor documentation.
 
 ### <a id='harbor-ca-cert'></a> Retrieve the Harbor CA Certificate
 
-Tanzu Application Service for Kubernetes must use your 
+TAS for Kubernetes must use your 
 Harbor registry's CA certificate or self-signed certificate 
 to access the registry.  
 
@@ -134,14 +134,14 @@ scroll down to the **Certificate Authority (CA)** field.
         1. In the **Advanced Options** pane, click the **DOWNLOAD ROOT CA CERT** button. 
 
 1. Use the retrieved CA certificate as the certificate authority value when 
-    configuring Tanzu Application Service for Kubernetes. See 
+    configuring TAS for Kubernetes. See 
     [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
 
  
 
 ### <a id='harbor-config-file'></a> Create the Harbor Image Registry Configuration File
 
-To configure Tanzu Application Service for Kubernetes to use your private container image registry:
+To configure TAS for Kubernetes to use your private container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 
@@ -180,7 +180,7 @@ To configure Tanzu Application Service for Kubernetes to use your private contai
 ### <a id='configure-other-registry'></a> Create the Configuration File for a Different Image Registry
 
 In addition to supporting a VMware Harbor registry as a container image registry,
-Tanzu Application Service for Kubernetes also supports using other container image 
+TAS for Kubernetes also supports using other container image 
 registries, such as a Google Container Registry (GCR) or Docker Hub registry. 
 
 To use a container image registry other than a Harbor registry:
@@ -210,10 +210,10 @@ To use a container image registry other than a Harbor registry:
 
     Where:
     * `HOST-FQDN` is the fully qualified domain name for your registry.  
-    * `REPOSITORY` is the full URL for the Tanzu Application Service for Kubernetes 
+    * `REPOSITORY` is the full URL for the TAS for Kubernetes 
     project within your registry.  
     * `APP-REGISTRY-USERNAME` is the username for an account with access to the 
-    Tanzu Application Service for Kubernetes project within your registry. 
+    TAS for Kubernetes project within your registry. 
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
 1. Save the file.
 1. After creating the image registry configuration file, proceed to the

@@ -1,28 +1,34 @@
 ---
-title: Configuring Apps Manager for Tanzu Application Service for Kubernetes
+title: Configuring Apps Manager for Tanzu Application Service for Kubernetes (Optional)
 owner: Apps Manager
 ---
 
-This topic describes how to configure Apps Manager before deploying TAS for Kubernetes.
+This topic describes how to configure Apps Manager before deploying 
+Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 ## <a id='overview'></a> Overview
 Apps Manager on TAS for Kubernetes provides a UI for 
 creating and deleting orgs, domains, and spaces, and
 managing services, members and permissions. 
+
+You can use Apps Manager's default configuration or 
+you can customize Apps Manager in any of the following ways:  
+
+* Modify resource consumption  
+* Customize the Marketplace  
+* White-label the UI  
+* Disable/Enable features
+
+<br>
+To customize Apps Manager: 
+
+* [Create the Apps Manager Configuration File](#create-configuration) 
+* [Configure Apps Manager](#configure-apps-manager)
+
+<br>
 For more information about Apps Manager, see 
 [Getting Started with Apps Manager](https://docs.run.pivotal.io/console/dev-console.html).
 
-You can customize Apps Manager's configuration in the following ways:  
-
-* Modify Apps Manager resource consumption.  
-* Assign Apps Manager to a custom Marketplace.  
-* Customize Apps Manager with a white-labeled UI.  
-* Customize which Apps Manager features are enabled.  
-
-If you want to customize Apps Manager, you must create an Apps Manager configuration file and mofify the settings. 
-To create and customize your Apps Manager configuration file, complete the steps in 
-[Create the Apps Manager Configuration File](#create-configuration) and 
-[Configure Apps Manager](#configure-apps-manager) below.  
 
 ## <a id='prerequisites'></a> Prerequisites
 
