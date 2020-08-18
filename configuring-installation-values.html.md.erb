@@ -89,6 +89,7 @@ To enable using a LoadBalancer service for the Istio ingress gateway:
 1. Populate the `load-balancer-values.yml` file with the following content:
 
     ```yaml
+    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
     #@data/values
     ---
     enable_load_balancer: True
