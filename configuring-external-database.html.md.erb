@@ -1,0 +1,142 @@
+---
+title: Configuring Your External Database
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to configure Tanzu Application Service for Kubernetes
+(TAS for Kubernetes) to use an external database for UAA, Cloud Controller and
+Usage Service, and how to configure the external database for TAS for
+Kubernetes.
+
+## <a id='overview'></a>Overview
+
+TAS for Kubernetes requires an external database for system components.
+
+<p class="note"><strong>Note:</strong> The YAML files in this topic us
+  <code>ytt</code> syntax in their first line.
+  For more information about <code>ytt</code>, see <a href="https://get-ytt.io/">ytt</a>.
+</p>
+
+## <a id='prerequisites'></a>Prerequisites
+
+Before you begin this procedure, ensure that you have an external Postgres
+database. Currently only Postgres database is supported by TAS for Kubernetes.
+
+## <a id='external-database-config-file'></a> Create the External Database Configuration File
+
+To configure TAS for Kubernetes to use your external database:
+
+1. Change directory into the `configuration-values` directory you created earlier.
+
+1. Create a file named `db-values.yml` in the `configuration-values` directory.
+1. Populate the `configuration-values` file with the following:
+
+    ```yaml
+    #@data/values
+    ---
+    capi:
+      #@overlay/replace
+      database:
+        adapter: postgres
+        host: "CCDB-HOSTNAME"
+        port: "CCDB-PORT"
+        user: "CCDB-USERNAME"
+        password: "CCDB-PASSWORD"
+        name: "CCDB-NAME"
+        ca_cert: |
+          -----BEGIN CERTIFICATE-----
+          CCDB-CA-CERTIFICATE-CONTENT
+          -----END CERTIFICATE-----
+
+    uaa:
+      #@overlay/replace
+      database:
+        adapter: postgresql
+        host: "UAADB-HOSTNAME"
+        port: "UAADB-PORT"
+        user: "UAADB-USERNAME"
+        password: "UAADB-PASSWORD"
+        name: "UAADB-NAME"
+        ca_cert: |
+          -----BEGIN CERTIFICATE-----
+          UAADB-CA-CERTIFICATE-CONTENT
+          -----END CERTIFICATE-----
+
+    usage_service:
+      #@overlay/replace
+      database_hostname: "USAGE-SERVICE-DB-HOSTNAME"
+      database_username: "USAGE-SERVICE-DB-USERNAME"
+      database_password: "USAGE-SERVICE-DB-PASSWORD"
+      database_name: "USAGE-SERVICE-DB-NAME"
+    ```
+
+    Where:
+    * `CCDB-HOSTNAME` is the fully qualified domain name for your Cloud Controller database server.
+    * `CCDB-PORT` is the connection port to your Cloud Controller database server.
+    * `CCDB-USERNAME` is the name of the user created to access your Cloud Controller database.
+    * `CCDB-PASSWORD` is the password of the user created to access your Cloud Controller database.
+    * `CCDB-NAME` is the name of the Cloud Controller database.
+    * `CCDB-CA-CERTIFICATE-CONTENT` is the CA certificate or
+    self-signed certificate for your Cloud Contronller database. Ensure each line of the
+    CA certificate value is indented four spaces, matching the indentation of
+    the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
+    * `UAADB-HOSTNAME` is the fully qualified domain name for your UAA database server.
+    * `UAADB-PORT` is the connection port to your UAA database server.
+    * `UAADB-USERNAME` is the name of the user created to access your UAA database.
+    * `UAADB-PASSWORD` is the password of the user created to access your UAA database.
+    * `UAADB-NAME` is the name of the UAA database.
+    * `UAADB-CA-CERTIFICATE-CONTENT` is the CA certificate or
+    self-signed certificate for your UAA database. Ensure each line of the
+    CA certificate value is indented four spaces, matching the indentation of
+    the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
+    * `USAGE-SERVICE-DB-HOSTNAME` is the fully qualified domain name for your Usage Service database server.
+    * `USAGE-SERVICE-DB-USERNAME` is the name of the user created to access your Usage Service database.
+    * `USAGE-SERVICE-DB-PASSWORD` is the password of the user created to access your Usage Service database.
+    * `USAGE-SERVICE-DB-NAME` is the name of the Usage Service database.
+1. Save the file.
+
+## <a id='configure-external-database'></a> Configure an External Database
+
+To configure an external Postgres database for Tanzu Application Services for Kubernetes:
+
+1. Set the environment variables
+
+    ```bash
+    export PGPASSWORD="POSTGRES-SUPERUSER-PASSWORD"
+    export PGHOST="POSGTRES-SERVER-HOST"
+    export DB_VALUES_FILE=db-values.yml
+    ```
+
+1. Run the following script. It will
+    * create separate databases for Cloud Controller, UAA and Usage Service
+    * create users for the Cloud Controller, UAA and Usage Service databases
+    * activate the `citext` extension for the Cloud Controller, UAA and Usage Service databases
+
+    The following uses [BOSH CLI](installing-command-line-tools.html#install-bosh-cli) to parse database values.
+    ```bash
+    CCDB_USERNAME=$(bosh interpolate --path /capi/database/user "$DB_VALUES_FILE")
+    CCDB_PASSWORD=$(bosh interpolate --path /capi/database/password "$DB_VALUES_FILE")
+    CCDB_NAME=$(bosh interpolate --path /capi/database/name "$DB_VALUES_FILE")
+    UAADB_USERNAME=$(bosh interpolate --path /uaa/database/user "$DB_VALUES_FILE")
+    UAADB_PASSWORD=$(bosh interpolate --path /uaa/database/password "$DB_VALUES_FILE")
+    UAADB_NAME=$(bosh interpolate --path /uaa/database/name "$DB_VALUES_FILE")
+    USAGE_SERVICE_DB_USERNAME=$(bosh interpolate --path /usage_service/database_username "$DB_VALUES_FILE")
+    USAGE_SERVICE_DB_PASSWORD=$(bosh interpolate --path /usage_service/database_password "$DB_VALUES_FILE")
+    USAGE_SERVICE_DB_NAME=$(bosh interpolate --path /usage_service/database_name "$DB_VALUES_FILE")
+    cat > "$TMPDIR/setup_db.sql" <<EOT
+    CREATE DATABASE ${CCDB_NAME};
+    CREATE ROLE ${CCDB_USERNAME} LOGIN PASSWORD '${CCDB_PASSWORD}';
+    CREATE DATABASE ${UAADB_NAME};
+    CREATE ROLE ${UAADB_USERNAME} LOGIN PASSWORD '${UAADB_PASSWORD}';
+    CREATE DATABASE ${USAGE_SERVICE_DB_NAME};
+    CREATE ROLE ${USAGE_SERVICE_DB_USERNAME} LOGIN PASSWORD '${USAGE_SERVICE_DB_PASSWORD}';
+    EOT
+    psql -U postgres -f "$TMPDIR/setup_db.sql"
+    psql -U postgres -d "${CCDB_NAME}" -c "CREATE EXTENSION citext"
+    psql -U postgres -d "${UAADB_NAME}" -c "CREATE EXTENSION citext"
+    psql -U postgres -d "${USAGE_SERVICE_DB_NAME}" -c "CREATE EXTENSION citext"
+    ```
+
+    Where:
+    * `POSTGRES-SUPERUSER-PASSWORD` is the password of the postgres server super user.
+    * `POSTGRES-SERVER-HOST` is the host address of the postgres server.
