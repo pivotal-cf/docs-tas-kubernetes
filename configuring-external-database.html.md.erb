@@ -4,14 +4,24 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to configure Tanzu Application Service for Kubernetes
-(TAS for Kubernetes) to use an external database for UAA, Cloud Controller and
-Usage Service, and how to configure the external database for TAS for
+(TAS for Kubernetes) to use external databases for UAA, Cloud Controller and
+Usage Service, and how to configure the external databases for TAS for
 Kubernetes.
 
 ## <a id='overview'></a>Overview
 
-TAS for Kubernetes requires an external database for system components.
+TAS for Kubernetes requires an external Postgres database for the UAA, Cloud Controller and
+Usage Service system components.  
 
+TAS for Kubernetes uses a configuration file to access the external system component databases. 
+This configuration file is also used to create the external databases.  
+
+To create the databases and users for these system components:  
+
+* [Create the External Database Configuration File](#external-database-config-file)  
+* [Create the External Postgres Databases](#configure-external-database)  
+
+<br>
 <p class="note"><strong>Note:</strong> The YAML files in this topic us
   <code>ytt</code> syntax in their first line.
   For more information about <code>ytt</code>, see <a href="https://get-ytt.io/">ytt</a>.
@@ -20,14 +30,13 @@ TAS for Kubernetes requires an external database for system components.
 ## <a id='prerequisites'></a>Prerequisites
 
 Before you begin this procedure, ensure that you have an external Postgres
-database. Currently only Postgres database is supported by TAS for Kubernetes.
+database.
 
 ## <a id='external-database-config-file'></a> Create the External Database Configuration File
 
-To configure TAS for Kubernetes to use your external database:
+To configure TAS for Kubernetes to use your external Postgres database:
 
 1. Change directory into the `configuration-values` directory you created earlier.
-
 1. Create a file named `db-values.yml` in the `configuration-values` directory.
 1. Populate the `configuration-values` file with the following:
 
@@ -73,33 +82,34 @@ To configure TAS for Kubernetes to use your external database:
     Where:
     * `CCDB-HOSTNAME` is the fully qualified domain name for your Cloud Controller database server.
     * `CCDB-PORT` is the connection port to your Cloud Controller database server.
-    * `CCDB-USERNAME` is the name of the user created to access your Cloud Controller database.
-    * `CCDB-PASSWORD` is the password of the user created to access your Cloud Controller database.
+    * `CCDB-USERNAME` is the name of the user to create to access your Cloud Controller database.
+    * `CCDB-PASSWORD` is the password of the Cloud Controller database user.
     * `CCDB-NAME` is the name of the Cloud Controller database.
-    * `CCDB-CA-CERTIFICATE-CONTENT` is the CA certificate or
-    self-signed certificate for your Cloud Contronller database. Ensure each line of the
+    * `CCDB-CA-CERTIFICATE-CONTENT` is the Certificate Authority (CA) certificate or
+    self-signed certificate for your Cloud Controller database. Ensure each line of the
     CA certificate value is indented four spaces, matching the indentation of
     the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
     * `UAADB-HOSTNAME` is the fully qualified domain name for your UAA database server.
     * `UAADB-PORT` is the connection port to your UAA database server.
-    * `UAADB-USERNAME` is the name of the user created to access your UAA database.
-    * `UAADB-PASSWORD` is the password of the user created to access your UAA database.
+    * `UAADB-USERNAME` is the name of the user to create to access your UAA database.
+    * `UAADB-PASSWORD` is the password of the UAA database user.
     * `UAADB-NAME` is the name of the UAA database.
     * `UAADB-CA-CERTIFICATE-CONTENT` is the CA certificate or
     self-signed certificate for your UAA database. Ensure each line of the
     CA certificate value is indented four spaces, matching the indentation of
     the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
     * `USAGE-SERVICE-DB-HOSTNAME` is the fully qualified domain name for your Usage Service database server.
-    * `USAGE-SERVICE-DB-USERNAME` is the name of the user created to access your Usage Service database.
-    * `USAGE-SERVICE-DB-PASSWORD` is the password of the user created to access your Usage Service database.
+    * `USAGE-SERVICE-DB-USERNAME` is the name of the user to create to access your Usage Service database.
+    * `USAGE-SERVICE-DB-PASSWORD` is the password of the Usage Service database user.
     * `USAGE-SERVICE-DB-NAME` is the name of the Usage Service database.
 1. Save the file.
 
-## <a id='configure-external-database'></a> Configure an External Database
+## <a id='configure-external-database'></a> Create the External Postgres Databases
 
-To configure an external Postgres database for Tanzu Application Services for Kubernetes:
+To create and configure separate external Postgres databases for Cloud Controller, UAA, and Usage Service:
 
-1. Set the environment variables
+1. Change directory into your `configuration-values` directory.
+1. Set the following environment variables:  
 
     ```bash
     export PGPASSWORD="POSTGRES-SUPERUSER-PASSWORD"
@@ -107,12 +117,8 @@ To configure an external Postgres database for Tanzu Application Services for Ku
     export DB_VALUES_FILE=db-values.yml
     ```
 
-1. Run the following script. It will
-    * create separate databases for Cloud Controller, UAA and Usage Service
-    * create users for the Cloud Controller, UAA and Usage Service databases
-    * activate the `citext` extension for the Cloud Controller, UAA and Usage Service databases
+1. Run the following script:  
 
-    The following uses [BOSH CLI](installing-command-line-tools.html#install-bosh-cli) to parse database values.
     ```bash
     CCDB_USERNAME=$(bosh interpolate --path /capi/database/user "$DB_VALUES_FILE")
     CCDB_PASSWORD=$(bosh interpolate --path /capi/database/password "$DB_VALUES_FILE")
@@ -138,5 +144,13 @@ To configure an external Postgres database for Tanzu Application Services for Ku
     ```
 
     Where:
-    * `POSTGRES-SUPERUSER-PASSWORD` is the password of the postgres server super user.
-    * `POSTGRES-SERVER-HOST` is the host address of the postgres server.
+    * `POSTGRES-SUPERUSER-PASSWORD` is the postgres server super user password.
+    * `POSTGRES-SERVER-HOST` is the postgres server host address.  
+
+     
+    The script uses the values in your `db-values.yml` file to 
+    create Postgres databases, configure service users, and activate 
+    the `citext` extension for the created databases.
+ <br>   
+    The script uses the [BOSH CLI](installing-command-line-tools.html#install-bosh-cli) 
+    to parse database values.  
