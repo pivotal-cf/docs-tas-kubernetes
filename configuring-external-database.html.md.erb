@@ -11,12 +11,12 @@ Kubernetes.
 ## <a id='overview'></a>Overview
 
 TAS for Kubernetes requires an external Postgres database for the UAA, Cloud Controller and
-Usage Service system components.  
+Usage Service, and uses a configuration file to access these system component databases.  
 
-TAS for Kubernetes uses a configuration file to access the external system component databases. 
-This configuration file is also used to create the external databases.  
+This configuration file is also used to create the system component databases.  
 
-To create the databases and users for these system components:  
+To create the Postgres databases and users for UAA, Cloud Controller, and
+Usage Service:  
 
 * [Create the External Database Configuration File](#external-database-config-file)  
 * [Create the External Postgres Databases](#configure-external-database)  
