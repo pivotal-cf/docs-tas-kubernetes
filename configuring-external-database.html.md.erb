@@ -37,10 +37,11 @@ database.
 To configure TAS for Kubernetes to use your external Postgres database:
 
 1. Change directory into the `configuration-values` directory you created earlier.
-1. Create a file named `db-values.yml` in the `configuration-values` directory.
+1. Create a file named `values-for-db.yml` in the `configuration-values` directory.
 1. Populate the `configuration-values` file with the following:
 
     ```yaml
+    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
     #@data/values
     ---
     capi:
@@ -71,6 +72,9 @@ To configure TAS for Kubernetes to use your external Postgres database:
           UAADB-CA-CERTIFICATE-CONTENT
           -----END CERTIFICATE-----
 
+    #@library/ref "@github.com/pivotal/usage-service-k8s-release"
+    #@data/values
+    ---
     usage_service:
       #@overlay/replace
       database_hostname: "USAGE-SERVICE-DB-HOSTNAME"
@@ -108,49 +112,5 @@ To configure TAS for Kubernetes to use your external Postgres database:
 
 To create and configure separate external Postgres databases for Cloud Controller, UAA, and Usage Service:
 
-1. Change directory into your `configuration-values` directory.
-1. Set the following environment variables:  
-
-    ```bash
-    export PGPASSWORD="POSTGRES-SUPERUSER-PASSWORD"
-    export PGHOST="POSGTRES-SERVER-HOST"
-    export DB_VALUES_FILE=db-values.yml
-    ```
-
-1. Run the following script:  
-
-    ```bash
-    CCDB_USERNAME=$(bosh interpolate --path /capi/database/user "$DB_VALUES_FILE")
-    CCDB_PASSWORD=$(bosh interpolate --path /capi/database/password "$DB_VALUES_FILE")
-    CCDB_NAME=$(bosh interpolate --path /capi/database/name "$DB_VALUES_FILE")
-    UAADB_USERNAME=$(bosh interpolate --path /uaa/database/user "$DB_VALUES_FILE")
-    UAADB_PASSWORD=$(bosh interpolate --path /uaa/database/password "$DB_VALUES_FILE")
-    UAADB_NAME=$(bosh interpolate --path /uaa/database/name "$DB_VALUES_FILE")
-    USAGE_SERVICE_DB_USERNAME=$(bosh interpolate --path /usage_service/database_username "$DB_VALUES_FILE")
-    USAGE_SERVICE_DB_PASSWORD=$(bosh interpolate --path /usage_service/database_password "$DB_VALUES_FILE")
-    USAGE_SERVICE_DB_NAME=$(bosh interpolate --path /usage_service/database_name "$DB_VALUES_FILE")
-    cat > "$TMPDIR/setup_db.sql" <<EOT
-    CREATE DATABASE ${CCDB_NAME};
-    CREATE ROLE ${CCDB_USERNAME} LOGIN PASSWORD '${CCDB_PASSWORD}';
-    CREATE DATABASE ${UAADB_NAME};
-    CREATE ROLE ${UAADB_USERNAME} LOGIN PASSWORD '${UAADB_PASSWORD}';
-    CREATE DATABASE ${USAGE_SERVICE_DB_NAME};
-    CREATE ROLE ${USAGE_SERVICE_DB_USERNAME} LOGIN PASSWORD '${USAGE_SERVICE_DB_PASSWORD}';
-    EOT
-    psql -U postgres -f "$TMPDIR/setup_db.sql"
-    psql -U postgres -d "${CCDB_NAME}" -c "CREATE EXTENSION citext"
-    psql -U postgres -d "${UAADB_NAME}" -c "CREATE EXTENSION citext"
-    psql -U postgres -d "${USAGE_SERVICE_DB_NAME}" -c "CREATE EXTENSION citext"
-    ```
-
-    Where:
-    * `POSTGRES-SUPERUSER-PASSWORD` is the postgres server super user password.
-    * `POSTGRES-SERVER-HOST` is the postgres server host address.  
-
-     
-    The script uses the values in your `db-values.yml` file to 
-    create Postgres databases, configure service users, and activate 
-    the `citext` extension for the created databases.
- <br>   
-    The script uses the [BOSH CLI](installing-command-line-tools.html#install-bosh-cli) 
-    to parse database values.  
+1. Ensure that databases exist on your configured database server(s) and that roles (users) exist on those databases
+1. Ensure that the databases support case-insensitive strings. This can be done by running the following command in postgres: `CREATE EXTENSION citext`
