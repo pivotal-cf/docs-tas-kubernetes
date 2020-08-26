@@ -5,22 +5,19 @@ owner: Tanzu Application Service Release Engineering
 
 This topic describes how to configure Tanzu Application Service for Kubernetes
 (TAS for Kubernetes) to use external databases for UAA, Cloud Controller and
-Usage Service, and how to configure the external databases for TAS for
-Kubernetes.
+Usage Service.
 
 ## <a id='overview'></a>Overview
 
-TAS for Kubernetes requires an external Postgres database for the UAA, Cloud Controller and
-Usage Service, and uses a configuration file to access these system component databases.  
+The TAS for Kubernetes UAA, Cloud Controller and Usage Service system components
+require external Postgres databases.  
 
-This configuration file is also used to create the system component databases.  
+To create external Postgres databases for the TAS for Kubernetes system components and 
+configure TAS for Kubernetes to use them:   
 
-To create the Postgres databases and users for UAA, Cloud Controller, and
-Usage Service:  
-
+* [Create the External Postgres Databases](#configure-external-database) 
 * [Create the External Database Configuration File](#external-database-config-file)  
-* [Create the External Postgres Databases](#configure-external-database)  
-
+ 
 <br>
 <p class="note"><strong>Note:</strong> The YAML files in this topic us
   <code>ytt</code> syntax in their first line.
@@ -32,13 +29,33 @@ Usage Service:
 Before you begin this procedure, ensure that you have an external Postgres
 database.
 
+
+## <a id='configure-external-database'></a> Create the External Postgres Databases
+
+TAS for Kubernetes uses external Postgres databases for UAA, Cloud Controller and Usage Service.
+
+To create and configure TAS for Kubernetes Postgres databases and users:  
+
+1. Create a database in your external Postgres database for each of the following:
+    * Cloud Controller
+    * UAA
+    * Usage Service
+1. To ensure that the databases support case-insensitive strings, 
+run the following postgres command for each database:  
+
+    ```
+    CREATE EXTENSION citext
+    ```
+1. Establish a Certificate Authority (CA) certificate for each database.  
+1. Create a service account role/user on each database.  
+
 ## <a id='external-database-config-file'></a> Create the External Database Configuration File
 
-To configure TAS for Kubernetes to use your external Postgres database:
+To configure TAS for Kubernetes to use your external Postgres databases:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 1. Create a file named `values-for-db.yml` in the `configuration-values` directory.
-1. Populate the `configuration-values` file with the following:
+1. Populate the `values-for-db.yml` file with the following:
 
     ```yaml
     #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
@@ -89,7 +106,7 @@ To configure TAS for Kubernetes to use your external Postgres database:
     * `CCDB-USERNAME` is the name of the user to create to access your Cloud Controller database.
     * `CCDB-PASSWORD` is the password of the Cloud Controller database user.
     * `CCDB-NAME` is the name of the Cloud Controller database.
-    * `CCDB-CA-CERTIFICATE-CONTENT` is the Certificate Authority (CA) certificate or
+    * `CCDB-CA-CERTIFICATE-CONTENT` is the CA certificate or
     self-signed certificate for your Cloud Controller database. Ensure each line of the
     CA certificate value is indented four spaces, matching the indentation of
     the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
@@ -107,10 +124,3 @@ To configure TAS for Kubernetes to use your external Postgres database:
     * `USAGE-SERVICE-DB-PASSWORD` is the password of the Usage Service database user.
     * `USAGE-SERVICE-DB-NAME` is the name of the Usage Service database.
 1. Save the file.
-
-## <a id='configure-external-database'></a> Create the External Postgres Databases
-
-To create and configure separate external Postgres databases for Cloud Controller, UAA, and Usage Service:
-
-1. Ensure that databases exist on your configured database server(s) and that roles (users) exist on those databases
-1. Ensure that the databases support case-insensitive strings. This can be done by running the following command in postgres: `CREATE EXTENSION citext`
