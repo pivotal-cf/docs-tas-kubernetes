@@ -58,7 +58,8 @@ If your Kubernetes cluster supports [Kubernetes Services](https://kubernetes.io/
 
 To enable Tanzu Application Service for Kubernetes to use a LoadBalancer service for ingress:
 
-1. In your terminal, change into the `tanzu-application-service` directory containing the installation resources.
+1. In the same directory that contains `tanzu-application-service`, create a new directory named `configuration-values`.
+Use this directory to store configuration values for this installation.
 
 1. Move the `replace-loadbalancer-with-clusterip.yaml` file from the `custom-overlays` directory to the `config-optional` directory:
   <pre><code>$ mv custom-overlays/replace-loadbalancer-with-clusterip.yaml config-optional</code></pre>
