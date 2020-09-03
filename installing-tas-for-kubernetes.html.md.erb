@@ -293,3 +293,14 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
     <p class="note">
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
     </p>
+
+## <a id='check-installed-version'></a> Validate TAS for Kubernetes Installed Version
+
+To check the version of TAS for Kubernetes currently installed to your cluster:
+
+```
+kubectl get ConfigMap version -n tas-system -o jsonpath="{.data}"
+```
+
+This will produce output like:
+<pre class="terminal">map[commit:__GIT_COMMIT__ version:__BUILD_NUMBER__]</pre>
