@@ -112,9 +112,9 @@ To customize Apps Manager:
 
 ### <a id='customize-apps-manager-configuration'></a> Configure Apps Manager Base Settings
 
-<p class="note"><strong>Note:</strong> The <code>enable_invitations</code> configuration is defaulted to false.
-  The invitations service depends on the notification service which is currently unavailable.
-  If invitations are enabled, users will not receive email notifications to continue the user creation flow.
+<p class="note"><strong>Note:</strong> The <code>enable_invitations</code> configuration defaults to false.
+  The invitations service depends on the notification service, which is currently unavailable.
+  If <code>enable_invitations</code> is set to true, users do not receive email notifications to continue creating their account.
 </p>
 
 To configure Apps Manager base settings:
@@ -266,8 +266,6 @@ The following are all of the configurable Apps Manager Invitations settings:
 <tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager Invitations.</td></tr>
 <tr><td>memory</td><td>256</td><td>Memory usage of the invitations apps in MB. Supports units, for example, `1GB`, `512MB`.</td></tr>
 </table>
-
-
 
 ### <a id='customize-apps-manager-white-label'></a> Configure Apps Manager White-Labeling
 
