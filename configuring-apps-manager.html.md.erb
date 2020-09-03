@@ -112,6 +112,11 @@ To customize Apps Manager:
 
 ### <a id='customize-apps-manager-configuration'></a> Configure Apps Manager Base Settings
 
+<p class="note"><strong>Note:</strong> The <code>enable_invitations</code> configuration is defaulted to false.
+  The invitations service depends on the notification service which is currently unavailable.
+  If invitations are enabled, users will not receive email notifications to continue the user creation flow.
+</p>
+
 To configure Apps Manager base settings:
 
 1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.    
@@ -129,7 +134,7 @@ should be a well formatted YAML file.
     apps_manager:
       currency_lookup: {"usd":"$","eur":"€"}
       display_plan_prices: "false"
-      enable_invitations: "true"
+      enable_invitations: "false"
       poll_interval: 30
       app_details_poll_interval: 10
     ```
@@ -144,7 +149,7 @@ The following are all of the configurable Apps Manager base settings:
   </tr>
 <tr><td>currency\_lookup</td><td>{"usd":"$","eur":"€"}</td><td>Supported currency symbols</td></tr>
 <tr><td>display\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
-<tr><td>enable\_invitations</td><td>true</td><td>Enable inviting users through the invitation service</td></tr>
+<tr><td>enable\_invitations</td><td>false</td><td>Enable inviting users through the invitation service</td></tr>
 <tr><td>poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
 <tr><td>app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
 </table>
@@ -330,7 +335,7 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
   </tr>
 <tr><td>apps\_manager.currency\_lookup</td><td> '{"usd":"$","eur":"€"}'</td><td>Supported currency symbols</td></tr>
 <tr><td>apps\_manager.display\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
-<tr><td>apps\_manager.enable\_invitations</td><td>true</td><td>Enable inviting users through the invitation service</td></tr>
+<tr><td>apps\_manager.enable\_invitations</td><td>false</td><td>Enable inviting users through the invitation service</td></tr>
 <tr><td>apps\_manager.poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
 <tr><td>apps\_manager.app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
 <tr><td>apps\_manager.whitelabeling.app\_icon</td><td>tanzu icon</td><td>Icon for apps manager UAA portal link</td></tr>
