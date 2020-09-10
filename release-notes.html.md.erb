@@ -12,7 +12,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 
 ## <a id='0-4-0'></a> v0.4.0
 
-**Release Date**: TBD, 2020
+**Release Date**: September 3, 2020
 
 ### <a id='product-snapshot'></a>Product Snapshot
 
@@ -27,7 +27,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
   <tr>
     <td>Release date</td>
-    <td>TBD, 2020</td>
+    <td>September 3, 2020</td>
   </tr>
 </table>
 To download VMware TAS for Kubernetes v0.4.0, see 
@@ -46,7 +46,27 @@ TAS for Kubernetes uses the following components:
   </tr>
   <tr>
     <td>cf-for-k8s</td>
-    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/9854f5b0e250fbdf11b33abd956ae5a53efe7866">Commit 9854f5b</a></td>
+    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/80c2f99a67f761b540f035f8d1bdd8360aa52a13">Commit 80c2f99</a></td>
+  </tr>
+  <tr>
+    <td>Usage Service</td>
+    <td><a href="https://github.com/pivotal/usage-service-k8s-release/commit/d3ba9e2f08cd8241c128f30e2ddbf9fbb9e52ab0">Commit d3ba9e2</a></td>
+  </tr>
+  <tr>
+    <td>Apps Manager</td>
+    <td><a href="https://github.com/pivotal/apps-manager-k8s-release/commit/792c6a0e2a634470399a7789d68485898323b90e">Commit 792c6a0</a></td>
+  </tr>
+  <tr>
+    <td>Node.js Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-nodejs-buildpack/">v1.0.4</a></td>
+  </tr>
+  <tr>
+    <td>Go Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-go-buildpack/">v1.0.3</a></td>
+  </tr>
+  <tr>
+    <td>Java Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-java-buildpack/">v2.5.0</a></td>
   </tr>
   <tr>
     <td>Istio</td>
@@ -91,7 +111,7 @@ TAS for Kubernetes requires the following components:
 #%>
   <tr>
     <td>kapp</td>
-    <td>v0.29.0 or later</td>
+    <td>0.33.0 or later</td>
   </tr>
   <tr>
     <td>kbld</td>
@@ -177,7 +197,10 @@ TAS for Kubernetes can be deployed and managed from the following desktop OS env
 
 New features and changes in this release:
 
-- None
+- TAS for Kubernetes incorporates Apps Manager
+- TAS for Kubernetes incorporates Usage Service
+- TAS for Kubernetes incorporates Tanzu Buildpacks (with support for airgapped app staging) for Java, NodeJS, and Golang
+- Security enhancements
 
 ### <a id='breaking-0-4-0'></a> Breaking Changes
 
