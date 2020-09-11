@@ -121,7 +121,7 @@ To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
 
     ```
     kbld package -f <(ytt \
-                   -f config/image_overrides.yml \
+                   -f config/image-overrides.yml \
                    -f config/values.yml ) \
                    --output /tmp/images.tar
     ```
@@ -152,7 +152,7 @@ To upload the TAS for Kubernetes images to the private registry:
     * If your client has the private registry CA certificates:  
 
         ```
-        kbld unpackage -f <(ytt -f config/image_overrides.yml \
+        kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/values.yml) \
                          -i /tmp/images.tar \
                          -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
@@ -168,7 +168,7 @@ To upload the TAS for Kubernetes images to the private registry:
     * If your client does not have the private registry CA certificates:  
 
         ```
-        kbld unpackage -f <(ytt -f config/image_overrides.yml \
+        kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/values.yml) \
                          -i /tmp/images.tar \
                          -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
@@ -186,7 +186,7 @@ To upload the TAS for Kubernetes images to the private registry:
 
 To customize your configuration files for your private registry: 
 
-1. Move the `config/image_overrides.yml` file to the `config-optional` directory.
+1. Move the `config/image-overrides.yml` file to the `config-optional` directory.
 1. To point the system registry variables to the private registry, 
 modify the `configuration-values/system-registry-values.yml` as follows:
 
