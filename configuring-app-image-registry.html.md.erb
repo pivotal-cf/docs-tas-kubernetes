@@ -13,35 +13,23 @@ for TAS for Kubernetes.
 TAS for Kubernetes pulls system component container images 
 from the [VMware Tanzu Network container registry](https://registry.pivotal.io/), 
 and retains those images in a private container image registry. 
-    
-<p class="note"><strong>Note:</strong> The YAML files in this topic use 
-  <code>ytt</code> syntax in their first line. 
-  For more information about <code>ytt</code>, see <a href="https://get-ytt.io/">ytt</a>.
-</p>
-
-## <a id='prerequisites'></a>Prerequisites 
 
 Before you begin this procedure, ensure that you have 
 created a private container image registry. VMware recommends that you use a VMware Harbor registry 
 as your container image registry.
 
-## <a id='configure-app-registry'></a> Configure a Harbor Container Image Registry
+This topic covers:
 
-TAS for Kubernetes retains system component container images 
-in a private container image registry. VMware recommends that you use a VMware Harbor registry 
-as your container image registry.
-
-To configure a container image registry for Tanzu Application Services for Kubernetes:
-
-* Configure a Harbor registry:
+* [Using Harbor as Your Application Image Registry](#configure-harbor-registry)
     1. [Create a Harbor Project and User Account](#harbor-project-user)
     1. [Configure the Harbor Project](#harbor-project-configure)
     1. [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
     1. [Create the Configuration File](#harbor-config-file)
 
-* Configure a different type of registry: 
-    [Create the Configuration File for a Different Image Registry]
-    (#configure-other-registry)
+* [Using a Different Image Registry](#configure-other-registry) 
+
+
+## <a id='configure-harbor-registry'></a> Using Harbor as Your Application Image Registry
 
 ### <a id='harbor-project-user'></a> Create a Harbor Project and User Account
 
@@ -73,8 +61,8 @@ in the Harbor documentation.
 <p class="note"><strong>Note:</strong> 
   If you specify custom project and user names in the 
   Harbor configuration procedure above, use the same names when configuring the 
-  <code>app-registry-values.yml</code> file. See <a href="#harbor-config-file">
-    Create the Image Registry Configuration File</a>, below. 
+  <code>values.yml</code> file. See <a href="#harbor-config-file">
+    Configure the App Image Registry</a>, below. 
 </p>
 
 ### <a id='harbor-project-configure'></a> Configure the Harbor Project
@@ -139,28 +127,20 @@ scroll down to the **Certificate Authority (CA)** field.
 
  
 
-### <a id='harbor-config-file'></a> Create the Harbor Image Registry Configuration File
+### <a id='harbor-config-file'></a> Configure the App Image Registry
 
 To configure TAS for Kubernetes to use your private container image registry:
 
-1. Change directory into the `configuration-values` directory you created earlier.
+1. Change directory into the `configuration-values` directory you created earlier, and open the `values.yml` file in the `configuration-values` directory.
 
-1. Create a file named `app-registry-values.yml` in the `configuration-values` directory.
-1. Populate the `configuration-values` file with the following:  
+1. In the `app_registry` section of the file, populate with the following:  
 
     ```yaml
-    #@data/values
-    ---
     app_registry:
       ca: |
         -----BEGIN CERTIFICATE-----
         CA-CERTIFICATE-CONTENT
         -----END CERTIFICATE-----
-
-    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
-    #@data/values
-    ---
-    app_registry:
       hostname: "HARBOR-FQDN"
       repository_prefix: "HARBOR-FQDN/tas-app-images"
       username: "tas-app-images-push-pull"
@@ -174,34 +154,25 @@ To configure TAS for Kubernetes to use your private container image registry:
     registry. Ensure each line of the CA certificate value is indented four spaces, 
     matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
 1. Save the file.
-1. After creating the image registry configuration file, proceed to the
-[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
 
-### <a id='configure-other-registry'></a> Create the Configuration File for a Different Image Registry
+After configuring the application image registry, proceed to the
+[Configuring System Image Registry](configuring-sys-image-registry.html) topic.
 
-In addition to supporting a VMware Harbor registry as a container image registry,
-TAS for Kubernetes also supports using other container image 
-registries, such as a Google Container Registry (GCR) or Docker Hub registry. 
+## <a id='configure-other-registry'></a> Using a Different Image Registry
+
+In addition to supporting a VMware Harbor registry as a container image registry, TAS for Kubernetes also supports using other container image registries, such as a Google Container Registry (GCR) or Docker Hub registry. 
 
 To use a container image registry other than a Harbor registry:
 
-1. Change directory into the `configuration-values` directory you created earlier.
-1. Create a file named `app-registry-values.yml` in the `configuration-values` directory.
-1. Populate the `configuration-values` file with the following: 
+1. Change directory into the `configuration-values` directory you created earlier and open `values.yml`.
+1. Populate the `app_registry` section with the following: 
 
-    ```yml
-    #@data/values
-    ---
+    ```yaml
     app_registry:
       ca: |
         -----BEGIN CERTIFICATE-----
         CA-CERTIFICATE-CONTENT
         -----END CERTIFICATE-----
-
-    #@library/ref "@github.com/cloudfoundry/cf-for-k8s"
-    #@data/values
-    ---
-    app_registry:
       hostname: "HOST-FQDN"
       repository_prefix: "REPOSITORY"
       username: "APP-REGISTRY-USERNAME"
@@ -215,6 +186,8 @@ To use a container image registry other than a Harbor registry:
     * `APP-REGISTRY-USERNAME` is the username for an account with access to the 
     TAS for Kubernetes project within your registry. 
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
+
 1. Save the file.
-1. After creating the image registry configuration file, proceed to the
-[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html) topic.
+
+After configuring the application image registry, proceed to the
+[Configuring System Image Registry](configuring-sys-image-registry.html) topic.
