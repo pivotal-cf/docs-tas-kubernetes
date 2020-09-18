@@ -10,12 +10,30 @@ from the VMware Tanzu Network and from a relocated image in a private container 
 
 Before installing TAS for Kubernetes:  
 
-1. Ensure you have a [VMware Tanzu Network](https://network.pivotal.io/) account to use 
-to download container images from the VMware Tanzu Network Registry. 
-   Ensure this account has a signed TAS for Kubernetes EULA.
-1. Ensure that you have configured all of the required or recommended 
-installation resources by reviewing 
+1. Ensure that you have configured all of the required or recommended installation resources by reviewing 
 [Configuring Installation Values](configuring-installation-values.html).
+1. Ensure that you have [configured the Apps Manager](configuring-apps-manager.html).
+1. [Generate internal configuration values](#generate-configuration-values) for system components.
+
+
+### <a id='generate-configuration-values'></a> Generate Internal Configuration Values
+
+TAS for Kubernetes requires internal configuration values, credentials and certificates to coordinate its components. These configuration values, credentials and certificates must be supplied to the TAS for Kubernetes installation script.  
+
+To generate the internal values, credentials and certificates needed during TAS for Kubernetes installation, use a helper script in the installation resources:
+
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories. Change to the `tanzu-application-service` directory.
+
+1. Run the value-generation script and store its output in the `configuration-values` directory:
+
+    ```bash
+    ./bin/generate-values.sh -d "SYSTEM-DOMAIN" > ../configuration-values/deployment-values.yml
+    ```
+
+    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.  
+
+<p class="note">If in the previous step <a href="configuring-installation-values.html">Configuring Installation Values</a> you didn't provide the certs for <code>system-certificate</code> and <code>workload-certificate</code>, this script will generate one for you, which is self-signed.
+</p>
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 

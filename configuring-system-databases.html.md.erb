@@ -1,0 +1,77 @@
+---
+title: Configuring Your System Databases
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to configure Tanzu Application Service for Kubernetes to use Postgres for UAA, Cloud Controller and Usage Service.
+
+## <a id='overview'></a>Overview
+
+The TAS for Kubernetes system components UAA, Cloud Controller and Usage Service all require their own Postgres databases.  
+
+## <a id='prerequisites'></a>Prerequisites
+
+Before you begin this procedure, ensure that:  
+
+1. you have created a Postgres database for each of the following:  
+    * Cloud Controller
+    * UAA
+    * Usage Service
+
+    For more information about Postgres database, see [Postgres for VMware Tanzu](https://network.pivotal.io/products/pivotal-postgres-for-kubernetes/).
+
+1. make sure that the databases support case-insensitivive strings. You may run the following postgres command for each database:
+
+    ```bash
+    CREATE EXTENSION citext
+    ```
+
+1. Establish a Certificate Authority (CA) certificate for each database.  
+
+1. Create a service account role/user on each database.  
+
+## <a id='config-database'></a> Configure the Databases for the System Components
+
+1. Change directory into the `configuration-values` directory and open the `value.yml` file.
+1. Populate the system component secion with the following:
+
+    ```yaml
+    capi:
+      database:
+        host: "CCDB-HOSTNAME"
+        user: cloud_controller
+        password: "CCDB-PASSWORD"
+        name: cloud_controller
+
+    uaa:
+      database:
+        host: "UAADB-HOSTNAME"
+        user: uaa
+        password: "UAADB-PASSWORD"
+        name: uaa
+
+    usage_service:
+      database:
+        host: "USAGE-SERVICE-DB-HOSTNAME"
+        user: usage_service
+        password: "USAGE-SERVICE-DB-PASSWORD"
+        name: usage_service
+     ```
+
+    Where:
+    * `host` is the fully qualified domain name for the respective component database server.
+    * `user` is the name of the user that accesses the respective database, defaulted to the compnent name.
+    * `password` is the password of database user.
+    * `name` is the name of database, defaulted to its respective component name.
+    * Optionally if you want to use your own CA certs for these databases, add these lines below the database name:
+        
+        ```yaml
+        ca_cert: |
+          -----BEGIN CERTIFICATE-----
+          CCDB-CA-CERTIFICATE-CONTENT
+          -----END CERTIFICATE-----
+        ```
+1. Save the file.
+
+After configuring the databases, proceed to the
+[Configuring Apps Manager](configuring-apps-manager.html) topic.
