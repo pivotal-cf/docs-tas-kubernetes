@@ -10,7 +10,7 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
 
 <%= partial 'limitation_notes' %>
 
-## <a id='0-4-0'></a> v0.4.0
+## <a id='0-5-0'></a> v0.5.0
 
 **Release Date**: TBD, 2020
 
@@ -23,19 +23,19 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
   <tr>
     <td>Version</td>
-    <td>v0.4.0</td>
+    <td>v0.5.0</td>
   </tr>
   <tr>
     <td>Release date</td>
     <td>TBD, 2020</td>
   </tr>
 </table>
-To download VMware TAS for Kubernetes v0.4.0, see 
+To download VMware TAS for Kubernetes v0.5.0, see
 [VMware Tanzu Application Service for Kubernetes]
-(https://network.pivotal.io/products/tas-for-kubernetes) 
+(https://network.pivotal.io/products/tas-for-kubernetes)
 on the _VMware Tanzu Network_.
 
-#### <a id='installed-components'></a>Installed With 0.4.0
+#### <a id='installed-components'></a>Installed With 0.5.0
 
 TAS for Kubernetes uses the following components:
 
@@ -83,7 +83,7 @@ TAS for Kubernetes requires the following components:
   <tr>
     <td>Harbor Registry</td>
     <td>.</td>
-  </tr>   
+  </tr>  
   <tr>
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
@@ -146,7 +146,7 @@ TAS for Kubernetes supports the following Kubernetes distributions:
 
 #### <a id='supported-environments'></a>Supported Environments
 
-TAS for Kubernetes can be deployed and managed from the following desktop OS environments:  
+TAS for Kubernetes can be deployed and managed from the following desktop OS environments: 
 
 * 64-bit Mac OS
 * 64-bit Linux OS
@@ -170,10 +170,10 @@ TAS for Kubernetes can be deployed and managed from the following desktop OS env
     <td></td>
   </tr>
 </table>
-#%> 
+#%>
 
 
-### <a id='features-0-4-0'></a> Features
+### <a id='features-0-5-0'></a> Features
 
 New features and changes in this release:
 
@@ -183,20 +183,225 @@ New features and changes in this release:
 
 This release has the following breaking changes:
 
- - App registry configuration files used with TAS for Kubernetes v0.3.0 and earlier 
- are not compatible with TAS for Kubernetes v0.4.0 and later. 
+ -
+
+### <a id='known-issues-0-5-0'></a> Known Issues
+
+This release has the following issues:
+
+ -
+ -
+
+## <a id='0-4-0'></a> v0.4.0
+
+**Release Date**: September 3, 2020
+
+### <a id='product-snapshot'></a>Product Snapshot
+
+<table class="nice">
+  <tr>
+    <th>Release</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td>v0.4.0</td>
+  </tr>
+  <tr>
+    <td>Release date</td>
+    <td>September 3, 2020</td>
+  </tr>
+</table>
+To download VMware TAS for Kubernetes v0.4.0, see
+[VMware Tanzu Application Service for Kubernetes]
+(https://network.pivotal.io/products/tas-for-kubernetes)
+on the _VMware Tanzu Network_.
+
+#### <a id='installed-components'></a>Installed With v0.4.0
+
+TAS for Kubernetes uses the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>cf-for-k8s</td>
+    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/80c2f99a67f761b540f035f8d1bdd8360aa52a13">Commit 80c2f99</a></td>
+  </tr>
+  <tr>
+    <td>Usage Service</td>
+    <td><a href="https://github.com/pivotal/usage-service-k8s-release/commit/d3ba9e2f08cd8241c128f30e2ddbf9fbb9e52ab0">Commit d3ba9e2</a></td>
+  </tr>
+  <tr>
+    <td>Apps Manager</td>
+    <td><a href="https://github.com/pivotal/apps-manager-k8s-release/commit/792c6a0e2a634470399a7789d68485898323b90e">Commit 792c6a0</a></td>
+  </tr>
+  <tr>
+    <td>Node.js Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-nodejs-buildpack/">v1.0.4</a></td>
+  </tr>
+  <tr>
+    <td>Go Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-go-buildpack/">v1.0.3</a></td>
+  </tr>
+  <tr>
+    <td>Java Buildpack for VMware Tanzu</td>
+    <td><a href="https://network.pivotal.io/products/tanzu-java-buildpack/">v2.5.0</a></td>
+  </tr>
+  <tr>
+    <td>Istio</td>
+    <td>v1.4.5</td>
+  </tr>
+  <tr>
+    <td>kpack</td>
+    <td>v0.0.9</td>
+  </tr>
+</table>
+
+#### <a id='additional-components'></a>Required Additional Components
+
+TAS for Kubernetes requires the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>BOSH CLI</td>
+    <td>v6.3.1</td>
+  </tr>
+  <tr>
+    <td>cf CLI</td>
+    <td>v6.51.0</td>
+  </tr>
+<%#
+  <tr>
+    <td>Docker CLI</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <td>Harbor Registry</td>
+    <td>.</td>
+  </tr>  
+  <tr>
+    <td>kubectl, the Kubernetes CLI</td>
+    <td>.</td>
+  </tr>
+#%>
+  <tr>
+    <td>kapp</td>
+    <td>v0.33.0 or later</td>
+  </tr>
+  <tr>
+    <td>kbld</td>
+    <td>v0.23.0 or later</td>
+  </tr>
+  <tr>
+    <td>ytt</td>
+    <td>v0.28.0 or later</td>
+  </tr>
+</table>
+
+<%#
+#### <a id='optional-components'></a>Optional Components
+
+TAS for Kubernetes supports the following optional components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th>Details</th>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td>.</td>
+  </tr>
+</table>
+#%>
+
+#### <a id='supported-platforms'></a>Supported Kubernetes Distributions
+
+TAS for Kubernetes supports the following Kubernetes distributions:
+
+<table class="nice">
+  <tr>
+    <th>Platform</th>
+    <th width=40%>Version</th>
+  </tr>
+  <tr>
+    <td>Tanzu Kubernetes Grid</td>
+    <td>v1.0, with <code>metrics-server</code></td>
+  </tr>
+  <tr>
+    <td>VMware Enterprise PKS</td>
+    <td>v1.6 or v1.7</td>
+  </tr>
+</table>
+
+
+#### <a id='supported-environments'></a>Supported Environments
+
+TAS for Kubernetes can be deployed and managed from the following desktop OS environments: 
+
+* 64-bit Mac OS
+* 64-bit Linux OS
+
+<%#
+<table class="nice">
+  <tr>
+    <th>Deployment Environment</th>
+    <th >Version</th>
+  </tr>
+  <tr>
+    <td>vSphere with Flannel</td>
+    <td>.</td>
+  </tr>
+  <tr>
+    <th>Supported IaaSs</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>.</td>
+    <td></td>
+  </tr>
+</table>
+#%>
+
+
+### <a id='features-0-4-0'></a> Features
+
+New features and changes in this release:
+
+- TAS for Kubernetes incorporates Apps Manager
+- TAS for Kubernetes incorporates Usage Service
+- TAS for Kubernetes incorporates Tanzu Buildpacks (with support for airgapped app staging) for Java, NodeJS, and Golang
+- Security enhancements
+
+### <a id='breaking-0-4-0'></a> Breaking Changes
+
+This release has the following breaking changes:
+
+ - App registry configuration files used with TAS for Kubernetes v0.3.0 and earlier
+ are not compatible with TAS for Kubernetes v0.4.0 and later.
  For information about the current app registry configuration file
  format, see [Create the Harbor Image Registry Configuration File]
- (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-app-image-registry.html#harbor-config-file)
+ (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-image-registries.html#harbor-config-file)
  and [Create the Configuration File for a Different Image Registry]
- (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-app-image-registry.html#configure-other-registry).
+ (https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-image-registries.html#configure-other-registry).
 
 ### <a id='known-issues-0-4-0'></a> Known Issues
 
 This release has the following issues:
 
- - **Apps Manager** does not support inviting members.
- - **Apps Manager** does not support creating container networking policies for apps.
+ - **Apps Manager** does not support inviting members. 
+ - **Apps Manager** does not support creating container networking policies for apps. 
 
 ## <a id='0-3-0'></a> v0.3.0
 
