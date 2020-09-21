@@ -118,6 +118,10 @@ The `values.yml` file gives you the flexibility to configure different parts of 
 
 1. **System databases configuration:**
 
+    TAS For Kubernetes requires credentials to an external database.
+
+    For instructions to configure the system database, see [Configuring System Database](configuring-system-databases.html)
+
     ```yaml
     capi:
       database:
@@ -138,6 +142,5 @@ The `values.yml` file gives you the flexibility to configure different parts of 
         password: ""
         name: usage_service
     ```
-    For more information about configuring the system databases, see [Configuring System Databases](configuring-system-databases.html)
 
 1. **Apps Manager configration:** for more information, see [Configuring Apps Manger](configuring-apps-manager.html)
