@@ -7,126 +7,33 @@ This topic describes how to configure Tanzu Application Service for Kubernetes t
 
 ## <a id='overview'></a>Overview
 
-The TAS for Kubernetes system components UAA, Cloud Controller and Usage Service all require their own Postgres databases.
+The TAS for Kubernetes system components UAA, Cloud Controller and Usage Service all require their own Postgres databases.  
 
-## <a id='setup-external-postgres-databases'></a>Setup the External Postgres Databases
+## <a id='prerequisites'></a>Prerequisites
 
-If using [Postgres for VMware Tanzu](https://network.pivotal.io/products/pivotal-postgres-for-kubernetes/), skip to [these specific setup instructions](#configure-tanzu-postgres).
+Before you begin this procedure, ensure that:  
 
-To configure the external postgres databases for use, complete the following:
-
-1. Create a Postgres database for each of the following:
+1. you have created a Postgres database for each of the following:  
     * Cloud Controller
     * UAA
     * Usage Service
 
-1. Make sure that the databases support case-insensitivive strings. You may run the following postgres command for each database:
+    For more information about Postgres database, see [Postgres for VMware Tanzu](https://network.pivotal.io/products/pivotal-postgres-for-kubernetes/).
+
+1. make sure that the databases support case-insensitivive strings. You may run the following postgres command for each database:
 
     ```bash
     CREATE EXTENSION citext
     ```
 
-1. Establish a Certificate Authority (CA) certificate for each database.
+1. Establish a Certificate Authority (CA) certificate for each database.  
 
-1. Create a service account role/user on each database.
+1. Create a service account role/user on each database.  
 
-Once everything is setup, proceed to [configuring the databases for system components](#config-databases).
-
-## <a id='configure-tanzu-postgres'></a> Configure Tanzu Postgres
-
-Ensure that you have [installed Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/0-4/installing.html) and [created the Postgres Operator release](http://postgres-kubernetes.docs.pivotal.io/0-4/create-release.html) on your cluster.
-
-Then to create and configure the Tanzu postgres databases for use, complete the following:
-
-1. Create a file named `postgres-databases.yml` and copy the following into the file
-```
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: postgres-dbs
----
-apiVersion: "postgres.pivotal.io/v1"
-kind: "PostgresInstance"
-metadata:
-  name: ccdb
-  namespace: postgres-dbs
-spec:
-  memory: "800Mi"
-  cpu: "0.5"
-  storageClassName: STORAGE-CLASS
-  serviceType: ClusterIP
-  storageSize: 300M
-  pgConfig:
-    dbname: cloud_controller
-    username: cloud_controller
----
-apiVersion: "postgres.pivotal.io/v1"
-kind: "PostgresInstance"
-metadata:
-  name: uaadb
-  namespace: postgres-dbs
-spec:
-  memory: "800Mi"
-  cpu: "0.5"
-  storageClassName: STORAGE-CLASS
-  serviceType: ClusterIP
-  storageSize: 300M
-  pgConfig:
-    dbname: uaa
-    username: uaa
----
-apiVersion: "postgres.pivotal.io/v1"
-kind: "PostgresInstance"
-metadata:
-  name: usagedb
-  namespace: postgres-dbs
-spec:
-  memory: "800Mi"
-  cpu: "0.5"
-  storageClassName: STORAGE-CLASS
-  serviceType: ClusterIP
-  storageSize: 300M
-  pgConfig:
-    dbname: usage_service
-    username: usage_service
-```
-where `STORAGE-CLASS` is the name of your Storage Class that you want to use for the databases.
-
-1. Target your Kubernetes cluster and apply this file in order to create a postgres namespace and three databases for Cloud Controller, UAA, and Usage Service:
-```
-kubectl apply -f postgres-databases.yml
-```
-The hostnames for each of the databases created is as follows:
-```
-USAGE-SERVICE-DB-HOSTNAME=usagedb.postgres-dbs
-UAADB-HOSTNAME=uaadb.postgres-dbs
-CCDB-HOSTNAME=ccdb.postgres-dbs
-```
-
-1. At this point, three databases should be provisioned. Run the following script to make sure that the databases support case-insensitivive strings:
-```
-kubectl exec -it -n postgres-dbs ccdb-0 -- psql -d ccdb -c "CREATE EXTENSION citext"
-kubectl exec -it -n postgres-dbs uaadb-0 -- psql -d uaadb -c "CREATE EXTENSION citext"
-kubectl exec -it -n postgres-dbs usagedb-0 -- psql -d usagedb -c "CREATE EXTENSION citext"
-```
-
-1. Retrieve the password for each of the databases. This will be used when [configuring the databases for the system components](#config-databases).
-```
-CCDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs ccdb-db-secret -o yaml ) | base64 -d`
-UAADBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs uaadb-db-secret -o yaml ) | base64 -d`
-USAGEDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs usagedb-db-secret -o yaml ) | base64 -d`
-
-cat <<EOT
-USAGE-SERVICE-DB-PASSWORD=${USAGEDBPW}
-UAADB-PASSWORD=${UAADBPW}
-CCDB-PASSWORD=${CCDBPW}
-EOT
-```
-
-## <a id='config-databases'></a> Configure the Databases for the System Components
+## <a id='config-database'></a> Configure the Databases for the System Components
 
 1. Change directory into the `configuration-values` directory and open the `value.yml` file.
-1. Populate the system component section with the following:
+1. Populate the system component secion with the following:
 
     ```yaml
     capi:
@@ -157,7 +64,7 @@ EOT
     * `password` is the password of database user.
     * `name` is the name of database, defaulted to its respective component name.
     * Optionally if you want to use your own CA certs for these databases, add these lines below the database name:
-
+        
         ```yaml
         ca_cert: |
           -----BEGIN CERTIFICATE-----
