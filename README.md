@@ -16,6 +16,10 @@ The _book_ repo uses these branches:
 Pipeline [here](https://concourse.run.pivotal.io/teams/cf-docs/pipelines/pas-kubernetes?group=tas-kubernetes-edge).
 * **Master** builds from the published content branches in this repo. Pipeline [here](https://concourse.run.pivotal.io/teams/cf-docs/pipelines/pas-kubernetes?group=pas-kubernetes-0-1).
 
+## Where is the Concourse pipeline?
+
+https://concourse.run.pivotal.io/teams/cf-docs/pipelines/pas-kubernetes
+
 ## Branches in this (content) repo
 
 All documentation for the next unreleased version of Tanzu Application Service for Kubernetes is in `master`.
@@ -28,7 +32,9 @@ Always make changes you want carried forward in the master branch. This includes
 
 | Branch Name| Status | Use for version… |
 |------------| -------|----------|
-| master     | in development | v0.3 (staged here: http://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/) |
+| master     | in development | v0.5 (staged here: http://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/) |
+| 0.4        | hidden beta (?) | v0.4 (http://docs-pcf-staging.cfapps.io/tas-kubernetes/0-4/) |
+| 0.3        | live, published | v0.3 (http://docs.pivotal.io/tas-kubernetes/0-3/) |
 | 0.2        | live, published | v0.2 (http://docs.pivotal.io/tas-kubernetes/0-2/) |
 | 0.1        | live, published | v0.1 (http://docs.pivotal.io/tas-kubernetes/0-1/) |
 | 2.6.0      | obsolete | v2.6.0-alpha.1 obsolete and removed from docs.pivotal.io and redirect made. Keep branch for historical record. Pipeline already down. (https://docs.pivotal.io/pas-kubernetes/2-6-0-alpha-1 redirects to new docs.) |
