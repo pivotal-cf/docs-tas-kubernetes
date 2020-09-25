@@ -3,22 +3,35 @@ title: Configuring Your System Databases
 owner: Tanzu Application Service Release Engineering
 ---
 
+<strong><%= modified_date %></strong>
+
+This topic describes how to configure Tanzu Application Service for Kubernetes (TAS for Kubernetes) to use Tanzu Postgres for User Account and Authentication (UAA), Cloud Controller, and Usage service.
+
 ## <a id='overview'></a>Overview
 
-The TAS for Kubernetes system components UAA, Cloud Controller and Usage Service all require their own Postgres databases. This topic describes how to configure Tanzu Application Service for Kubernetes to use Postgres for UAA, Cloud Controller and Usage Service.
+UAA, Cloud Controller, and Usage service require individual Tanzu Postgres databases. 
 
-This topic describes:
+To create and configure databases for these system components:
 
-  * Provision Tanzu Postgres Databases
-  * Configure the Databases for the System Components
+  1. [Provision Tanzu Postgres Databases](#provision-postgres-databases)
+  1. [Configure the Databases for the System Components](#config-databases)
+
+## <a id='prerequisites'></a> Prerequisites
+
+Before you provision the databases, you must:
+
+* Install Tanzu Postgres. See [Installing VMware Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/0-4/installing.html).
+* Create the Postgres operator release on your cluster. See [Creating a Postgres Operator Release](http://postgres-kubernetes.docs.pivotal.io/0-4/create-release.html).
 
 ## <a id='provision-postgres-databases'></a>Provision Tanzu Postgres Databases
 
-Ensure that you have [installed Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/0-4/installing.html) and [created the Postgres Operator release](http://postgres-kubernetes.docs.pivotal.io/0-4/create-release.html) on your cluster.
+The UAA, Cloud Controller, and Usage service each need a Tanzu Postgres database.
 
-Then to create and configure the Tanzu postgres databases for use, complete the following:
+To configure these three databases:
 
-1. Create a file named `postgres-databases.yml` in the `configuration-values` directory and copy the following into the file
+1. Create a file named `postgres-databases.yml` in the `configuration-values` directory.
+
+1. Copy and paste the following text into the `postgres-databases.yml` file:
 
     ```
     apiVersion: v1
@@ -72,7 +85,7 @@ Then to create and configure the Tanzu postgres databases for use, complete the 
         username: usage_service
     ```
 
-    where `STORAGE-CLASS` is the name of your Storage Class that you want to use for the databases.
+1. Replace `STORAGE-CLASS` with the name you want to use for the Storage Class for databases.
 
 1. Target your Kubernetes cluster and apply this file in order to create a postgres namespace and three databases for Cloud Controller, UAA, and Usage Service:
 
