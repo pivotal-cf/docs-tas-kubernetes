@@ -41,19 +41,27 @@ The `values.yml` file gives you the flexibility to configure different parts of 
 1. **LoadBalancer service configuration:**
     
     ```yaml
-     enable_load_balancer: False
+    ingress:
+      load_balancer:
+        enable: False
+        static_external_ip: ""
+      external_traffic_policy: "Local"
     ```
 
-    Keep this configuration `False` if you are deploying to one of these:    
+    Keep `ingress.load_balancer.enable` set to `False` if you are deploying to one of these:    
       * Tanzu Kubernetes Grid on vSphere
       * VMware Enterprise PKS on vSphere with Flannel container networking
     
-    Change this configuration `True` to if you are deploying to one of these:
+    Change `ingress.load_balancer.enable` to `True` to provision the Kubernetes ingress with a LoadBalancer Istio ingress service if you are deploying to one of these:
     <ul>
       <li>VMware Enterprise PKS on AWS, Azure or GCP</li>
       <li>Tanzu Kubernetes Grid on AWS</li>
       <li>vSphere with NSX-T container networking</li>   
     </ul>
+
+    If you are provisioning the Kubernetes ingress with a LoadBalancer, you may provide a static external IP for it using `static_external_ip`.
+
+    For environments (like TKGs) that don't support the `Local` for `external_traffic_policy`, you may need to set it to `Cluster` instead.
 
     <p class="note">The above mentioned Kubernetes clusters support Kubernetes Services of type LoadBalancer. Enabling the LoadBalancer for your deployment will provision a load balancer for the Istio ingress gateway required by the TAS system. For more information, see <a href="https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types">Kubernetes Services</a> in the Kubernetes documentation. </p> 
 
