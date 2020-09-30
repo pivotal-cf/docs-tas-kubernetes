@@ -79,14 +79,17 @@ The `values.yml` file gives you the flexibility to configure different parts of 
     * `key` is a Base64-encoded private key
     * `ca` is a Base64-encoded CA certificate used to sign the respective certifcate
 
-1. **Application containers certificates configuration:** Optionally you can provide a certificate for the TAS deployed applications to trust. This certificate will be injected into the application trust store, so that the applications can communicate with each other in a secure manner:
+1. **Application containers certificates configuration:** Optionally you can provide one or more certificates for the TAS deployed applications to trust. These certificates will be injected into the application trust store, so that the applications can communicate with each other in a secure manner:
     
     ```yaml
      app_containers:
         #! PEM encoded Certificate Authority
         ca: |
           -----BEGIN CERTIFICATE-----
-          CA-CERTIFICATE-CONTENT
+          FIRST-CA-CERTIFICATE-CONTENT
+          -----END CERTIFICATE-----
+          -----BEGIN CERTIFICATE-----
+          SECOND-CA-CERTIFICATE-CONTENT
           -----END CERTIFICATE-----
     ```
 
