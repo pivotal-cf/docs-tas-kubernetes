@@ -104,9 +104,9 @@ To configure these three databases:
 1. At this point, three databases should be provisioned. Run the following script to make sure that the databases support case-insensitivive strings:
 
     ```bash
-    kubectl exec -it -n postgres-dbs ccdb-0 -- psql -d ccdb -c "CREATE EXTENSION citext"
-    kubectl exec -it -n postgres-dbs uaadb-0 -- psql -d uaadb -c "CREATE EXTENSION citext"
-    kubectl exec -it -n postgres-dbs usagedb-0 -- psql -d usagedb -c "CREATE EXTENSION citext"
+    kubectl exec -it -n postgres-dbs ccdb-0 -- psql -d cloud_controller -c "CREATE EXTENSION citext"
+    kubectl exec -it -n postgres-dbs uaadb-0 -- psql -d uaa -c "CREATE EXTENSION citext"
+    kubectl exec -it -n postgres-dbs usagedb-0 -- psql -d usage_service -c "CREATE EXTENSION citext"
     ```
 
 1. Retrieve the password for each of the databases. This will be used when [configuring the databases for the system components](#config-databases).
