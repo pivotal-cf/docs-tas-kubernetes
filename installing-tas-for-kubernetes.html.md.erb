@@ -84,7 +84,7 @@ To install TAS for Kubernetes:
     ```
     kbld -f <(  \
         ytt -f config \
-        -f ../configuration-values-0.3.0 | \
+        -f ../configuration-values | \
         kbld -f-) \
     -f relocated_images.yml > /tmp/final_deployment.yml
     kapp deploy -a cf -f /tmp/final_deployment.yml
