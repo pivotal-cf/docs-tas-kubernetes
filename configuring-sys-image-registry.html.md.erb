@@ -137,7 +137,7 @@ To upload the TAS for Kubernetes images to the private registry:
                          -i /tmp/images.tar \
                          -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml
-        sed -i 's/registry.pivotal.io/PRIVATE_REPOSITORY/g' relocated_images.yml
+        sed -i 's/image: registry.pivotal.io/image: 10.195.35.68/g' relocated_images.yml
         ```
 
         Where:
@@ -154,7 +154,7 @@ To upload the TAS for Kubernetes images to the private registry:
                          -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
-        sed -i 's/registry.pivotal.io/PRIVATE_REPOSITORY/g' relocated_images.yml
+        sed -i 's/image: registry.pivotal.io/image: 10.195.35.68/g' relocated_images.yml
         ```
 
         Where:
