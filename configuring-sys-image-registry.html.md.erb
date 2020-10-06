@@ -153,33 +153,10 @@ To upload the TAS for Kubernetes images to the private registry:
                          -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
+        sed -i 's/registry.pivotal.io/PRIVATE_REPOSITORY/g' relocated_images.yml
         ```
 
         Where:
         * Where `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
         * `PROJECT` is the project name in your private registry
         * `IMAGE` is the image name to reallocate the images.
-
-### <a id='configure-for-private-registry'></a> Customize Your Configuration to Use Your Private System Registry
-
-To customize your configuration files for your private registry: 
-
-1. To point the system registry variables to the private registry, 
-modify the `configuration-values/values.yml` as follows:
-
-    ```
-    #@data/values
-    ---
-    system_registry:
-      hostname: "REGISTRY-HOSTNAME"
-      username: "REGISTRY-USERNAME"
-      password: "REGISTRY-PASSWORD"
-    ```
-
-    Where:
-    * `REGISTRY-HOSTNAME` is the hostname of your private registry.
-    * `REGISTRY-USERNAME` is a user account with write access to the private registry. 
-    * `REGISTRY-PASSWORD` is the password for the user account.  
-
-After configuring the system image registry, proceed to the
-[Configuring System Database](configuring-system-databases.html) topic.
