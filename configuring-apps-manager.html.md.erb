@@ -86,7 +86,7 @@ apps_manager:
   poll_interval: 30
 
   resources:
-    instances: 1
+    instances: 2
 
   whitelabeling:
     accent_color: "#00A79D"
@@ -166,7 +166,7 @@ should be a well formatted YAML file.
     apps_manager:
 
       resources:
-        instances: 1
+        instances: 2
     ```
 1. Save the configuration file.
 
@@ -178,7 +178,7 @@ The following are all of the configurable Apps Manager resource usage settings:
     <th width="20%">Default Value</th>
     <th width="40%">Description</th>
   </tr>
-<tr><td>instances</td><td>1</td><td>Deployed instances of Apps Manager.</td></tr>
+<tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager.</td></tr>
 </table>
 
 
@@ -304,7 +304,7 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
 <tr><td>apps\_manager.whitelabeling.marketplace\_name</td><td>"Marketplace"</td><td>Name of the marketplace. Enter plain text or HTML markup</td></tr>
 <tr><td>apps\_manager.whitelabeling.marketplace\_url</td><td>"/marketplace"</td><td>Apps Manager Marketplace link to point to a custom marketplace.</td></tr>
 <tr><td>apps\_manager.whitelabeling.secondary\_navigation\_links</td><td>'[{"name":"Docs","href":"https&#58;//docs.run.pivotal.io"},{"name":"Tools","href"&#58;"/tools"}]'</td><td>List of secondary navigation links of Apps Manager. Enter json string.</td></tr>
-<tr><td>apps\_manager.resources.instances</td><td>1</td><td>Deployed Instances of Apps Manager</td></tr>
+<tr><td>apps\_manager.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
 <tr><td>search\_server.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
 </table>
 %>
