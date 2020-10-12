@@ -24,13 +24,17 @@ To generate the internal values, credentials and certificates needed during TAS 
 
 1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories. Change to the `tanzu-application-service` directory.
 
-1. Run the value-generation script and store its output in the `configuration-values` directory:
+1. Run the value-generation script and provide the path to the `configuration-values` directory:
 
     ```bash
-    ./bin/generate-values.sh -d "SYSTEM-DOMAIN" > ../configuration-values/deployment-values.yml
+    ./bin/generate-values.sh ../configuration-values
     ```
 
-    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.  
+This will create `../configuration-values/_generated-values.yml` where the generated values will be read from during installation.
+
+It also creates `../configuration-values/vars-store/tas-vars` which is the data store for the credentials and certificates. This file is not used during the installation, but may be needed for future value generation.
+
+These files contain important installation secrets and should be preserved for future installations while ensuring their contents are kept secure.
 
 <p class="note">If in the previous step <a href="configuring-installation-values.html">Configuring Installation Values</a> you didn't provide the certs for <code>system-certificate</code> and <code>workload-certificate</code>, this script will generate one for you, which is self-signed.
 </p>
