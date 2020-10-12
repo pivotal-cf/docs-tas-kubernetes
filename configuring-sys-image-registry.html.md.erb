@@ -118,16 +118,13 @@ To upload the TAS for Kubernetes images to the private registry:
 1. Log in to the private registry.  
 
     ```
-    docker login registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
+    docker login PRIVATE_REPOSITORY \
                        -u USERNAME \
                        -p PASSWORD
     ```
 
     Where:
-    * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
-    TAS for Kubernetes installation.
-    * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
-    * `REPOSITORY` is the private registry repository to log in to.
+    * `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
     * `USERNAME` is a user account with write access to the private registry. 
     * `PASSWORD` is the password for the user account. 
 
@@ -138,15 +135,15 @@ To upload the TAS for Kubernetes images to the private registry:
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/values.yml) \
                          -i /tmp/images.tar \
-                         -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
+                         -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml
+        sed -i 's/image: registry.pivotal.io/image: PRIVATE_REPOSITORY/g' relocated_images.yml
         ```
 
         Where:
-        * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
-        TAS for Kubernetes installation.
-        * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
-        * `REPOSITORY` is the private registry repository to log in to.  
+        * Where `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
+        * `PROJECT` is the project name in your private registry
+        * `IMAGE` is the image name to reallocate the images.
 <br>
     * If your client does not have the private registry CA certificates:  
 
@@ -154,38 +151,13 @@ To upload the TAS for Kubernetes images to the private registry:
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/values.yml) \
                          -i /tmp/images.tar \
-                         -r registry.SYSTEM-DOMAIN/ORG-NAME/REPOSITORY \
+                         -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
+        sed -i 's/image: registry.pivotal.io/image: PRIVATE_REPOSITORY/g' relocated_images.yml
         ```
 
         Where:
-        * Where `SYSTEM-DOMAIN` is the system domain, such as `example.com`, that you previously selected for your 
-        TAS for Kubernetes installation.
-        * `ORG-NAME` is your organization name, such as a Cloud Foundry Org name.
-        * `REPOSITORY` is the private registry repository to log in to.  
-
-### <a id='configure-for-private-registry'></a> Customize Your Configuration to Use Your Private System Registry
-
-To customize your configuration files for your private registry: 
-
-1. Move the `config/image-overrides.yml` file to the `config-optional` directory.
-1. To point the system registry variables to the private registry, 
-modify the `configuration-values/values.yml` as follows:
-
-    ```
-    #@data/values
-    ---
-    system_registry:
-      hostname: "REGISTRY-HOSTNAME"
-      username: "REGISTRY-USERNAME"
-      password: "REGISTRY-PASSWORD"
-    ```
-
-    Where:
-    * `REGISTRY-HOSTNAME` is the hostname of your private registry.
-    * `REGISTRY-USERNAME` is a user account with write access to the private registry. 
-    * `REGISTRY-PASSWORD` is the password for the user account.  
-
-After configuring the system image registry, proceed to the
-[Configuring System Database](configuring-system-databases.html) topic.
+        * Where `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
+        * `PROJECT` is the project name in your private registry
+        * `IMAGE` is the image name to reallocate the images.

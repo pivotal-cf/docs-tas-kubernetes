@@ -79,23 +79,16 @@ To install TAS for Kubernetes:
 1. Change directory to the `tanzu-applications-service` directory.
 
 1. To deploy TAS for Kubernetes using the images in the private registry:
-    * If your client has the private registry CA certificates:  
+    
 
-        ```
+    ```
+    kbld -f <(  \
         ytt -f config \
-              -f ../configuration-values | \
-              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
-        kapp deploy -a cf -f /tmp/final_deployment.yml
-        ```
-    * If your client does not have the private registry CA certificates:
-
-        ```
-        ytt -f config \
-              -f ../configuration-values | \
-              kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml \
-              --registry-verify-certs=false
-        kapp deploy -a cf -f /tmp/final_deployment.yml
-        ```
+        -f ../configuration-values | \
+        kbld -f-) \
+    -f relocated_images.yml > /tmp/final_deployment.yml
+    kapp deploy -a cf -f /tmp/final_deployment.yml
+    ```
 
 ## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
