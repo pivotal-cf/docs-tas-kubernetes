@@ -56,14 +56,14 @@ The `values.yml` file gives you the flexibility to configure different parts of 
     Keep `enable` set to `False` if you are deploying to one of these:    
     <ul>
       <li>Tanzu Kubernetes Grid on vSphere</li>
-      <li>VMware Enterprise PKS on vSphere with Flannel container networking</li>
+      <li>TKG Integrated Edition on vSphere with Flannel container networking</li>
     </ul>
 
     Change `enable` to `True` if you are deploying to one of these:
     <ul>
-      <li>VMware Enterprise PKS on AWS, Azure or GCP</li>
       <li>Tanzu Kubernetes Grid on AWS</li>
-      <li>vSphere with NSX-T container networking</li>   
+      <li>TKG Integrated Edition on AWS, Azure or GCP</li>
+      <li>TKG Integrated Edition on vSphere with NSX-T container networking</li>   
     </ul>
 
     <p class="note">The above mentioned Kubernetes clusters support Kubernetes Services of type LoadBalancer. Enabling the LoadBalancer for your deployment will provision a load balancer for the Istio ingress gateway required by the TAS system. For more information, see <a href="https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types">Kubernetes Services</a> in the Kubernetes documentation. </p>

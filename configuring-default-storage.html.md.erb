@@ -16,14 +16,14 @@ Before configuring a Kubernetes cluster default storage class, you must have:
 * A default storage class in the Kubernetes cluster.
 * The `kapp` utility.
   See [Installing Command-Line Tools](installing-command-line-tools.html).
-* If you are using a PKS-provisioned cluster, see 
-    [Provision Dynamic PVs for Use with Enterprise PKS]
-    (https://docs.pivotal.io/pks/volumes.html#dynamic-pv-pks) 
+* If you are using a TKGI-provisioned cluster, see 
+    [Provision Dynamic PVs for Use with TKGI (formerly known as Enterprise PKS)]
+    (https://docs.pivotal.io/tkgi/volumes.html#dynamic-pv) 
     in _Configuring and Using PersistentVolumes_ for additional requirements.  
 
-## <a id='configuring-vsphere-storage'></a> Configure the Default Storage for PKS-Provisioned Clusters on vSphere
+## <a id='configuring-vsphere-storage'></a> Configure the Default Storage for TKGI-Provisioned Clusters on vSphere
 
-To configure a default storage class for a PKS-provisioned Clusters on vSphere:
+To configure a default storage class for a TKGI-provisioned Clusters on vSphere:
 
 1. Create a file named `vsphere-default-storage-class.yml`.  
 1. Populate the `vsphere-default-storage-class.yml` file with the following:  
