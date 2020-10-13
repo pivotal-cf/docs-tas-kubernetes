@@ -105,7 +105,7 @@ To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
     ```
     kbld package -f <(ytt \
                    -f config/image-overrides.yml \
-                   -f config/values.yml ) \
+                   -f config/_values.yml ) \
                    --output /tmp/images.tar
     ```
 
@@ -149,7 +149,7 @@ To upload the TAS for Kubernetes images to the private registry:
 
         ```
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
-                         -f config/values.yml) \
+                         -f config/_values.yml) \
                          -i /tmp/images.tar \
                          -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
