@@ -16,7 +16,7 @@ use to download container images from the VMware Tanzu Network Registry.
 * Follow the procedures in:  
     * [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
     * [Configuring Installation Values for Tanzu Application Service for Kubernetes](configuring-installation-values.html) 
-* If installing TAS for Kubernetes from a private registry:  
+* If installing TAS for Kubernetes from a private container image registry:  
  
     * Grant write access to your private container image registry.  
 
@@ -25,9 +25,9 @@ use to download container images from the VMware Tanzu Network Registry.
 In Kubernetes, containers can be re-created at various times and a system image for the new container will be pulled 
 from your system registry. The system registry you use for TAS for Kubernetes must always be available when a container is started on a new host.  
 
-You can use either the VMware Tanzu Network or a private registry as your system registry.  
+You can use either the VMware Tanzu Network or a private container image registry as your system registry.  
 
-You should install TAS for Kubernetes from a private registry for the following situations:  
+You should install TAS for Kubernetes from a private container image registry for the following situations:  
 
 * Your deployment has limited network egress because of firewall or network bandwidth.  
 * You want to reduce the external runtime dependencies of your TAS for Kubernetes installation. 
@@ -36,8 +36,8 @@ You should install TAS for Kubernetes from a private registry for the following 
 To configure the VMware Tanzu Network as your system registry, follow the procedures in 
 [Configure the VMware Tanzu Network as Your System Registry](#configure-for-tanzu-network).
 
-To configure a private registry as your system registry, follow the procedures in 
-[Configure a Private Registry as Your System Registry](#configure-for-private).
+To configure a private container image registry as your system registry, follow the procedures in 
+[Configure a Private Container Image Registry as Your System Registry](#configure-for-private).
 
 ## <a id='configure-for-tanzu-network'></a> Configure the VMware Tanzu Network as Your System Registry
 
@@ -66,21 +66,14 @@ After configuring the system image registry, proceed to the
 [Configuring Your System Databases](configuring-system-databases.html) topic.
 
 
-## <a id='configure-for-private'></a> Configure a Private Registry as Your System Registry
+## <a id='configure-for-private'></a> Configure a Private Container Image Registry as Your System Registry
+Before installing TAS for Kubernetes from a private container image registry, 
+you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private container image registry.  
 
-To configure a private registry as your system registry:  
-
-* [Relocate TAS for Kubernetes Images](#relocate-tas-for-k8s-images)
-* [Customize Your Configuration to Use Your Private System Registry](#configure-for-private-registry)
-* [Validate Your Installation Configuration](#configure-for-private-registry)
-
-### <a id='relocate-tas-for-k8s-images'></a> Relocate TAS for Kubernetes Images
-
-Before installing TAS for Kubernetes from a private registry, 
-you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private registry:  
+To relocate the TAS for Kubernetes image to a private container image registry:  
 
 * [Download the TAS for Kubernetes Images](#downloading-the-images)
-* [Upload the TAS for Kubernetes Images to the Private Registry](#uploading-the-images)
+* [Upload the TAS for Kubernetes Images to the Private Container Image Registry](#uploading-the-images)
 
 #### <a id='downloading-the-images'></a> Download the TAS for Kubernetes Images
 
@@ -111,11 +104,11 @@ To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
 
     Packaging the image takes about 5 minutes to complete.
 
-#### <a id='uploading-the-images'></a> Upload the TAS for Kubernetes Images to the Private Registry
+#### <a id='uploading-the-images'></a> Upload the TAS for Kubernetes Images to the Private Container Image Registry
 
-To upload the TAS for Kubernetes images to the private registry:
+To upload the TAS for Kubernetes images to the private container image registry:
 
-1. Log in to the private registry.  
+1. Log in to the private container image registry.  
 
     ```
     docker login PRIVATE_REPOSITORY \
@@ -123,35 +116,34 @@ To upload the TAS for Kubernetes images to the private registry:
                        -p PASSWORD
     ```
 
-    Where:
-    * `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
-    * `USERNAME` is a user account with write access to the private registry. 
+    Where:  
+    * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.  
+    * `USERNAME` is a user account with write access to the registry. 
     * `PASSWORD` is the password for the user account. 
 
-1. Unpackage the image tarball and upload to the private registry.  
-    * If your client has the private registry CA certificates:  
+1. Unpackage the image tarball and upload to the private container image registry.  
+    * If your client has the private container image registry CA certificates:  
 
         ```
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/values.yml) \
                          -i /tmp/images.tar \
-                         -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
+                         -r PRIVATE-REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml
-        sed -i 's/image: registry.pivotal.io/image: PRIVATE_REPOSITORY/g' relocated_images.yml
         ```
 
-        Where:
-        * Where `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
-        * `PROJECT` is the project name in your private registry
-        * `IMAGE` is the image name to reallocate the images.
+        Where:  
+        * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.  
+        * `PROJECT` is the project name in the registry.  
+        * `IMAGE` is the image name to reallocate the images.  
 <br>
-    * If your client does not have the private registry CA certificates:  
+    * If your client does not have the private container image registry CA certificates:  
 
         ```
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
                          -f config/_values.yml) \
                          -i /tmp/images.tar \
-                         -r PRIVATE_REPOSITORY/PROJECT/IMAGE \
+                         -r PRIVATE-REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
         ```
