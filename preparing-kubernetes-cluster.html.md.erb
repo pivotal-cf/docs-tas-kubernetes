@@ -11,20 +11,19 @@ Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 Before creating or configuring Kubernetes clusters, 
 ensure your environment and clusters support 
-TAS for Kubernetes.  
+TAS for Kubernetes:  
 
-TAS for Kubernetes 
-supports Kubernetes clusters in the following environments:
-
-* [VMware Tanzu Kubernetes Grid Integrated Edition (formerly known as Enterprise PKS)](#tkgi)
+* [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
 * [VMware Tanzu Kubernetes Grid](#grid)
 
 ### <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
-Ensure the following before creating or configuring Kubernetes clusters 
-for TAS for Kubernetes:
+TAS for Kubernetes supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.  
 
-* Your Tanzu Kubernetes Grid Integrated Edition (TKGI) version is v1.7 or above.
+Ensure the following before creating or configuring Kubernetes clusters 
+for TAS for Kubernetes on TKGI:
+
+* Your TKGI version is v1.7 or later.
 * Your Kubernetes clusters have been created with the following characteristics:  
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
@@ -33,17 +32,22 @@ for TAS for Kubernetes:
     If the registry has a certificate issued from a private certificate authority (CA), 
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust 
     the certificate of that CA.
+    * kubectl targets the cluster. To ensure that kubectl targets the cluster, 
+    run `tkgi get-credentials CLUSTER-NAME` after creating the cluster.  
+
 
 For information about creating a cluster with TKGI, 
-see [Creating Clusters](https://docs.pivotal.io/tkgi/create-cluster.html)
+see [Creating Clusters](https://docs.pivotal.io/tkgi/create-cluster.html) 
+in the TKGI documentation.  
 
-After creating the cluster, 
-run `tkgi get-credentials CLUSTER-NAME` to ensure that kubectl targets the cluster.
+<p class="note"><strong>Note:</strong> TKGI was formerly known as Enterprise PKS.</p>
 
 ## <a id='grid'></a> VMware Tanzu Kubernetes Grid
 
+TAS for Kubernetes supports Kubernetes clusters in VMware Tanzu Kubernetes Grid (TKG) environments.  
+
 Ensure the following before creating or configuring Kubernetes clusters 
-for TAS for Kubernetes:
+for TAS for Kubernetes on TKG:
 
 * Your Tanzu Kubernetes Grid environment:
     * Is Tanzu Kubernetes Grid version is 1.0 or later.  

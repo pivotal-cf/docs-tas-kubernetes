@@ -43,30 +43,59 @@ The `values.yml` file gives you the flexibility to configure different parts of 
     ```yaml
     ingress:
       load_balancer:
-        enable: False
-        static_external_ip: ""
-      external_traffic_policy: "Local"
+        enable: ENABLED
+        static_external_ip: "LOAD-BALANCER"
+      external_traffic_policy: "POLICY"
     ```
 
     Where:
-    * `enable`: denotes whether to provision the Kubernetes ingress with a LoadBalancer Istio ingress service.
-    * `static_external_ip` may accept a static external IP address for the LoadBalancer, if it's enabled.
-    * `external_traffic_policy` denotes if this ingress desires to route external traffic to node-local or cluster-wide endpoints. For environments (like TKGs) that don't support node-local endpoints, you will need to change this value to `Cluster`.
+    * `ENABLED` configures the provisioning of the Kubernetes ingress with a `LoadBalancer` Istio ingress service.
+    To provision a `LoadBalancer` for the Istio ingress gateway required for TAS for Kubernetes, 
+    enable `LoadBalancer` as follows:  
+    <table>
+      <tr>
+        <th>Deployment Environment</th>
+        <th width="20%"><code>enable</code> value</th>
+      </tr>
+      <tr>
+        <td>Tanzu Kubernetes Grid (TKG) on vSphere</td>
+        <td>`False`</td>
+      </tr>
+      <tr>
+        <td>TKG on AWS</td>
+        <td>`True`</td>
+      </tr>
+      <tr>
+        <td>Tanzu Kubernetes Grid Integrated Edition (TKGI) on vSphere with Flannel container networking</td>
+        <td>`False`</td>
+      </tr>
+      <tr>
+        <td>TKGI on vSphere with NSX-T container networking</td>
+        <td>`True`</td>
+      </tr>
+      <tr>
+        <td>TKGI on AWS</td>
+        <td>`True`</td>
+      </tr>
+      <tr>
+        <td>TKGI on Azure</td>
+        <td>`True`</td>
+      </tr>
+      <tr>
+        <td>TKGI on GCP</td>
+        <td>`True`</td>
+      </tr>
+    </table>  
+    For more information, see [Kubernetes Services]
+    (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) 
+    in the Kubernetes documentation.  
+    <br>
+    * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.  
+    * `POLICY` controls if this ingress routes external traffic to node-local or cluster-wide endpoints. 
+        * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.  
+        * For TKG and other environments that do not support node-local endpoints, 
+        configure `external_traffic_policy` as `Cluster`.
 
-    Keep `enable` set to `False` if you are deploying to one of these:    
-    <ul>
-      <li>Tanzu Kubernetes Grid on vSphere</li>
-      <li>TKG Integrated Edition on vSphere with Flannel container networking</li>
-    </ul>
-
-    Change `enable` to `True` if you are deploying to one of these:
-    <ul>
-      <li>Tanzu Kubernetes Grid on AWS</li>
-      <li>TKG Integrated Edition on AWS, Azure or GCP</li>
-      <li>TKG Integrated Edition on vSphere with NSX-T container networking</li>   
-    </ul>
-
-    <p class="note">The above mentioned Kubernetes clusters support Kubernetes Services of type LoadBalancer. Enabling the LoadBalancer for your deployment will provision a load balancer for the Istio ingress gateway required by the TAS system. For more information, see <a href="https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types">Kubernetes Services</a> in the Kubernetes documentation. </p>
 
 1. **Ingress gateway certificates configuration:**  TAS for Kubernetes requires a certificate to terminate TLS at the ingress gateway. If you are ok with self-signed TLS certificate for the ingress gateway, you can skip this step, and we will generate the certificates for you prior to the installation.
 
