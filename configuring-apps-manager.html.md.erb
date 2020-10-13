@@ -47,54 +47,21 @@ in _Configuring Installation Values for TAS for Kubernetes_.
 
 ## <a id='create-configuration'></a> Create the Apps Manager Configuration File
 
-Apps Manager configuration settings are stored in the 
-`apps-manager-values.yml` configuration file. 
-You must manually create the `apps-manager-values.yml` file.
+Apps Manager configuration settings are stored in the `apps-manager-values.yml` configuration file.
 
-To create the `apps-manager-values` configuration file:
+In the parent directory that contains `tanzu-application-service`, there should be a directory named `configuration-values`. Use this directory to store configuration values for Apps Manager.
 
-1. Change directory to the `configuration-values` directory.
+When you are in the parent directory, duplicate the Apps Manager Sample Value File as your baseline configuration:
 
-1. Create a file named `apps-manager-values.yml` in the `configuration-values` directory.
+```
+cp tanzu-application-service/sample-apps-manager-values.yml configuration-values/apps-manager-values.yml
+```
 
-1. Copy the following into the `apps-manager-values.yml` file:
-
-
-    ```yaml
-    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
-    #@data/values
-    ---
-    apps_manager:
-
-      whitelabeling:
-        product_name: "Apps Manager"
-
-    ```
+The `apps-manager-values.yml` file gives you the flexibility to configure Apps Manager in a single file.
 
 ## <a id='configure-apps-manager'></a> Configure Apps Manager
 You can customize Apps Manager and configure resource usage by modifying 
-the `apps-manager-values.yml` configuration file. 
-
-The Apps Manager configuration file you create 
-should be a well formatted YAML file. For example:  
-
-```yaml
-#@library/ref "@github.com/pivotal/apps-manager-k8s-release"
-#@data/values
----
-apps_manager:
-  poll_interval: 30
-
-  resources:
-    instances: 2
-
-  whitelabeling:
-    accent_color: "#00A79D"
-
-search_server:
-  resources:
-    instances: 2
-```
+the `apps-manager-values.yml` configuration file.
 
 To customize Apps Manager:
 
@@ -115,18 +82,17 @@ To configure Apps Manager base settings:
 1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.    
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager Base Settings](#apps-manager-base-settings) below.  
-1. Review the completed file. The configuration file you create 
+1. Review the completed file. The configuration file you modify
 should be a well formatted YAML file.  
 <br>
     For example:  
 
     ```yaml
-    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
     #@data/values
     ---
     apps_manager:
       currency_lookup: {"usd":"$","eur":"€"}
-      display_plan_prices: "false"
+      enable_displaying_plan_prices: "false"
       poll_interval: 30
       app_details_poll_interval: 10
     ```
@@ -140,7 +106,7 @@ The following are all of the configurable Apps Manager base settings:
     <th width="40%">Description</th>
   </tr>
 <tr><td>currency\_lookup</td><td>{"usd":"$","eur":"€"}</td><td>Supported currency symbols</td></tr>
-<tr><td>display\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
+<tr><td>enable\_displaying\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
 <tr><td>poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
 <tr><td>app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
 </table>
@@ -154,13 +120,12 @@ To configure Apps Manager resource usage settings:
 1. Ensure the `apps_manager:` section includes a `resources:` sub-section.  
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager Resource Settings](#apps-manager-resource-settings) below.
-11. Review the completed file. The configuration file you create 
+11. Review the completed file. The configuration file you modify
 should be a well formatted YAML file.  
 <br>
     For example:  
 
     ```yaml
-    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
     #@data/values
     ---
     apps_manager:
@@ -196,7 +161,6 @@ should be a well formatted YAML file.
     For example:  
 
     ```yaml
-    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
     #@data/values
     ---
     search_server:
@@ -231,7 +195,6 @@ should be a well formatted YAML file.
     For example:  
 
     ```yaml
-    #@library/ref "@github.com/pivotal/apps-manager-k8s-release"
     #@data/values
     ---
     apps_manager:
@@ -286,7 +249,7 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
     <th width="40%">Description</th>
   </tr>
 <tr><td>apps\_manager.currency\_lookup</td><td> '{"usd":"$","eur":"€"}'</td><td>Supported currency symbols</td></tr>
-<tr><td>apps\_manager.display\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
+<tr><td>apps\_manager.enable\_displaying\_plan\_prices</td><td>false</td><td>Display Marketplace Service Plan Prices</td></tr>
 <tr><td>apps\_manager.poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
 <tr><td>apps\_manager.app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
 <tr><td>apps\_manager.whitelabeling.app\_icon</td><td>tanzu icon</td><td>Icon for apps manager UAA portal link</td></tr>
