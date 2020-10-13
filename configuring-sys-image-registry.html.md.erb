@@ -67,17 +67,10 @@ After configuring the system image registry, proceed to the
 
 
 ## <a id='configure-for-private'></a> Configure a Private Container Image Registry as Your System Registry
-
-To configure a private container image registry as your system registry:  
-
-* [Relocate TAS for Kubernetes Images](#relocate-tas-for-k8s-images)
-* [Customize Your Configuration to Use Your Private System Registry](#configure-for-private-registry)
-* [Validate Your Installation Configuration](#configure-for-private-registry)
-
-### <a id='relocate-tas-for-k8s-images'></a> Relocate TAS for Kubernetes Images
-
 Before installing TAS for Kubernetes from a private container image registry, 
-you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private container image registry:  
+you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private container image registry.  
+
+To relocate the TAS for Kubernetes image to a private container image registry:  
 
 * [Download the TAS for Kubernetes Images](#downloading-the-images)
 * [Upload the TAS for Kubernetes Images to the Private Container Image Registry](#uploading-the-images)
@@ -159,3 +152,8 @@ To upload the TAS for Kubernetes images to the private container image registry:
         * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.  
         * `PROJECT` is the project name in the registry.  
         * `IMAGE` is the image name to reallocate the images.  
+
+## <a id="next"></a> Next Steps
+
+After you complete this procedure, proceed to 
+[Configuring Your System Databases](configuring-system-databases.html).
