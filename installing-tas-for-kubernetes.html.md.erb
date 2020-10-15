@@ -22,22 +22,35 @@ TAS for Kubernetes requires internal configuration values, credentials and certi
 
 To generate the internal values, credentials and certificates needed during TAS for Kubernetes installation, use a helper script in the installation resources:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories. Change to the `tanzu-application-service` directory.
-
-1. Run the value-generation script and provide the path to the `configuration-values` directory:
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories. 
+1. Change directory to the `tanzu-application-service` directory.
+1. To create new configuration files, run:  
 
     ```bash
-    ./bin/generate-values.sh ../configuration-values
+    ./bin/generate-values.sh CONFIG-VALUES-PATH
     ```
+<br>
+    Where `CONFIG-VALUES-PATH` is the path to the `configuration-values` directory. 
+    For example, `../configuration-values`.  
+<br>
+    The `generate-values` script creates:  
+    * **_generated-values.yml**: The `_generated-values.yml` file contains generated configuration values 
+    that will be read during installation. 
+    The default location for the `_generated-values.yml` file is: `../configuration-values/_generated-values.yml`.
+ <br>   
+    * **tas-vars**: The `tas-vars` data store contains credentials and certificates 
+    that are not used during TAS for Kubernetes installation but may be needed for future value generation. 
+    The default location for the `tas-vars` data store is: `../configuration-values/vars-store/tas-vars`.    
+<br>
+    * **Certificates**: Self-signed `system-certificate` and `workload-certificate` certificates are created 
+    if you did not provide these certificates when completing the steps in [Configuring Installation Values](configuring-installation-values.html).   
 
-This will create `../configuration-values/_generated-values.yml` where the generated values will be read from during installation.
 
-It also creates `../configuration-values/vars-store/tas-vars` which is the data store for the credentials and certificates. This file is not used during the installation, but may be needed for future value generation.
-
-These files contain important installation secrets and should be preserved for future installations while ensuring their contents are kept secure.
-
-<p class="note">If in the previous step <a href="configuring-installation-values.html">Configuring Installation Values</a> you didn't provide the certs for <code>system-certificate</code> and <code>workload-certificate</code>, this script will generate one for you, which is self-signed.
+<p class="note">Ensure all of the generated files in the <code>configuration-values</code> directory are stored securely. 
+    These files contain important installation secrets and should be preserved 
+    for future installations.
 </p>
+
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
