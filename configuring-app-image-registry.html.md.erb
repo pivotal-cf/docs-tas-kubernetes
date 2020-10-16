@@ -18,18 +18,21 @@ Before you begin this procedure, ensure that you have
 created a private container image registry. VMware recommends that you use a VMware Harbor registry 
 as your container image registry.
 
-This topic covers:
+To use a VMware Harbor registry as your container image registry, 
+complete the procedures in [Use Harbor as Your Application Image Registry](#configure-harbor-registry) below.
 
-* [Using Harbor as Your Application Image Registry](#configure-harbor-registry)
-    1. [Create a Harbor Project and User Account](#harbor-project-user)
-    1. [Configure the Harbor Project](#harbor-project-configure)
-    1. [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
-    1. [Create the Configuration File](#harbor-config-file)
-
-* [Using a Different Image Registry](#configure-other-registry) 
+To use a different registry as your container image registry, 
+complete the procedures in [Use a Different Image Registry](#configure-other-registry) below.
 
 
-## <a id='configure-harbor-registry'></a> Using Harbor as Your Application Image Registry
+## <a id='configure-harbor-registry'></a> Use Harbor as Your Application Image Registry
+
+To use a VMware Harbor registry as your container image registry:  
+
+* [Create a Harbor Project and User Account](#harbor-project-user)  
+* [Configure the Harbor Project](#harbor-project-configure)  
+* [Retrieve the Harbor CA Certificate](#harbor-ca-cert)  
+* [Configure the App Image Registry](#harbor-config-file)  
 
 ### <a id='harbor-project-user'></a> Create a Harbor Project and User Account
 
@@ -60,8 +63,8 @@ in the Harbor documentation.
 
 <p class="note"><strong>Note:</strong> 
   If you specify custom project and user names in the 
-  Harbor configuration procedure above, use the same names when configuring the 
-  <code>values.yml</code> file. See <a href="#harbor-config-file">
+  Harbor configuration procedure above, use the same project and user names when configuring the 
+  <code>values.yml</code> file. For more information, see <a href="#harbor-config-file">
     Configure the App Image Registry</a>, below. 
 </p>
 
@@ -122,7 +125,7 @@ scroll down to the **Certificate Authority (CA)** field.
         1. In the **Advanced Options** pane, click the **DOWNLOAD ROOT CA CERT** button. 
 
 1. Use the retrieved CA certificate as the certificate authority value when 
-    configuring TAS for Kubernetes. See 
+    configuring TAS for Kubernetes. For more information, see 
     [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
 
  
@@ -133,7 +136,7 @@ To configure TAS for Kubernetes to use your private container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier, and open the `values.yml` file in the `configuration-values` directory.
 
-1. In the `app_registry` section of the file, populate with the following:  
+1. Populate the `app_registry` section of the file with the following:  
 
     ```yaml
     app_registry:
@@ -155,17 +158,17 @@ To configure TAS for Kubernetes to use your private container image registry:
     matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
 1. Save the file.
 
-After configuring the application image registry, proceed to the
-[Configuring System Image Registry](configuring-sys-image-registry.html) topic.
+## <a id='configure-other-registry'></a> Use a Different Image Registry
 
-## <a id='configure-other-registry'></a> Using a Different Image Registry
+In addition to supporting a VMware Harbor registry as a container image registry, 
+TAS for Kubernetes also supports using other container image registries, 
+such as a Google Container Registry (GCR) or Docker Hub registry.  
 
-In addition to supporting a VMware Harbor registry as a container image registry, TAS for Kubernetes also supports using other container image registries, such as a Google Container Registry (GCR) or Docker Hub registry. 
+To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container image registry:  
 
-To use a container image registry other than a Harbor registry:
-
-1. Change directory into the `configuration-values` directory you created earlier and open `values.yml`.
-1. Populate the `app_registry` section with the following: 
+1. Change directory into the `configuration-values` directory you created earlier.  
+1. Open the `values.yml` file.  
+1. Populate the `app_registry` section with the following:  
 
     ```yaml
     app_registry:
@@ -189,5 +192,7 @@ To use a container image registry other than a Harbor registry:
 
 1. Save the file.
 
-After configuring the application image registry, proceed to the
-[Configuring System Image Registry](configuring-sys-image-registry.html) topic.
+## <a id="next"></a> Next Steps
+
+After you complete this procedure, proceed to 
+[Configuring System Image Registry](configuring-sys-image-registry.html).  
