@@ -15,7 +15,7 @@ use to download container images from the VMware Tanzu Network Registry.
   Ensure this account has a signed TAS for Kubernetes EULA.
 * Follow the procedures in:  
     * [Preparing to Install Tanzu Application Service for Kubernetes](preparing-to-install-tas-for-kubernetes.html) 
-    * [Configuring Installation Values for Tanzu Application Service for Kubernetes](configuring-installation-values.html) 
+    * [Configuring Installation Values](configuring-installation-values.html) 
 * If installing TAS for Kubernetes from a private container image registry:  
  
     * Grant write access to your private container image registry.  
@@ -47,9 +47,9 @@ system components from the [VMware Tanzu Network container registry](https://reg
 
 To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
 
-1. Change directory into the `configuration-values` directory you created earlier and open `values.yml` file.
-
-1. Populate the `system_registry` section in the file with the following:
+1. Change directory into the `configuration-values` directory you created earlier.  
+1. Open the `values.yml` file.  
+1. Populate the `system_registry` section in the `values.yml` file with the following:
 
     ```yaml
     system_registry:
@@ -60,11 +60,7 @@ To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
 
     Where:
     * `USERNAME` is the username of the account to use to download container images from the VMware Tanzu Network Registry, which will ensure that this account has a signed TAS for Kubernetes EULA.
-    * `PASSWORD` is the password for the account you specified.
-
-After configuring the system image registry, proceed to the
-[Configuring Your System Databases](configuring-system-databases.html) topic.
-
+    * `PASSWORD` is the password for the account you specified.  
 
 ## <a id='configure-for-private'></a> Configure a Private Container Image Registry as Your System Registry
 Before installing TAS for Kubernetes from a private container image registry, 
