@@ -1,0 +1,95 @@
+---
+title: Installing a Default Storage Class
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to enable dynamic provisioning of persistent volumes on Kubernetes clusters by installing a default storage class on your Kubernetes clusters to support TAS for Kubernetes.
+
+<p class="note"><strong>Note:</strong> 
+  Your should skip this step if your Kubernetes cluster already comes with a default storage class. See previous topic <a href='preparing-kubernetes-cluster.html#verify-default-storage'>Verifying a Default Storage Exists</a>.
+</p>
+
+## <a id='installing-for-tkgi'></a> Installing for TKGI-Provisioned Clusters on vSphere
+
+To install a default storage class for a TKG Integrated Edition (formerly known as Enterprise PKS) provisioned Clusters on vSphere:
+
+1. Create a file named `vsphere-default-storage-class.yml`.  
+1. Populate the `vsphere-default-storage-class.yml` file with the following:  
+
+    ```yaml
+    ---
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: thin
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: kubernetes.io/vsphere-volume
+    ```
+
+1. To install the storage class, run the following command:
+
+    ```
+    kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml
+    ```
+
+For more information, see [Provision a Dynamic PV](https://docs.pivotal.io/tkgi/volumes.html#dynamic-pv) in _Configuring and Using PersistentVolumes_ in the TKGI documentation for additional requirements.  
+
+## <a id='installing-for-tkg-vsphere'></a> Installing for TKG-provisioned Clusters on vSphere
+
+If you are running TKG on vSphere:
+
+1. Create a file named `vsphere-default-storage-class.yml`.  
+1. Populate the `vsphere-default-storage-class.yml` file with the following:  
+
+    ```yaml
+    ---
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: thin-csi
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: csi.vsphere.vmware.com
+    parameters:
+      datastoreurl: "DATASTORE-URL"
+    ```
+    
+    Where `DATASTORE-URL` is the URL to your CSI datastore.  
+
+1. To install the storage class, run:
+
+    ```bash
+    kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml
+    ```
+
+
+## <a id='installing-for-tkg-aws'></a> Installing for TKG-provisioned Clusters on AWS
+
+If you are running TKG on AWS:  
+  
+1. Create a file named `aws-default-storage-class.yml`. 
+1. Populate the `aws-default-storage-class.yml` file with the following:  
+
+  ```yaml
+    ---
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: gp2
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: kubernetes.io/aws-ebs
+    parameters:
+      type: gp2
+      fsType: ext4
+  ```
+
+1. To install the storage class, run:
+
+    ```
+    kapp deploy -a default-storage-class -f aws-default-storage-class.yml
+    ```
+
+
+Proceed to [Installing TAS for Kubernetes](index-install.html) once you verify that there is a storage class marked with `(default)` in your `StorageClass` list by running command `kubectl get storageclass`. 
