@@ -7,28 +7,54 @@ This topic describes how to configure installation resources before deploying Ta
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before proceeding, complete the following sections in [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html):
+Before proceeding, complete all sections in:  
 
-* Prepare Your Installation Resources
-* Ensure Your Container Registry is Accessible
-* Select a System Domain Name
-* Ensure Command-Line Tools Are Installed
+* [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html)  
+* [Installing Command-Line Tools](installing-command-line-tools.html)  
 
-## <a id='overview'></a> Overview of the Configuration
+## <a id='configure-values'></a> Configure Installation Values
 
-To configure installation values for TAS for Kubernetes, you need to modify the configuration value template.
+To configure installation values for TAS for Kubernetes, 
+you need to modify a copy of the configuration values template:  
 
-In the parent directory that contains `tanzu-application-service`, create a new directory named `configuration-values`. Use the new directory to store configuration values for this installation.
+* [Copy the Configuration Values Template](#)  
+* [Configure the System Domain](#configure-system-domain)  
+* [Configure the Load Balancer](#configure-lb)  
+* [Configure the Ingress Gateway Certificates](#configure-ingress-cert)  
+* [Configure Application Container Certificates](#configure-ingress-cert)
+* [Configure Additional Settings](#configure-other-sections)
 
-When you are in the parent directory, duplicate the sample value file as your baseline configuration:
+### <a id='copy-template'></a> Copy the Configuration Values Template  
 
-```
-cp tanzu-application-service/sample-values.yml configuration-values/values.yml
-```
+The configuration values template gives you the flexibility to 
+configure different parts of the system in a single file. 
+Use a copy of the template as your baseline configuration.   
 
-The `values.yml` file gives you the flexibility to configure different parts of the system in one single file. Open it in a text editor and you'll see:
+To copy the configuration values template:  
 
-1. **System domain configuration:**
+1. Change directory to the parent directory that contains the `tanzu-application-service` directory.
+1. Duplicate the sample value file:
+
+    ```
+    cp tanzu-application-service/sample-values.yml configuration-values/values.yml
+    ```
+
+    Customize the new `values.yml` as your configuration values file.
+    
+1. Create a new directory named `configuration-values`.  
+Use the new directory to store configuration values for this installation.
+
+The file gives you the flexibility to 
+configure different parts of the system in one single file. 
+Open it in a text editor and you'll see:
+
+### <a id='configure-system-domain'></a> Configure the System Domain 
+
+To configure you system domain:  
+
+1. Open `values.yml` in a text editor.  
+1. Locate the `system_domain` section in the `values.yml` file.  
+1. Configure the system domain:
 
     ```yaml
     system_domain: "SYSTEM-DOMAIN"
@@ -37,8 +63,15 @@ The `values.yml` file gives you the flexibility to configure different parts of 
     - "apps.SYSTEM-DOMAIN"
     ```
     Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.
+1. Save the `values.yml` file.  
 
-1. **LoadBalancer service configuration:**
+### <a id='configure-lb'></a> Configure the Load Balancer  
+
+To configure you LoadBalancer service:  
+
+1. Open `values.yml` in a text editor.  
+1. Locate the `load_balancer` section in the `values.yml` file.  
+1. Configure the LoadBalancer service:  
     
     ```yaml
     ingress:
@@ -95,32 +128,52 @@ The `values.yml` file gives you the flexibility to configure different parts of 
         * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.  
         * For TKG and other environments that do not support node-local endpoints, 
         configure `external_traffic_policy` as `Cluster`.
+1. Save the `values.yml` file.  
 
+### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates  
 
-1. **Ingress gateway certificates configuration:**  TAS for Kubernetes requires a certificate to terminate TLS at the ingress gateway. If you are ok with self-signed TLS certificate for the ingress gateway, you can skip this step, and we will generate the certificates for you prior to the installation.
+TAS for Kubernetes requires a certificate to terminate TLS at the ingress gateway
+and will generate a self-signed TLS certificate for the ingress gateway 
+if you do not provide one prior to installing.  
 
-    To provide your own certificates for the ingress gateway, fill out:
+To configure Ingress gateway certificates:  
+
+1. Open `values.yml` in a text editor.  
+1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.  
+1. Configure the Ingress gateway certificates:  
     
     ```yaml
     system_certificate:
-      crt: ""
-      key: ""
-      ca: ""
+      crt: "SYSTEM-CERT"
+      key: "SYSTEM-KEY"
+      ca: "SYSTEM-CA"
     workloads_certificate:
-      crt: ""
-      key: ""
-      ca: ""
+      crt: "WORKLOAD-CERT"
+      key: "WORKLOAD-KEY"
+      ca: "WORKLOAD-CA"
     ```
 
     Where:
-    * The system certificate is for the wildcard subdomain of the system domain (e.g., `*.SYSTEM-DOMAIN`)
-    * The workloads certificate is for the wildcard subdomain of the app domain (e.g., `*.apps.SYSTEM-DOMAIN`)
-    * `crt` is a Base64-encoded certificate
-    * `key` is a Base64-encoded private key
-    * `ca` is a Base64-encoded CA certificate used to sign the respective certifcate
+    * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain (e.g., `*.SYSTEM-DOMAIN`)
+    * `SYSTEM-KEY` is the Base64-encoded private key for the system certificate.  
+    * `SYSTEM-CA` is the Base64-encoded CA certificate used to sign the system certificate.  
+    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain (e.g., `*.apps.SYSTEM-DOMAIN`)
+    * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.  
+    * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.  
+1. Save the `values.yml` file.  
 
-1. **Application containers certificates configuration:** Optionally you can provide one or more certificates for the TAS deployed applications to trust. These certificates will be injected into the application trust store, so that the applications can communicate with each other in a secure manner:
-    
+### <a id='configure-ingress-cert'></a> Configure Application Container Certificates 
+
+Optionally you can provide one or more certificates for the TAS deployed applications to trust. 
+These certificates will be injected into the application trust store to 
+allow applications to communicate with each other in a secure manner.  
+
+To configure optional application container certificates:  
+
+1. Open `values.yml` in a text editor.  
+1. Locate the `app_containers` section in the `values.yml` file.  
+1. Configure the app container certificates:  
+
     ```yaml
      app_containers:
         #! PEM encoded Certificate Authority
@@ -134,8 +187,16 @@ The `values.yml` file gives you the flexibility to configure different parts of 
     ```
 
     Where:
-    * `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate of the services or applications that you want your TAS deployed application to trust. Ensure each line of the CA certificate value is indented four spaces, matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
+    * `FIRST-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service 
+    or application that you want your TAS deployed app to trust.  
+    * `SECOND-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service 
+    or application that you want your TAS deployed app to trust.  
 
+    Ensure each line of the CA certificate value is indented four spaces, 
+    matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.  
+1. Save the `values.yml` file.  
+
+### <a id='configure-other-sections'></a> Configure Additional Settings  
 
 1. **Application image registry configuration:**
 
