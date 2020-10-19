@@ -83,13 +83,15 @@ To install TAS for Kubernetes from the VMware Tanzu Network:
 
 1. Change directory into the `tanzu-application-service` directory.
 
-1. To set cluster specific configuration, run the cluster-detect script:
+1. To create a cluster configurations file:
 
     ```bash
     ./bin/cluster-detect.sh > ../configuration-values/cluster-values.yml
     ```
 
-    The command communicates with the kube API to determine and set deployment values in a new file in your configuration directory.
+    The `cluster-detect` script communicates with the kube API to determine deployment values 
+    and saves those values in a `cluster-values` configuration file.  
+
 
 1. To install TAS for Kubernetes, run the installation script:
 
