@@ -9,7 +9,10 @@ Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 ## <a id='overview'></a> Overview
 Apps Manager on TAS for Kubernetes provides a UI for 
 creating and deleting orgs, domains and spaces, and
-managing services, members, and permissions. 
+managing services, members, and permissions.  
+
+Apps Manager configuration settings are stored in the `apps-manager-values.yml` configuration file. 
+The `apps-manager-values.yml` file gives you the flexibility to configure Apps Manager in a single file.  
 
 You can use Apps Manager's default configuration, or 
 you can customize Apps Manager in any of the following ways:  
@@ -20,10 +23,8 @@ you can customize Apps Manager in any of the following ways:
 * Disable/Enable features
 
 <br>
-To customize Apps Manager: 
-
-* [Create the Apps Manager Configuration File](#create-configuration) 
-* [Configure Apps Manager](#configure-apps-manager)
+To create an Apps Manager configuration file: [Create the Apps Manager Configuration File](#create-configuration).  
+To customize your Apps Manager configuration: [Configure Apps Manager](#configure-apps-manager).  
 
 <br>
 For more information about Apps Manager, see 
@@ -47,17 +48,19 @@ in _Configuring Installation Values for TAS for Kubernetes_.
 
 ## <a id='create-configuration'></a> Create the Apps Manager Configuration File
 
-Apps Manager configuration settings are stored in the `apps-manager-values.yml` configuration file.
+Create and store your Apps Manager configuration values file within the `configuration-values` 
+directory used to store TAS for Kubernetes configuration values.  
 
-In the parent directory that contains `tanzu-application-service`, there should be a directory named `configuration-values`. Use this directory to store configuration values for Apps Manager.
+To create the `apps-manager-values.yml` Apps Manager configuration file:
 
-When you are in the parent directory, duplicate the Apps Manager Sample Value File as your baseline configuration:
+1. Open a command line and change directory to the parent directory that contains `tanzu-application-service` directory.  
+1. Confirm there is a `configuration-values` subdirectory in this directory.  
+1. To copy the Apps Manager Sample Values file as your baseline `apps-manager-values.yml` Apps Manager configuration:
 
-```
-cp tanzu-application-service/sample-apps-manager-values.yml configuration-values/apps-manager-values.yml
-```
+    ```
+    cp tanzu-application-service/sample-apps-manager-values.yml configuration-values/apps-manager-values.yml
+    ```
 
-The `apps-manager-values.yml` file gives you the flexibility to configure Apps Manager in a single file.
 
 ## <a id='configure-apps-manager'></a> Configure Apps Manager
 You can customize Apps Manager and configure resource usage by modifying 
@@ -82,7 +85,7 @@ To configure Apps Manager base settings:
 1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.    
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager Base Settings](#apps-manager-base-settings) below.  
-1. Review the completed file. The configuration file you modify
+1. Review the completed file. The configuration file 
 should be a well formatted YAML file.  
 <br>
     For example:  
@@ -120,7 +123,7 @@ To configure Apps Manager resource usage settings:
 1. Ensure the `apps_manager:` section includes a `resources:` sub-section.  
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager Resource Settings](#apps-manager-resource-settings) below.
-11. Review the completed file. The configuration file you modify
+11. Review the completed file. The configuration file 
 should be a well formatted YAML file.  
 <br>
     For example:  
@@ -155,7 +158,7 @@ To configure Apps Manager Search Server settings:
 1. Ensure the `search_server:` section includes a `resources:` sub-section.  
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager Search Server Settings](#apps-manager-search-server) below.
-1. Review the completed file. The configuration file you create 
+1. Review the completed file. The configuration file 
 should be a well formatted YAML file.  
 <br>
     For example:  
@@ -189,7 +192,7 @@ To configure Apps Manager White-Labeling settings:
 1. Ensure the `apps_manager:` section includes a `whitelabeling:` sub-section.  
 1. Add the desired property configuration, using `property: value` format. 
 See [Configurable Apps Manager White-Label Settings](#apps-manager-white-label-settings) below.
-1. Review the completed file. The configuration file you create 
+1. Review the completed file. The configuration file 
 should be a well formatted YAML file.  
 <br>
     For example:  
