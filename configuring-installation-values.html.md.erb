@@ -15,14 +15,13 @@ Before proceeding, complete all sections in:
 ## <a id='configure-values'></a> Configure Installation Values
 
 To configure installation values for TAS for Kubernetes, 
-you need to modify a copy of the configuration values template:  
+modify a copy of the configuration values template:  
 
-* [Copy the Configuration Values Template](#)  
+* [Copy the Configuration Values Template](#copy-template)  
 * [Configure the System Domain](#configure-system-domain)  
 * [Configure the Load Balancer](#configure-lb)  
 * [Configure the Ingress Gateway Certificates](#configure-ingress-cert)  
-* [Configure Application Container Certificates](#configure-ingress-cert)
-* [Configure Additional Settings](#configure-other-sections)
+* [(Optional) Configure Application Container Certificates](#configure-app-cert)
 
 ### <a id='copy-template'></a> Copy the Configuration Values Template  
 
@@ -32,21 +31,18 @@ Use a copy of the template as your baseline configuration.
 
 To copy the configuration values template:  
 
+1. Open a command line.
 1. Change directory to the parent directory that contains the `tanzu-application-service` directory.
-1. Duplicate the sample value file:
+1. Create a new directory named `configuration-values`. 
+Use the new directory to store configuration values for this installation.
+1. Duplicate the sample values file:
 
     ```
     cp tanzu-application-service/sample-values.yml configuration-values/values.yml
     ```
 
     Customize the new `values.yml` as your configuration values file.
-    
-1. Create a new directory named `configuration-values`.  
-Use the new directory to store configuration values for this installation.
 
-The file gives you the flexibility to 
-configure different parts of the system in one single file. 
-Open it in a text editor and you'll see:
 
 ### <a id='configure-system-domain'></a> Configure the System Domain 
 
@@ -92,31 +88,31 @@ To configure you LoadBalancer service:
       </tr>
       <tr>
         <td>Tanzu Kubernetes Grid (TKG) on vSphere</td>
-        <td>`False`</td>
+        <td><code>False</code></td>
       </tr>
       <tr>
         <td>TKG on AWS</td>
-        <td>`True`</td>
+        <td><code>True</code></td>
       </tr>
       <tr>
         <td>Tanzu Kubernetes Grid Integrated Edition (TKGI) on vSphere with Flannel container networking</td>
-        <td>`False`</td>
+        <td><code>False</code></td>
       </tr>
       <tr>
         <td>TKGI on vSphere with NSX-T container networking</td>
-        <td>`True`</td>
+        <td><code>True</code></td>
       </tr>
       <tr>
         <td>TKGI on AWS</td>
-        <td>`True`</td>
+        <td><code>True</code></td>
       </tr>
       <tr>
         <td>TKGI on Azure</td>
-        <td>`True`</td>
+        <td><code>True</code></td>
       </tr>
       <tr>
         <td>TKGI on GCP</td>
-        <td>`True`</td>
+        <td><code>True</code></td>
       </tr>
     </table>  
     For more information, see [Kubernetes Services]
@@ -124,7 +120,7 @@ To configure you LoadBalancer service:
     in the Kubernetes documentation.  
     <br>
     * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.  
-    * `POLICY` controls if this ingress routes external traffic to node-local or cluster-wide endpoints. 
+    * `POLICY` is the endpoint this ingress routes external traffic to:   
         * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.  
         * For TKG and other environments that do not support node-local endpoints, 
         configure `external_traffic_policy` as `Cluster`.
@@ -133,8 +129,8 @@ To configure you LoadBalancer service:
 ### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates  
 
 TAS for Kubernetes requires a certificate to terminate TLS at the ingress gateway
-and will generate a self-signed TLS certificate for the ingress gateway 
-if you do not provide one prior to installing.  
+and generates a self-signed TLS certificate for the ingress gateway 
+if you do not provide one before installing.  
 
 To configure Ingress gateway certificates:  
 
@@ -162,17 +158,17 @@ To configure Ingress gateway certificates:
     * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.  
 1. Save the `values.yml` file.  
 
-### <a id='configure-ingress-cert'></a> Configure Application Container Certificates 
+### <a id='configure-app-cert'></a> (Optional) Configure Application Container Certificates 
 
-Optionally you can provide one or more certificates for the TAS deployed applications to trust. 
+You can provide one or more certificates for the TAS deployed applications to trust. 
 These certificates will be injected into the application trust store to 
-allow applications to communicate with each other in a secure manner.  
+allow apps to communicate with each other in a secure manner.  
 
 To configure optional application container certificates:  
 
 1. Open `values.yml` in a text editor.  
 1. Locate the `app_containers` section in the `values.yml` file.  
-1. Configure the app container certificates:  
+1. Configure the application container certificates:  
 
     ```yaml
      app_containers:
