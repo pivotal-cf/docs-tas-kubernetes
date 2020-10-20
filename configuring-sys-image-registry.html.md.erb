@@ -145,7 +145,7 @@ To upload the TAS for Kubernetes images to the private container image registry:
         ```
 
         Where:
-        * Where `PRIVATE_REPOSITORY` is the private registry repository to log in to. Either FQDN or IP address.
+        * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.
         * `PROJECT` is the project name in your private registry
         * `IMAGE` is the image name to reallocate the images.
 
@@ -153,9 +153,10 @@ To upload the TAS for Kubernetes images to the private container image registry:
 
 To customize your configuration files for your private registry:
 
-1. Move the `config/image-overrides.yml` file to the `config-optional` directory.
-1. To point the system registry variables to the private registry,
-modify the `configuration-values/values.yml` as follows:
+1. Move the `config/image-overrides.yml` file to the `config-optional` directory.  
+1. Open `configuration-values/values.yml` in a text editor.  
+1. To point the system registry variables to the private registry, 
+configure the `system_registry` section:
 
     ```
     #@data/values
@@ -169,7 +170,10 @@ modify the `configuration-values/values.yml` as follows:
     Where:
     * `REGISTRY-HOSTNAME` is the hostname of your private registry.
     * `REGISTRY-USERNAME` is a user account with write access to the private registry.
-    * `REGISTRY-PASSWORD` is the password for the user account.
+    * `REGISTRY-PASSWORD` is the password for the user account.  
+1. Save the `values.yml` file.  
 
-After configuring the system image registry, proceed to the
-[Configuring System Database](configuring-system-databases.html) topic.
+## <a id="next"></a> Next Steps
+
+After you complete this procedure, proceed to 
+[Configuring System Database](configuring-system-databases.html).
