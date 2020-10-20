@@ -72,9 +72,9 @@ To install TAS for Kubernetes:
 
 ### <a id='install-tas-for-k8s-from-network'></a> Install TAS for Kubernetes from the VMware Tanzu Network
 
-To install TAS for Kubernetes from the VMware Tanzu Network:  
+To install TAS for Kubernetes from the VMware Tanzu Network:
 
-1. To validate your configuration, run the following:    
+1. To validate your configuration, run the following:
 
     ```bash
     kubectl cluster-info
@@ -89,9 +89,8 @@ To install TAS for Kubernetes from the VMware Tanzu Network:
     ./bin/cluster-detect.sh > ../configuration-values/cluster-values.yml
     ```
 
-    The `cluster-detect` script communicates with the kube API to determine deployment values 
-    and saves those values in a `cluster-values` configuration file.  
-
+    The `cluster-detect` script communicates with the kube API to determine deployment values
+    and saves those values in a `cluster-values` configuration file.
 
 1. To install TAS for Kubernetes, run the installation script:
 
@@ -103,15 +102,31 @@ To install TAS for Kubernetes from the VMware Tanzu Network:
 
 ### <a id='post-image-relocation'></a> Install TAS for Kubernetes from a Private System Registry
 
-After uploading your TAS for Kubernetes images to the private registry, 
+After uploading your TAS for Kubernetes images to the private registry,
 you can install TAS for Kubernetes using a modified installation procedure.
 
-To install TAS for Kubernetes: 
+To install TAS for Kubernetes:
 
-1. Change directory to the `tanzu-applications-service` directory.
+1. To validate your configuration, run the following:
+
+    ```bash
+    kubectl cluster-info
+    ```
+    Inspect the output. Ensure that your Kubernetes client configuration targets the intended cluster for installation.
+
+1. Change directory into the `tanzu-application-service` directory.
+
+1. To create a cluster configurations file:
+
+    ```bash
+    ./bin/cluster-detect.sh > ../configuration-values/cluster-values.yml
+    ```
+
+    The `cluster-detect` script communicates with the kube API to determine deployment values
+    and saves those values in a `cluster-values` configuration file.
 
 1. To deploy TAS for Kubernetes using the images in the private registry:
-    
+
 
     ```
     ytt -f config \
