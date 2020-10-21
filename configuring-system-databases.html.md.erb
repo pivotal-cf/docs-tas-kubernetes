@@ -116,9 +116,9 @@ To configure these three databases:
 1. Retrieve the password for each database. Use these passwords when configuring the system component databases. See [Configure Databases for the System Components](#config-databases) below.
 
     ```
-    CCDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs ccdb-db-secret -o yaml ) | base64 -d`
-    UAADBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs uaadb-db-secret -o yaml ) | base64 -d`
-    USAGEDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs usagedb-db-secret -o yaml ) | base64 -d`
+    CCDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs ccdb-db-secret -o yaml ) | base64 --decode`
+    UAADBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs uaadb-db-secret -o yaml ) | base64 --decode`
+    USAGEDBPW=`bosh interpolate --path='/data/password' <( kubectl get secret -n postgres-dbs usagedb-db-secret -o yaml ) | base64 --decode`
 
     cat <<EOT
     USAGE-SERVICE-DB-PASSWORD=${USAGEDBPW}
