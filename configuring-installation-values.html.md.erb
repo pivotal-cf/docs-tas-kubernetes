@@ -56,9 +56,10 @@ To configure you system domain:
     system_domain: "SYSTEM-DOMAIN"
     app_domains:
     #@overlay/append
-    - "apps.SYSTEM-DOMAIN"
+    - "APPS-DOMAIN"
     ```
-    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.
+    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation and `APPS-DOMAIN` is the separate unique domain where apps will be hosted
+   
 1. Save the `values.yml` file.  
 
 ### <a id='configure-lb'></a> Configure the Load Balancer  
@@ -153,7 +154,7 @@ To configure Ingress gateway certificates:
     * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain (e.g., `*.SYSTEM-DOMAIN`)
     * `SYSTEM-KEY` is the Base64-encoded private key for the system certificate.  
     * `SYSTEM-CA` is the Base64-encoded CA certificate used to sign the system certificate.  
-    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain (e.g., `*.apps.SYSTEM-DOMAIN`)
+    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain (e.g., `*.APPS-DOMAIN`)
     * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.  
     * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.  
 1. Save the `values.yml` file.  

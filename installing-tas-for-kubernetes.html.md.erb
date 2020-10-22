@@ -343,10 +343,10 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
 1. To validate the test app is running, make a request to the app after the `cf push` command succeeds:  
 
     ```
-    curl test-app.apps.SYSTEM-DOMAIN
+    curl test-app.APPS-DOMAIN
     ```
 
-    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
+    Where `APPS-DOMAIN` is your TAS for Kubernetes installation apps domain.  
 
     <p class="note">
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
