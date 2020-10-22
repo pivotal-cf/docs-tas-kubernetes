@@ -56,6 +56,10 @@ To generate the internal values, credentials and certificates needed during TAS 
     for future installations.
 </p>
 
+<p class= "note warning">
+  <strong>Warning:</strong> The Cloud API currently doesn't support encryption key rotation in the Kubernetes stack. Changing the encryption key will cause failures on redeployment. Therefore the <code>capi.database.encryption_key</code> value should not be modified after it is initially set.
+</p>
+
 
 ## <a id='install-tas-for-k8s'></a> Install TAS for Kubernetes
 
