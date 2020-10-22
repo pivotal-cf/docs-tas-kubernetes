@@ -29,7 +29,7 @@ The UAA, Cloud Controller, and Usage service each need a Tanzu Postgres database
 
 To configure these three databases:
 
-1. Create a file named `postgres-databases.yml` in the `configuration-values` directory.
+1. Create a file named `postgres-databases.yml` and store it outside of the scope of TAS for Kuberentes. Note that this file is only used for deploying the databases. It is not part of the TAS for Kubernetes configuration.
 
 1. Copy and paste the following text into the `postgres-databases.yml` file:
 
