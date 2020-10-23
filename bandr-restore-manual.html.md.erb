@@ -117,6 +117,8 @@ in _Configuring Your System Databases_.
 
 ## <a id='restore-monitoring'></a> Monitor Restore Progress
 
+To inspect the status of a restore:  
+
 * [Review All Restores](#restore-monitor-all)  
 * [Inspect a Single Restore](#restore-monitor-single)  
 
@@ -205,7 +207,7 @@ Review the logs for any failures and their root causes.
 
 ### <a id='restore-validate'></a> Validate the Restore
 
-Given a velero restore has Completed and there were no errors or warnings, 
+Given a velero restore has completed and there were no errors or warnings, 
 the backup-recovery solution provides a simple way to help validate the restored Cloud Foundry data.
 
 The Cloud Foundry Metadata reporting tool provides a simple script to get the Cloud Foundry 
@@ -218,11 +220,14 @@ to measure what data was in Cloud Foundry during a backup.
 
 To validate a completed restore:  
 
-1. Inspect the TAS for Kubernetes artifact as described in [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
-1. Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:  
+1. If you do not have the TAS for Kubernetes installation resources, 
+download the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes). 
+For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
+1. Inspect the TAS for Kubernetes artifact. 
+Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:  
     * `get-backup-metadata.sh`
     * `compare-backup-metadata.sh`
-1. To determine the name of the backup to compare against the restored system:
+1. To determine the name of the backup used to restore your system:
 
     ```
     velero get backups
@@ -237,22 +242,23 @@ To validate a completed restore:
     backup_1 Completed 2020-03-24 14:12:29 +0000 UTC     21d          default    &lt;none&gt;
     </pre>
 
-1. To generate a JSON file which contains a snapshot of Cloud Foundry at the time of the backup.
+1. To generate a snapshot of the Cloud Foundry state at the time of the backup:
 
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
     ```
 
     Where:  
-    * `BACKUP-NAME` is the name of the backup you want to validate against.  
-    * `OUTPUT-FILENAME` is the name of the backup state JSON file to create.  
+    * `BACKUP-NAME` is the name of the backup you restored.  
+    * `OUTPUT-FILENAME` is the name of the Cloud Foundry state file to create for the backup. 
+    The created state file is a JSON formatted file.  
 
     For example: 
     <pre class="terminal">
     $ ./bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
 
-1. To compare the current system state against the backup state:
+1. To compare the backup state to the restored system state:
 
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/compare-backup-metadata.sh OUTPUT-FILENAME
