@@ -4,10 +4,10 @@ owner: Apps Manager
 ---
 
 This topic describes how to customize the Apps Manager deployed with
-<%= vars.app_runtime_full %> (TAS for Kubernetes).
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 ## <a id='overview'></a> Overview
-Apps Manager on TAS for Kubernetes provides a UI for
+Apps Manager on <%= vars.app_runtime_short %> provides a UI for
 creating and deleting orgs, domains and spaces, and
 managing services, members, and permissions.
 
@@ -30,7 +30,7 @@ For more information about Apps Manager, see
 [Getting Started with Apps Manager](https://docs.run.pivotal.io/console/dev-console.html).
 
 <p class="note"><strong>Note:</strong> Users are currently unable to invite members to orgs and spaces through Apps Manager.
-  This feature depends on the Notifications Service, which is not available on TAS for Kubernetes.
+  This feature depends on the Notifications Service, which is not available on <%= vars.app_runtime_short %>.
 </p>
 
 
@@ -43,12 +43,12 @@ Before configuring Apps Manager, complete the following:
 * Ensure that your installation has a `configuration-values` directory within the
 `tanzu-application-service` directory. For more information, see
 [Generate Internal Configuration Values](configuring-installation-values.html#generate-configuration-values)
-in _Configuring Installation Values for TAS for Kubernetes_.
+in _Configuring Installation Values for <%= vars.app_runtime_short %>_.
 
 ## <a id='create-configuration'></a> Create the Apps Manager Configuration File
 
 Create and store your Apps Manager configuration values file within the `configuration-values`
-directory used to store TAS for Kubernetes configuration values.
+directory used to store <%= vars.app_runtime_short %> configuration values.
 
 To create the `apps-manager-values.yml` Apps Manager configuration file:
 
@@ -165,7 +165,7 @@ The following are all of the configurable Apps Manager White-Label settings:
 ## <a id="next"></a> Next Steps
 
 After you complete this procedure, proceed to
-[Installing TAS for Kubernetes](installing-tas-for-kubernetes.html).
+[Installing <%= vars.app_runtime_short %>](installing-tas-for-kubernetes.html).
 
 <%#
 # # #
