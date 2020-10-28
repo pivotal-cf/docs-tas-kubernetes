@@ -17,7 +17,6 @@ The `apps-manager-values.yml` file gives you the flexibility to configure Apps M
 You can use Apps Manager's default configuration, or 
 you can customize Apps Manager in any of the following ways:  
 
-* Modify resource consumption  
 * Customize the Marketplace  
 * White-label the UI  
 * Disable/Enable features
@@ -63,8 +62,7 @@ To create the `apps-manager-values.yml` Apps Manager configuration file:
 
 
 ## <a id='configure-apps-manager'></a> Configure Apps Manager
-You can customize Apps Manager and configure resource usage by modifying 
-the `apps-manager-values.yml` configuration file.
+You can customize Apps Manager by modifying the `apps-manager-values.yml` configuration file.
 
 To customize Apps Manager:
 
@@ -74,7 +72,6 @@ To customize Apps Manager:
 
 1. Complete one or more of the following: 
     * [Configure Apps Manager Base Settings](#customize-apps-manager-configuration)  
-    * [Configure Apps Manager Resources](#customize-apps-manager-resources)  
     * [Configure Apps Manager White-Labeling](#customize-apps-manager-white-label) 
     * [Configure the Apps Manager Search Server](#customize-apps-manager-searchserver)
 
@@ -113,76 +110,6 @@ The following are all of the configurable Apps Manager base settings:
 <tr><td>poll\_interval</td><td>30</td><td>The Apps Manager poll interval. Enter value in seconds.</td></tr>
 <tr><td>app\_details\_poll\_interval</td><td>10</td><td>The app details polling interval. Enter value in seconds.</td></tr>
 </table>
-
-
-### <a id='customize-apps-manager-resources'></a> Configure Apps Manager Resources
-
-To configure Apps Manager resource usage settings:
-
-1. Ensure the `apps-manager-values.yml` file has an `apps_manager:` section.  
-1. Ensure the `apps_manager:` section includes a `resources:` sub-section.  
-1. Add the desired property configuration, using `property: value` format. 
-See [Configurable Apps Manager Resource Settings](#apps-manager-resource-settings) below.
-11. Review the completed file. The configuration file 
-should be a well formatted YAML file.  
-<br>
-    For example:  
-
-    ```yaml
-    #@data/values
-    ---
-    apps_manager:
-
-      resources:
-        instances: 2
-    ```
-1. Save the configuration file.
-
-#### <a id='apps-manager-resource-settings'></a> Configurable Apps Manager Resource Settings
-The following are all of the configurable Apps Manager resource usage settings:
-<table class="nice">
-  <tr>
-    <th width="40%">Property</th>
-    <th width="20%">Default Value</th>
-    <th width="40%">Description</th>
-  </tr>
-<tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager.</td></tr>
-</table>
-
-
-### <a id='customize-apps-manager-searchserver'></a> Configure Apps Manager Search Server
-
-To configure Apps Manager Search Server settings:
-
-1. Ensure the `apps-manager-values.yml` file has an `search_server:` section.  
-1. Ensure the `search_server:` section includes a `resources:` sub-section.  
-1. Add the desired property configuration, using `property: value` format. 
-See [Configurable Apps Manager Search Server Settings](#apps-manager-search-server) below.
-1. Review the completed file. The configuration file 
-should be a well formatted YAML file.  
-<br>
-    For example:  
-
-    ```yaml
-    #@data/values
-    ---
-    search_server:
-      resources:
-        instances: 2
-    ```
-1. Save the configuration file.
-
-#### <a id='apps-manager-search-server'></a> Configurable Apps Manager Search Server Settings
-The following are all of the configurable Apps Manager Search Server settings:
-<table class="nice">
-  <tr>
-    <th width="40%">Property</th>
-    <th width="20%">Default Value</th>
-    <th width="40%">Description</th>
-  </tr>
-<tr><td>instances</td><td>2</td><td>Deployed instances of Apps Manager Search Server.</td></tr>
-</table>
-
 
 ### <a id='customize-apps-manager-white-label'></a> Configure Apps Manager White-Labeling
 
@@ -245,7 +172,7 @@ After you complete this procedure, proceed to
 < a 
 id='available-configurations'></a> Available Configurations
 
-The following are all of the configurable Apps Manager "whitelabeling", "resources", and other various tooling settings:
+The following are all of the configurable Apps Manager settings:
 <table class="nice">
   <tr>
     <th width="40%">Property</th>
@@ -271,7 +198,5 @@ The following are all of the configurable Apps Manager "whitelabeling", "resourc
 <tr><td>apps\_manager.whitelabeling.marketplace\_name</td><td>"Marketplace"</td><td>Name of the marketplace. Enter plain text or HTML markup</td></tr>
 <tr><td>apps\_manager.whitelabeling.marketplace\_url</td><td>"/marketplace"</td><td>Apps Manager Marketplace link to point to a custom marketplace.</td></tr>
 <tr><td>apps\_manager.whitelabeling.secondary\_navigation\_links</td><td>'[{"name":"Docs","href":"https&#58;//docs.run.pivotal.io"},{"name":"Tools","href"&#58;"/tools"}]'</td><td>List of secondary navigation links of Apps Manager. Enter json string.</td></tr>
-<tr><td>apps\_manager.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
-<tr><td>search\_server.resources.instances</td><td>2</td><td>Deployed Instances of Apps Manager</td></tr>
 </table>
 %>
