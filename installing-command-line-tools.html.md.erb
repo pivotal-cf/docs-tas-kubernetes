@@ -4,11 +4,11 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to install command-line tools required to install
-<%= vars.app_runtime_full %> (TAS for Kubernetes).
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 ## <a id='overview'></a> Overview
 
-TAS for Kubernetes installation procedures require a
+<%= vars.app_runtime_short %> installation procedures require a
 Linux or macOS workstation with the following command-line tools installed:
 
 * Cloud Foundry CLI
@@ -44,7 +44,7 @@ The k14s utilities are Kubernetes support tools:
 This section guides you through installing the necessary CLIs and k14 utilities on your workstation:
 
 1. Review [Required Additional Components]
-(release-notes.html#additional-components) in _TAS for Kubernetes Release Notes_
+(release-notes.html#additional-components) in _<%= vars.app_runtime_short %> Release Notes_
 for the versions of the command line tools to install.
 
 1. Install the cf CLI. See [Installing the cf CLI]
@@ -57,7 +57,7 @@ for the versions of the command line tools to install.
 (https://docs.pivotal.io/tkgi/installing-kubectl-cli.html).
 
 1. <a id='install-bosh-cli'></a>Install the `BOSH CLI`:
-    1. Download the `BOSH CLI` binary for your version of TAS for Kubernetes from
+    1. Download the `BOSH CLI` binary for your version of <%= vars.app_runtime_short %> from
     [VMware <%= vars.app_runtime_full %>](https://network.pivotal.io/products/tas-for-kubernetes)
     on the _VMware Tanzu Network_.
     1. Rename the downloaded binary to <code>bosh</code>.
