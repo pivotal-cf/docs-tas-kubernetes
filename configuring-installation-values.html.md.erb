@@ -3,7 +3,7 @@ title: Configuring Installation Values
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure installation resources before deploying <%= vars.app_runtime_full %> to a Kubernetes cluster.
+This topic describes how to configure installation resources before deploying <%= vars.app_runtime_full %> (TAS) to a Kubernetes cluster.
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -56,11 +56,11 @@ To configure your system domain:
     system_domain: "SYSTEM-DOMAIN"
     app_domains:
     #@overlay/append
-    - "APPS-DOMAIN"
+    - "APP-DOMAIN"
     ```
     Where:
     - `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.
-    - `APPS-DOMAIN` is the separate unique domain where apps will be hosted.
+    - `APP-DOMAIN` is a separate, unique domain for hosting apps.
 
 1. Save the `values.yml` file.
 
@@ -79,7 +79,6 @@ To configure your LoadBalancer service:
         static_external_ip: "LOAD-BALANCER"
       external_traffic_policy: "POLICY"
     ```
-
     Where:
     * `ENABLED` configures the provisioning of the Kubernetes ingress with a `LoadBalancer` Istio ingress service.
     To provision a `LoadBalancer` for the Istio ingress gateway required for TAS for Kubernetes,
@@ -151,21 +150,20 @@ To configure Ingress gateway certificates:
       key: "WORKLOAD-KEY"
       ca: "WORKLOAD-CA"
     ```
-
     Where:
-    * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain (e.g., `*.SYSTEM-DOMAIN`)
+    * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain. For example, `*.SYSTEM-DOMAIN`.
     * `SYSTEM-KEY` is the Base64-encoded private key for the system certificate.
     * `SYSTEM-CA` is the Base64-encoded CA certificate used to sign the system certificate.
-    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain (e.g., `*.APPS-DOMAIN`)
+    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain. For example, `*.APP-DOMAIN`.
     * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.
     * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.
 1. Save the `values.yml` file.
 
 ### <a id='configure-app-cert'></a> (Optional) Configure Application Container Certificates
 
-You can provide one or more certificates for the TAS deployed applications to trust.
-These certificates will be injected into the application trust store to
-allow apps to communicate with each other in a secure manner.
+You can provide one or more certificates for the TAS-deployed applications to trust.
+These certificates are injected into the application trust store to
+allow apps to communicate with each other securely.
 
 To configure optional application container certificates:
 
@@ -184,12 +182,11 @@ To configure optional application container certificates:
           SECOND-CA-CERTIFICATE-CONTENT
           -----END CERTIFICATE-----
     ```
-
     Where:
-    * `FIRST-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service
-    or application that you want your TAS deployed app to trust.
+    * `FIRST-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service.
+    or application that you want your TAS-deployed app to trust.
     * `SECOND-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service
-    or application that you want your TAS deployed app to trust.
+    or application that you want your TAS-deployed app to trust.
 
     Ensure each line of the CA certificate value is indented four spaces,
     matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.
@@ -255,5 +252,5 @@ After you complete this procedure, complete all of the following configuration p
         name: usage_service
     ```
 
-1. **Apps Manager configration:** for more information, see [Configuring Apps Manger](configuring-apps-manager.html)
+1. **Apps Manager configuration:** for more information, see [Configuring Apps Manager](configuring-apps-manager.html)
 %>
