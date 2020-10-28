@@ -10,7 +10,7 @@ This topic outlines the process for administering <%= vars.app_runtime_full %> (
 To administer Tanzu Application Service (TAS) for Kubernetes after initial installation:
 
 1. **Create TAS Orgs and Spaces**: Create orgs and spaces by following the instructions
-in the _TAS for VMs Administrator Guide_,
+in the _<%= vars.standard_runtime_name %> Administrator Guide_,
 see [Orgs, Spaces, Roles, and Permissions]
 (https://docs.pivotal.io/application-service/concepts/roles.html).
 <br>
@@ -19,7 +19,7 @@ Every app, service, and route that developers create is scoped to a space.
 Each space belongs to an org in the TAS installation.
 
 1. **Create TAS Quota Plans**: Create quota plans by following the instructions
-in the _TAS for VMs Administrator Guide_,
+in the _<%= vars.standard_runtime_name %> Administrator Guide_,
 see [Creating and Modifying Quota Plans]
 (https://docs.pivotal.io/application-service/adminguide/quota-plans.html).
 <br>
@@ -30,7 +30,7 @@ the usage of organizations within a TAS installation.
 registering the service brokers and making the service plans public.
 See
 [Managing Service Brokers](https://docs.pivotal.io/application-service/services/managing-service-brokers.html)
-in the _TAS for VMs Administrator Guide_.
+in the _<%= vars.standard_runtime_name %> Administrator Guide_.
 <br>
     Developers typically need to connect their apps running on TAS to dependencies such as data services.
 Service brokers give developers a self-service mechanism to provision these dependencies
