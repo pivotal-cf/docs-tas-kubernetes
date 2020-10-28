@@ -3,14 +3,14 @@ title: Configuring Your App Image Registry
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure <%= vars.app_runtime_full %> (TAS for Kubernetes) 
+This topic describes how to configure <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>)
 to access container image registries,
 and how to create and configure a new private registry
-for TAS for Kubernetes.
+for <%= vars.app_runtime_short %>.
 
 ## <a id='overview'></a>Overview
 
-TAS for Kubernetes pulls system component container images
+<%= vars.app_runtime_short %> pulls system component container images
 from the [VMware Tanzu Network container registry](https://registry.pivotal.io/),
 and retains those images in a private container image registry.
 
@@ -39,7 +39,7 @@ To use a VMware Harbor registry as your container image registry:
 Harbor requires that your create a Harbor project before pushing container images
 to Harbor.
 
-To create a Harbor project for your TAS for Kubernetes container images:
+To create a Harbor project for your <%= vars.app_runtime_short %> container images:
 
 1. Open your browser and navigate to your Harbor registry.
 
@@ -92,7 +92,7 @@ in the Harbor documentation.
 
 ### <a id='harbor-ca-cert'></a> Retrieve the Harbor CA Certificate
 
-TAS for Kubernetes must use your
+<%= vars.app_runtime_short %> must use your
 Harbor registry's CA certificate or self-signed certificate
 to access the registry.
 
@@ -125,14 +125,14 @@ scroll down to the **Certificate Authority (CA)** field.
         1. In the **Advanced Options** pane, click the **DOWNLOAD ROOT CA CERT** button.
 
 1. Use the retrieved CA certificate as the certificate authority value when
-    configuring TAS for Kubernetes. For more information, see
+    configuring <%= vars.app_runtime_short %>. For more information, see
     [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
 
 
 
 ### <a id='harbor-config-file'></a> Configure the App Image Registry
 
-To configure TAS for Kubernetes to use your private container image registry:
+To configure <%= vars.app_runtime_short %> to use your private container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier, and open the `values.yml` file in the `configuration-values` directory.
 
@@ -161,10 +161,10 @@ To configure TAS for Kubernetes to use your private container image registry:
 ## <a id='configure-other-registry'></a> Use a Different Image Registry
 
 In addition to supporting a VMware Harbor registry as a container image registry,
-TAS for Kubernetes also supports using other container image registries,
+<%= vars.app_runtime_short %> also supports using other container image registries,
 such as a Google Container Registry (GCR) or Docker Hub registry.
 
-To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container image registry:
+To use GCR, Docker Hub, or other registry as your <%= vars.app_runtime_short %> container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 1. Open the `values.yml` file.
@@ -181,10 +181,10 @@ To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container i
 
     Where:
     * `HOST-FQDN` is the fully qualified domain name for your registry.
-    * `REPOSITORY` is the full URL for the TAS for Kubernetes
+    * `REPOSITORY` is the full URL for the <%= vars.app_runtime_short %>
     project within your registry.
     * `APP-REGISTRY-USERNAME` is the username for an account with access to the
-    TAS for Kubernetes project within your registry.
+    <%= vars.app_runtime_short %> project within your registry.
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
 
 1. (Optional) To specify a CA certificate for the registry, replace the empty `ca:` property with the following:
