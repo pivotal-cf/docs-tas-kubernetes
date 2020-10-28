@@ -46,7 +46,7 @@ Use the new directory to store configuration values for this installation.
 
 ### <a id='configure-system-domain'></a> Configure the System Domain
 
-To configure you system domain:
+To configure your system domain:
 
 1. Open `values.yml` in a text editor.
 1. Locate the `system_domain` section in the `values.yml` file.
@@ -58,13 +58,15 @@ To configure you system domain:
     #@overlay/append
     - "APPS-DOMAIN"
     ```
-    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation and `APPS-DOMAIN` is the separate unique domain where apps will be hosted
+    Where:
+    - `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.
+    - `APPS-DOMAIN` is the separate unique domain where apps will be hosted.
 
 1. Save the `values.yml` file.
 
 ### <a id='configure-lb'></a> Configure the Load Balancer
 
-To configure you LoadBalancer service:
+To configure your LoadBalancer service:
 
 1. Open `values.yml` in a text editor.
 1. Locate the `load_balancer` section in the `values.yml` file.
