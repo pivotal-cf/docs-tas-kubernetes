@@ -1,13 +1,13 @@
 ---
 title: Uninstalling <%= vars.app_runtime_full %>
 owner: Tanzu Application Service Release Engineering
-<%= vars.app_runtime_abbr %>
+---
 
 This topic discusses how to uninstall <%= vars.app_runtime_full %>.
 
 ## <a id='uninstalling-k8s'></a> Uninstalling Kubernetes Resources
 
-To uninstall the <%= vars.app_runtime_abbr %> resources installed to the Kubernetes cluster, run:
+To uninstall the TAS for Kubernetes resources installed to the Kubernetes cluster, run:
 
 ```
 $ kapp delete -a cf
@@ -18,6 +18,6 @@ This deletion command also deletes the pods and other resources that correspond 
 
 ## <a id='removing-app-images'></a> Removing App Images
 
-Uninstalling the <%= vars.app_runtime_abbr %> resources from the Kubernetes cluster
+Uninstalling the TAS for Kubernetes resources from the Kubernetes cluster
 does not delete any app images pushed to the app-image registry.
-To delete them, delete the repositories that <%= vars.app_runtime_abbr %> has created in the registry.
+To delete them, delete the repositories that TAS for Kubernetes has created in the registry.
