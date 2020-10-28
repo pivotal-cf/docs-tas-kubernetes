@@ -3,8 +3,7 @@ title: Uninstalling Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic discusses how to uninstall 
-Tanzu Application Service for Kubernetes (TAS for Kubernetes).
+This topic discusses how to uninstall <%= vars.app_runtime_full %>.
 
 ## <a id='uninstalling-k8s'></a> Uninstalling Kubernetes Resources
 
@@ -19,6 +18,6 @@ This deletion command also deletes the pods and other resources that correspond 
 
 ## <a id='removing-app-images'></a> Removing App Images
 
-Uninstalling the TAS for Kubernetes resources from the Kubernetes cluster 
-does not delete any app images pushed to the app-image registry. 
+Uninstalling the TAS for Kubernetes resources from the Kubernetes cluster
+does not delete any app images pushed to the app-image registry.
 To delete them, delete the repositories that TAS for Kubernetes has created in the registry.
