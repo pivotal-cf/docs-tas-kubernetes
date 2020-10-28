@@ -4,33 +4,33 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to relocate VMware <%= vars.app_runtime_full %>
-(TAS for Kubernetes) images to a private container image registry.
+(<%= vars.app_runtime_short %>) images to a private container image registry.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before installing TAS for Kubernetes, complete the following:
+Before installing <%= vars.app_runtime_short %>, complete the following:
 
 * Ensure you have a [VMware Tanzu Network](https://network.pivotal.io/) account to
 use to download container images from the VMware Tanzu Network Registry.
-  Ensure this account has a signed TAS for Kubernetes EULA.
+  Ensure this account has a signed <%= vars.app_runtime_short %> EULA.
 * Follow the procedures in:
-    * [Preparing to Install <%= vars.app_runtime_full %>](preparing-to-install-tas-for-kubernetes.html) 
+    * [Preparing to Install <%= vars.app_runtime_full %>](preparing-to-install-tas-for-kubernetes.html)
     * [Configuring Installation Values](configuring-installation-values.html)
-* If installing TAS for Kubernetes from a private container image registry:
+* If installing <%= vars.app_runtime_short %> from a private container image registry:
 
     * Grant write access to your private container image registry.
 
 ## <a id='overview'></a> Overview
 
 In Kubernetes, containers can be re-created at various times and a system image for the new container will be pulled
-from your system registry. The system registry you use for TAS for Kubernetes must always be available when a container is started on a new host.
+from your system registry. The system registry you use for <%= vars.app_runtime_short %> must always be available when a container is started on a new host.
 
 You can use either the VMware Tanzu Network or a private container image registry as your system registry.
 
-You should install TAS for Kubernetes from a private container image registry for the following situations:
+You should install <%= vars.app_runtime_short %> from a private container image registry for the following situations:
 
 * Your deployment has limited network egress because of firewall or network bandwidth.
-* You want to reduce the external runtime dependencies of your TAS for Kubernetes installation.
+* You want to reduce the external runtime dependencies of your <%= vars.app_runtime_short %> installation.
 
 <br>
 To configure the VMware Tanzu Network as your system registry, follow the procedures in
@@ -41,11 +41,11 @@ To configure a private container image registry as your system registry, follow 
 
 ## <a id='configure-for-tanzu-network'></a> Configure the VMware Tanzu Network as Your System Registry
 
-TAS for Kubernetes requires a registered
+<%= vars.app_runtime_short %> requires a registered
 [VMware Tanzu Network](https://network.pivotal.io) account to pull container images for
 system components from the [VMware Tanzu Network container registry](https://registry.pivotal.io/).
 
-To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
+To configure <%= vars.app_runtime_short %> with VMware Tanzu Network user credentials:
 
 1. Change directory into the `config` directory you created earlier.
 1. Open the `_values.yml` file.
@@ -59,21 +59,21 @@ To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
     ```
 
     Where:
-    * `USERNAME` is the username of the account to use to download container images from the VMware Tanzu Network Registry, which will ensure that this account has a signed TAS for Kubernetes EULA.
+    * `USERNAME` is the username of the account to use to download container images from the VMware Tanzu Network Registry, which will ensure that this account has a signed <%= vars.app_runtime_short %> EULA.
     * `PASSWORD` is the password for the account you specified.
 
 ## <a id='configure-for-private'></a> Configure a Private Container Image Registry as Your System Registry
-Before installing TAS for Kubernetes from a private container image registry,
-you must relocate the TAS for Kubernetes image from the VMware Tanzu Network Registry to the private container image registry.
+Before installing <%= vars.app_runtime_short %> from a private container image registry,
+you must relocate the <%= vars.app_runtime_short %> image from the VMware Tanzu Network Registry to the private container image registry.
 
-To relocate the TAS for Kubernetes image to a private container image registry:
+To relocate the <%= vars.app_runtime_short %> image to a private container image registry:
 
-* [Download the TAS for Kubernetes Images](#downloading-the-images)
-* [Upload the TAS for Kubernetes Images to the Private Container Image Registry](#uploading-the-images)
+* [Download the <%= vars.app_runtime_short %> Images](#downloading-the-images)
+* [Upload the <%= vars.app_runtime_short %> Images to the Private Container Image Registry](#uploading-the-images)
 
-#### <a id='downloading-the-images'></a> Download the TAS for Kubernetes Images
+#### <a id='downloading-the-images'></a> Download the <%= vars.app_runtime_short %> Images
 
-To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
+To download the <%= vars.app_runtime_short %> Images from VMware Tanzu Network Registry:
 
 1. In your terminal, navigate to the `tanzu-application-service` directory.
 
@@ -100,9 +100,9 @@ To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
 
     Packaging the image takes about 5 minutes to complete.
 
-#### <a id='uploading-the-images'></a> Upload the TAS for Kubernetes Images to the Private Container Image Registry
+#### <a id='uploading-the-images'></a> Upload the <%= vars.app_runtime_short %> Images to the Private Container Image Registry
 
-To upload the TAS for Kubernetes images to the private container image registry:
+To upload the <%= vars.app_runtime_short %> images to the private container image registry:
 
 1. Log in to the private container image registry.
 
