@@ -18,25 +18,25 @@ You do have 2 options while restoring TAS4K8s:
 Restore to a new platform with no state - this scenario is typical for a full disaster recovery
 Restore in place while deleting all current state of the platform - this scenario maybe used when things went so bad that it is worth losing some recent changes in favor of restoring a healthy baseline
 
-* [Restore TAS for Kubernetes](#restore-tas)
+* [Restore <%= vars.app_runtime_short %>](#restore-tas)
 * [Monitor Restore Progress](#restore-monitoring)
 * [Review a Completed Restore](#restore-review)
 
 ## <a id='prerequisites'></a> Prerequisites
 
-You must have access to the TAS for Kubernetes Velero backup artifacts you plan to restore.
+You must have access to the <%= vars.app_runtime_short %> Velero backup artifacts you plan to restore.
 
 
-## <a id='restore-tas'></a> Restore TAS for Kubernetes
+## <a id='restore-tas'></a> Restore <%= vars.app_runtime_short %>
 
-To restore a TAS for Kubernetes backup:
+To restore a <%= vars.app_runtime_short %> backup:
 
 * [Prepare the Velero Backup Artifacts](#restore-prepare)
-* [Start a TAS for Kubernetes Velero Restore](#restore-start)
+* [Start a <%= vars.app_runtime_short %> Velero Restore](#restore-start)
 
 ### <a id='restore-prepare'></a> Prepare the Velero Backup Artifacts
 
-To prepare your TAS for Kubernetes Velero backup artifacts:
+To prepare your <%= vars.app_runtime_short %> Velero backup artifacts:
 
 1. Determine the name of the backup to be restored:
 
@@ -77,9 +77,9 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
     This is required to restore the correct data.
     </p>
 
-### <a id='restore-start'></a> Start a TAS for Kubernetes Velero Restore
+### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Velero Restore
 
-To restore TAS for Kubernetes Tanzu Postgres Instances:
+To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
 1. To restore the PGBackrest volume and secrets:
 
@@ -113,7 +113,7 @@ in _Configuring Your System Databases_.
 
 1. To re-annotate and label your pods, complete
 [Prepare Tanzu Postgres TAS Instances for Backup and Restore]
-(bandr-backup-manual.html#backup-prepare-instances) in _Backing Up TAS for Kubernetes_.
+(bandr-backup-manual.html#backup-prepare-instances) in _Backing Up <%= vars.app_runtime_short %>_.
 
 ## <a id='restore-monitoring'></a> Monitor Restore Progress
 
@@ -220,10 +220,10 @@ to measure what data was in Cloud Foundry during a backup.
 
 To validate a completed restore:
 
-1. If you do not have the TAS for Kubernetes installation resources,
+1. If you do not have the <%= vars.app_runtime_short %> installation resources,
 download the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
 For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
-1. Inspect the TAS for Kubernetes artifact.
+1. Inspect the <%= vars.app_runtime_short %> artifact.
 Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:
     * `get-backup-metadata.sh`
     * `compare-backup-metadata.sh`
