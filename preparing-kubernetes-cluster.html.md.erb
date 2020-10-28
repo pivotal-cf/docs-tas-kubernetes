@@ -72,28 +72,25 @@ For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
 
 After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that kubectl targets the cluster.
 
-## <a id='verify-default-storage'></a> Verify a Default Storage Exists
+## <a id='verify-default-storage'></a> Verifying a Default Storage Exists
 
-TAS for Kubernetes requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore.
+TAS for Kubernetes requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default `StorageClass` resource in the Kubernetes cluster can dynamically provision the persistent volumes that TAS for Kuberenetes calls for. 
 
-To verify your Kubernetes cluster already has a default storage class installed:
+Most of the Kubernetes distributed by the public clouds come with a default storage class. If you are using Kubernetes on a private cloud, you might need to install one instead.
 
-1. Retrieve the list of StorageClass resources in the cluster:
-  <pre><code>$ kubectl get storageclass</code></pre>
-  For example:
-  <pre><code>$ kubectl get storageclass
+To verify your Kubernetes cluster already has a default storage class installed, retrieve the list of StorageClass resources in the cluster:
+
+```bash
+$ kubectl get storageclass
+```
+
+Review the returned list of StorageClass resources:
+
+```bash
 NAME             PROVISIONER                    AGE
 thin (default)   kubernetes.io/vsphere-volume   34h
-</code></pre>
+```
 
-1. Review the returned list of StorageClass resources.
-    * If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically.
-    * If the list does not include a default, you must install one before deploying TAS for Kubernetes.
-See the [Configuring Default Storage](configuring-default-storage.html) topic for information about configuring the default storage class.
+* If the list includes an entry for which `(default)` follows the storage class name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically. Proceed to [Installing TAS for Kubernetes](index-install.html).
 
-<!--
-## <a name='deploying-tas-kubernetes'></a> Next: Configuring Tanzu Application Service for Kubernetes Installation Values
-
-After you have completed the preparatory steps above, proceed to [Configuring Installation Values](configuring-installation-values.html) for installation to the Kubernetes cluster.
-
--->
+* If the list does not include a default, you must install one before installing TAS for Kubernetes. See the [Installing a Default Storage Class](installing-default-storage-class.html) topic for information.
