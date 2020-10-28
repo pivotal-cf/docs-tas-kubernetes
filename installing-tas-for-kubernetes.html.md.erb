@@ -1,16 +1,16 @@
 ---
-title: Installing Tanzu Application Service for Kubernetes
+title: Installing <%= vars.app_runtime_full %>
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to install Tanzu Application Service for Kubernetes (TAS for Kubernetes) 
-from the VMware Tanzu Network and from a relocated image in a private container image registry.  
+This topic describes how to install <%= vars.app_runtime_full %> (TAS for Kubernetes)
+from the VMware Tanzu Network and from a relocated image in a private container image registry.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before installing TAS for Kubernetes:  
+Before installing TAS for Kubernetes:
 
-1. Ensure that you have configured all of the required or recommended installation resources by reviewing 
+1. Ensure that you have configured all of the required or recommended installation resources by reviewing
 [Configuring Installation Values](configuring-installation-values.html).
 1. Ensure that you have configured the Apps Manager. For more information, see [Configuring Apps Manager](configuring-apps-manager.html).
 
@@ -23,36 +23,36 @@ To configure installation settings and install TAS for Kubernetes:
 
 ## <a id='generate-configuration-values'></a> Generate Internal Configuration Values
 
-TAS for Kubernetes requires internal configuration values, credentials and certificates to coordinate its components. These configuration values, credentials and certificates must be supplied to the TAS for Kubernetes installation script.  
+TAS for Kubernetes requires internal configuration values, credentials and certificates to coordinate its components. These configuration values, credentials and certificates must be supplied to the TAS for Kubernetes installation script.
 
 To generate the internal values, credentials and certificates needed during TAS for Kubernetes installation, use a helper script in the installation resources:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories. 
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
 1. Change directory to the `tanzu-application-service` directory.
-1. To create new configuration files, run:  
+1. To create new configuration files, run:
 
     ```bash
     ./bin/generate-values.sh CONFIG-VALUES-PATH
     ```
 <br>
-    Where `CONFIG-VALUES-PATH` is the path to the `configuration-values` directory. 
-    For example, `../configuration-values`.  
+    Where `CONFIG-VALUES-PATH` is the path to the `configuration-values` directory.
+    For example, `../configuration-values`.
 <br>
-    The `generate-values` script creates:  
-    * **_generated-values.yml**: The `_generated-values.yml` file contains generated configuration values 
-    that will be read during installation. 
+    The `generate-values` script creates:
+    * **_generated-values.yml**: The `_generated-values.yml` file contains generated configuration values
+    that will be read during installation.
     The default location for the `_generated-values.yml` file is: `../configuration-values/_generated-values.yml`.
- <br>   
-    * **tas-vars**: The `tas-vars` data store contains credentials and certificates 
-    that are not used during TAS for Kubernetes installation but may be needed for future value generation. 
-    The default location for the `tas-vars` data store is: `../configuration-values/vars-store/tas-vars`.    
+ <br>
+    * **tas-vars**: The `tas-vars` data store contains credentials and certificates
+    that are not used during TAS for Kubernetes installation but may be needed for future value generation.
+    The default location for the `tas-vars` data store is: `../configuration-values/vars-store/tas-vars`.
 <br>
-    * **Certificates**: Self-signed `system-certificate` and `workload-certificate` certificates are created 
-    if you did not provide these certificates when completing the steps in [Configuring Installation Values](configuring-installation-values.html).   
+    * **Certificates**: Self-signed `system-certificate` and `workload-certificate` certificates are created
+    if you did not provide these certificates when completing the steps in [Configuring Installation Values](configuring-installation-values.html).
 
 
-<p class="note">Ensure all of the generated files in the <code>configuration-values</code> directory are stored securely. 
-    These files contain important installation secrets and should be preserved 
+<p class="note">Ensure all of the generated files in the <code>configuration-values</code> directory are stored securely.
+    These files contain important installation secrets and should be preserved
     for future installations.
 </p>
 
@@ -139,35 +139,35 @@ To install TAS for Kubernetes:
 
 ## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
 
-To configure DNS entries for the TAS for Kubernetes ingress gateway:  
+To configure DNS entries for the TAS for Kubernetes ingress gateway:
 
-* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:  
+* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
 <br>
-    By default, TAS for Kubernetes does not create a Kubernetes `LoadBalancer` service 
-    for the ingress gateway. Complete the following:  
+    By default, TAS for Kubernetes does not create a Kubernetes `LoadBalancer` service
+    for the ingress gateway. Complete the following:
     1. [Use a LoadBalancer Service for the Ingress Gateway]
-    (configuring-installation-values.html#adjust-installation-resources-networking) 
+    (configuring-installation-values.html#adjust-installation-resources-networking)
     1. [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway]
-    (#post-installation-dns-with-k8s-lb)  
+    (#post-installation-dns-with-k8s-lb)
 <br>
-* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:  
+* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
 <br>
-    To configure DNS, complete one of the following:  
-    * If you are using an external load balancer for the ingress gateway: 
+    To configure DNS, complete one of the following:
+    * If you are using an external load balancer for the ingress gateway:
     [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb)
-    * If you are not using an external load balancer for the ingress gateway: 
-    [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb)  
+    * If you are not using an external load balancer for the ingress gateway:
+    [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb)
 
 ### <a id='post-installation-dns-no-lb'></a> Configure DNS Without a Load Balancer for Ingress Gateway
 
-This section describes how to configure your DNS 
-if you do not have an external load balancer to use for ingress and 
-have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service 
-for the ingress gateway. 
+This section describes how to configure your DNS
+if you do not have an external load balancer to use for ingress and
+have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service
+for the ingress gateway.
 
 To set up your DNS records to establish ingress connectivity directly to the worker nodes:
 
-1. To retrieve the list of existing worker nodes with their external IP addresses:  
+1. To retrieve the list of existing worker nodes with their external IP addresses:
 
     ```
     kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
@@ -183,23 +183,23 @@ af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.8
 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
 </pre>
 
-1. Create a wildcard `A` record for the system domain in your DNS zone, 
-resolving to the set of external IP addresses for the worker nodes:  
+1. Create a wildcard `A` record for the system domain in your DNS zone,
+resolving to the set of external IP addresses for the worker nodes:
 
     ```
     *.SYSTEM-DOMAIN
     ```
-    Where `SYSTEM-DOMAIN` is the system domain. Include the `*.` wildcard prefix so that all subdomains 
+    Where `SYSTEM-DOMAIN` is the system domain. Include the `*.` wildcard prefix so that all subdomains
     of the system domain also resolve to the IP addresses.
 
 ### <a id='post-installation-dns-with-lb'></a> Configure DNS With an External Load Balancer for Ingress Gateway
 
-This section describes how to configure DNS 
+This section describes how to configure DNS
 if you have an external load balancer to use for ingress to the TAS for Kubernetes installation and
-have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service 
-for the ingress gateway. 
+have deployed TAS for Kubernetes without a Kubernetes LoadBalancer service
+for the ingress gateway.
 
-To configure the external load balancer to forward HTTP and HTTPS traffic to the Kubernetes worker nodes:  
+To configure the external load balancer to forward HTTP and HTTPS traffic to the Kubernetes worker nodes:
 
 1. To retrieve the list of existing worker nodes with their internal IP addresses:
 
@@ -217,35 +217,35 @@ af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.8
 cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
     </pre>
 
-1. Configure your external load balancer to forward traffic on TCP ports `80` and `443` to the set of 
+1. Configure your external load balancer to forward traffic on TCP ports `80` and `443` to the set of
 internal IP addresses for the Kubernetes worker nodes.
 
 1. Configure DNS records in your DNS zone:
-    * If your load balancer has a static IP, create a wildcard `A` record for the system domain, 
-        resolving to the external IP address of the load balancer:  
+    * If your load balancer has a static IP, create a wildcard `A` record for the system domain,
+        resolving to the external IP address of the load balancer:
 
         ```
         *.SYSTEM-DOMAIN
         ```
-        Where `SYSTEM-DOMAIN` is the system domain.  
+        Where `SYSTEM-DOMAIN` is the system domain.
 <br>
-    * If your load balancer has a DNS name instead of static IP, such as an AWS load balancer, 
-        create a wildcard `CNAME` record for the system domain, 
-        resolving to the external IP address of the load balancer:  
+    * If your load balancer has a DNS name instead of static IP, such as an AWS load balancer,
+        create a wildcard `CNAME` record for the system domain,
+        resolving to the external IP address of the load balancer:
 
         ```
         *.SYSTEM-DOMAIN
         ```
-        Where `SYSTEM-DOMAIN` is the system domain.  
+        Where `SYSTEM-DOMAIN` is the system domain.
 
 
-    Ensure you include the `*.` wildcard prefix in the new record 
+    Ensure you include the `*.` wildcard prefix in the new record
     so that all subdomains of the system domain also resolve to this IP address.
 
 ### <a id='post-installation-dns-with-k8s-lb'></a> Configure DNS With a Kubernetes Load Balancer for Ingress Gateway
 
-This section describes how to configure DNS if you have configured TAS for Kubernetes to 
-use a Kubernetes LoadBalancer Service for the ingress gateway.  
+This section describes how to configure DNS if you have configured TAS for Kubernetes to
+use a Kubernetes LoadBalancer Service for the ingress gateway.
 
 To configure DNS with your system domain resolving to the external IP address of the load balancer:
 
@@ -263,27 +263,27 @@ To configure DNS with your system domain resolving to the external IP address of
     ae7b1093f9c3b44fd9982b828b32ccad-2445920965.us-west-2.elb.amazonaws.com
     </pre>
 
-1. In your DNS zone, create an entry for your system domain:  
-    * If you have an external IP address, create a wildcard `A` record for the system domain, 
-        resolving to the external IP address:  
+1. In your DNS zone, create an entry for your system domain:
+    * If you have an external IP address, create a wildcard `A` record for the system domain,
+        resolving to the external IP address:
 
         ```
         *.SYSTEM-DOMAIN
         ```
-        Where `SYSTEM-DOMAIN` is the system domain.  
+        Where `SYSTEM-DOMAIN` is the system domain.
     <br>
-    * If you have a hostname, create a wildcard CNAME record for the system domain, 
-        resolving to the hostname:  
+    * If you have a hostname, create a wildcard CNAME record for the system domain,
+        resolving to the hostname:
 
         ```
         *.SYSTEM-DOMAIN
         ```
-        Where `SYSTEM-DOMAIN` is the system domain. 
+        Where `SYSTEM-DOMAIN` is the system domain.
 
     Ensure you include the `*.` wildcard prefix in the new record so that all subdomains of the system domain also resolve to the load balancer.
 
-For information about configuring TAS for Kubernetes to 
-use a Kubernetes LoadBalancer Service for the ingress gateway, see 
+For information about configuring TAS for Kubernetes to
+use a Kubernetes LoadBalancer Service for the ingress gateway, see
 [Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
 
 ## <a id='post-installation-configuration'></a> Validate Your TAS for Kubernetes Installation
@@ -296,11 +296,11 @@ To validate your TAS for Kubernetes:
     cf api api.SYSTEM-DOMAIN --skip-ssl-validation
     ```
 
-    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.  
-1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values` 
+    Where `SYSTEM-DOMAIN` is your TAS for Kubernetes installation system domain.
+1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values`
 directories.
 
-1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password 
+1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password
 stored in the `cf_admin_password` key in the `configuration-values/deployment-values.yml` file:
 
     ```
@@ -314,7 +314,7 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
     cf auth admin "$CF_ADMIN_PASSWORD"
     ```
 
-1. Create and target an organization and space for the verification application. 
+1. Create and target an organization and space for the verification application.
 
     For example:
     <pre class="terminal">$ cf create-org test-org
@@ -328,8 +328,8 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
     git clone https://github.com/cloudfoundry-samples/test-app.git
     ```
 
-    For more information see [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app) 
-    on GitHub.  
+    For more information see [Cloud Foundry test application](https://github.com/cloudfoundry-samples/test-app)
+    on GitHub.
 
 1. Change directory into the resulting `test-app` directory.
 
@@ -340,13 +340,13 @@ stored in the `cf_admin_password` key in the `configuration-values/deployment-va
     cf push test-app --hostname test-app
     ```
 
-1. To validate the test app is running, make a request to the app after the `cf push` command succeeds:  
+1. To validate the test app is running, make a request to the app after the `cf push` command succeeds:
 
     ```
     curl test-app.APPS-DOMAIN
     ```
 
-    Where `APPS-DOMAIN` is your TAS for Kubernetes installation apps domain.  
+    Where `APPS-DOMAIN` is your TAS for Kubernetes installation apps domain.
 
     <p class="note">
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
