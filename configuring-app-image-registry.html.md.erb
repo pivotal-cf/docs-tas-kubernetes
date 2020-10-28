@@ -172,10 +172,7 @@ To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container i
 
     ```yaml
     app_registry:
-      ca: |
-        -----BEGIN CERTIFICATE-----
-        CA-CERTIFICATE-CONTENT
-        -----END CERTIFICATE-----
+      ca: ""
       hostname: "HOST-FQDN"
       repository_prefix: "REPOSITORY"
       username: "APP-REGISTRY-USERNAME"
@@ -189,6 +186,21 @@ To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container i
     * `APP-REGISTRY-USERNAME` is the username for an account with access to the 
     TAS for Kubernetes project within your registry. 
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
+
+1. (Optional) To specify a CA certificate for the registry, replace the empty `ca:` property with the following:  
+
+    ```
+      ca: |
+        -----BEGIN CERTIFICATE-----
+        CA-CERTIFICATE-CONTENT
+        -----END CERTIFICATE-----
+    ```
+    Where `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate for your 
+    registry. Ensure each line of the CA certificate value is indented four spaces, 
+    matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.  
+<br>
+    Specifying a CA certificate is required if your registry does not have a 
+    certificate signed by a trusted authority.
 
 1. Save the file.
 

@@ -1,0 +1,110 @@
+---
+title: Installing a Default Storage Class
+owner: Tanzu Application Service Release Engineering
+---
+
+This topic describes how to install a default storage class on your Kubernetes clusters to support TAS for Kubernetes.
+
+<p class="note"><strong>Note:</strong>
+  If your Kubernetes cluster already comes with a default storage class, skip this procedure. See <a href='preparing-kubernetes-cluster.html#verify-default-storage'>Verify that a Default Storage Class Exists</a> in <em>Preparing the Kubernetes Cluster</em>.
+</p>
+
+## <a id='overview'></a>Overview
+
+Installing a default storage class on your Kubernetes clusters enables dynamic provisioning of persistent volumes.
+
+You can install a default storage class on Kubernetes clusters that are provisioned by Tanzu Kubernetes Grid Integrated Edition (TKGI) on vSphere or provisioned by Tanzu Kubernetes Grid (TKG) on vSphere or Amazon Web Services (AWS).
+
+See the following sections:
+
+- [Install a Default Storage Class for TKGI-Provisioned Clusters on vSphere](#installing-for-tkgi)
+- [Install a Default Storage Class for TKG-Provisioned Clusters on vSphere](#installing-for-tkg-vsphere)
+- [Install a Default Storage Class for TKG-Provisioned Clusters on AWS](#installing-for-tkg-aws)
+
+## <a id='installing-for-tkgi'></a> Install a Default Storage Class for TKGI-Provisioned Clusters on vSphere
+
+To install a default storage class for a TKGI-provisioned cluster on vSphere:
+
+1. Create a file named `vsphere-default-storage-class.yml`.
+1. Populate the `vsphere-default-storage-class.yml` file with the following:
+
+    ```yaml
+    ---
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: thin
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: kubernetes.io/vsphere-volume
+    ```
+
+1. To install the StorageClass, run the following command:
+
+    ```
+    kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml
+    ```
+
+For more information and additional requirements, see [Provision a Dynamic PV](https://docs.pivotal.io/tkgi/volumes.html#dynamic-pv) in _Configuring and Using PersistentVolumes_ in the TKGI documentation.
+
+## <a id='installing-for-tkg-vsphere'></a> Install a Default Storage Class for TKG-Provisioned Clusters on vSphere
+
+To install a default storage class for a TKG-provisioned cluster on vSphere:
+
+1. Create a file named `vsphere-default-storage-class.yml`.
+1. Populate the `vsphere-default-storage-class.yml` file with the following:
+
+    ```yaml
+    ---
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: thin-csi
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: csi.vsphere.vmware.com
+    parameters:
+      datastoreurl: "DATASTORE-URL"
+    ```
+
+    Where `DATASTORE-URL` is the URL to your CSI datastore.
+
+1. To install the StorageClass, run:
+
+    ```bash
+    kapp deploy -a default-storage-class -f vsphere-default-storage-class.yml
+    ```
+
+
+## <a id='installing-for-tkg-aws'></a> Install a Default Storage Class for TKG-Provisioned Clusters on AWS
+
+To install a default storage class for a TKG-provisioned cluster on AWS:
+
+1. Create a file named `aws-default-storage-class.yml`.
+1. Populate the `aws-default-storage-class.yml` file with the following:
+
+    ```yaml
+      ---
+      kind: StorageClass
+      apiVersion: storage.k8s.io/v1
+      metadata:
+        name: gp2
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+      provisioner: kubernetes.io/aws-ebs
+      parameters:
+        type: gp2
+        fsType: ext4
+    ```
+
+1. To install the StorageClass, run:
+
+    ```
+    kapp deploy -a default-storage-class -f aws-default-storage-class.yml
+    ```
+
+## <a id="next"></a>Next Steps
+
+Verify that there is a storage class marked with `(default)` in your `StorageClass` list by running `kubectl get storageclass`.
+
+After verifying that there is a default storage class, proceed to [Installing TAS for Kubernetes](index-install.html).

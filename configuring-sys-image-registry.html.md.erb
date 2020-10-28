@@ -47,9 +47,9 @@ system components from the [VMware Tanzu Network container registry](https://reg
 
 To configure TAS for Kubernetes with VMware Tanzu Network user credentials:
 
-1. Change directory into the `configuration-values` directory you created earlier.  
-1. Open the `values.yml` file.  
-1. Populate the `system_registry` section in the `values.yml` file with the following:
+1. Change directory into the `config` directory you created earlier.  
+1. Open the `_values.yml` file.  
+1. Populate the `system_registry` section in the `_values.yml` file with the following:
 
     ```yaml
     system_registry:
@@ -94,7 +94,7 @@ To download the TAS for Kubernetes Images from VMware Tanzu Network Registry:
     ```
     kbld package -f <(ytt \
                    -f config/image-overrides.yml \
-                   -f config/values.yml ) \
+                   -f config/_values.yml ) \
                    --output /tmp/images.tar
     ```
 
@@ -122,7 +122,7 @@ To upload the TAS for Kubernetes images to the private container image registry:
 
         ```
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
-                         -f config/values.yml) \
+                         -f config/_values.yml) \
                          -i /tmp/images.tar \
                          -r PRIVATE-REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml
@@ -137,19 +137,43 @@ To upload the TAS for Kubernetes images to the private container image registry:
 
         ```
         kbld unpackage -f <(ytt -f config/image-overrides.yml \
-                         -f config/values.yml) \
+                         -f config/_values.yml) \
                          -i /tmp/images.tar \
                          -r PRIVATE-REPOSITORY/PROJECT/IMAGE \
                          --lock-output relocated_images.yml \
                          --registry-verify-certs=false
         ```
 
-        Where:  
-        * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.  
-        * `PROJECT` is the project name in the registry.  
-        * `IMAGE` is the image name to reallocate the images.  
+        Where:
+        * `PRIVATE-REPOSITORY` is the FQDN or IP address for the private container image registry repository to log in to.
+        * `PROJECT` is the project name in your private registry
+        * `IMAGE` is the image name to reallocate the images.
+
+### <a id='configure-for-private-registry'></a> Customize Your Configuration to Use Your Private System Registry
+
+To customize your configuration files for your private registry:
+
+1. Move the `config/image-overrides.yml` file to the `config-optional` directory.  
+1. Open `config/_values.yml` in a text editor.  
+1. To point the system registry variables to the private registry, 
+configure the `system_registry` section:
+
+    ```
+    #@data/values
+    ---
+    system_registry:
+      hostname: "REGISTRY-HOSTNAME"
+      username: "REGISTRY-USERNAME"
+      password: "REGISTRY-PASSWORD"
+    ```
+
+    Where:
+    * `REGISTRY-HOSTNAME` is the hostname of your private registry.
+    * `REGISTRY-USERNAME` is a user account with write access to the private registry.
+    * `REGISTRY-PASSWORD` is the password for the user account.  
+1. Save the `_values.yml` file.  
 
 ## <a id="next"></a> Next Steps
 
 After you complete this procedure, proceed to 
-[Configuring Your System Databases](configuring-system-databases.html).
+[Configuring System Database](configuring-system-databases.html).
