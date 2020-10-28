@@ -3,43 +3,43 @@ title: Configuring Your App Image Registry
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure Tanzu Application Service for Kubernetes (TAS for Kubernetes) 
-to access container image registries, 
-and how to create and configure a new private registry 
+This topic describes how to configure <%= vars.app_runtime_full %> (TAS for Kubernetes) 
+to access container image registries,
+and how to create and configure a new private registry
 for TAS for Kubernetes.
 
 ## <a id='overview'></a>Overview
 
-TAS for Kubernetes pulls system component container images 
-from the [VMware Tanzu Network container registry](https://registry.pivotal.io/), 
-and retains those images in a private container image registry. 
+TAS for Kubernetes pulls system component container images
+from the [VMware Tanzu Network container registry](https://registry.pivotal.io/),
+and retains those images in a private container image registry.
 
-Before you begin this procedure, ensure that you have 
-created a private container image registry. VMware recommends that you use a VMware Harbor registry 
+Before you begin this procedure, ensure that you have
+created a private container image registry. VMware recommends that you use a VMware Harbor registry
 as your container image registry.
 
-To use a VMware Harbor registry as your container image registry, 
+To use a VMware Harbor registry as your container image registry,
 complete the procedures in [Use Harbor as Your Application Image Registry](#configure-harbor-registry) below.
 
-To use a different registry as your container image registry, 
+To use a different registry as your container image registry,
 complete the procedures in [Use a Different Image Registry](#configure-other-registry) below.
 
 
 ## <a id='configure-harbor-registry'></a> Use Harbor as Your Application Image Registry
 
-To use a VMware Harbor registry as your container image registry:  
+To use a VMware Harbor registry as your container image registry:
 
-* [Create a Harbor Project and User Account](#harbor-project-user)  
-* [Configure the Harbor Project](#harbor-project-configure)  
-* [Retrieve the Harbor CA Certificate](#harbor-ca-cert)  
-* [Configure the App Image Registry](#harbor-config-file)  
+* [Create a Harbor Project and User Account](#harbor-project-user)
+* [Configure the Harbor Project](#harbor-project-configure)
+* [Retrieve the Harbor CA Certificate](#harbor-ca-cert)
+* [Configure the App Image Registry](#harbor-config-file)
 
 ### <a id='harbor-project-user'></a> Create a Harbor Project and User Account
 
-Harbor requires that your create a Harbor project before pushing container images 
-to Harbor. 
+Harbor requires that your create a Harbor project before pushing container images
+to Harbor.
 
-To create a Harbor project for your TAS for Kubernetes container images:  
+To create a Harbor project for your TAS for Kubernetes container images:
 
 1. Open your browser and navigate to your Harbor registry.
 
@@ -48,33 +48,33 @@ To create a Harbor project for your TAS for Kubernetes container images:
     ```
     Where `HARBOR-FQDN` is  the fully qualified domain name for your Harbor installation.
 
-1. Log in with your Harbor administrative credentials.  
+1. Log in with your Harbor administrative credentials.
 
-1. Create a new Harbor user named `tas-app-images-push-pull`. 
-You must provide a username and password to create the account. 
+1. Create a new Harbor user named `tas-app-images-push-pull`.
+You must provide a username and password to create the account.
 For more information, see [Create a new user]
-(https://goharbor.io/docs/1.10/administration/managing-users/create-users-db/) 
-in the Harbor documentation. 
+(https://goharbor.io/docs/1.10/administration/managing-users/create-users-db/)
+in the Harbor documentation.
 
-1. Create a new Harbor project named `tas-app-images`. 
+1. Create a new Harbor project named `tas-app-images`.
 For more information, see [Create a new private project]
 (https://goharbor.io/docs/1.10/working-with-projects/create-projects/)
-in the Harbor documentation. 
+in the Harbor documentation.
 
-<p class="note"><strong>Note:</strong> 
-  If you specify custom project and user names in the 
-  Harbor configuration procedure above, use the same project and user names when configuring the 
+<p class="note"><strong>Note:</strong>
+  If you specify custom project and user names in the
+  Harbor configuration procedure above, use the same project and user names when configuring the
   <code>values.yml</code> file. For more information, see <a href="#harbor-config-file">
-    Configure the App Image Registry</a>, below. 
+    Configure the App Image Registry</a>, below.
 </p>
 
 ### <a id='harbor-project-configure'></a> Configure the Harbor Project
 
-To grant your Harbor user account permissions to your Harbor project: 
+To grant your Harbor user account permissions to your Harbor project:
 
-1. Open your Harbor registry in a browser, and open the **Projects** list.  
+1. Open your Harbor registry in a browser, and open the **Projects** list.
 
-1. Click the `tas-app-images` project in the Projects list, 
+1. Click the `tas-app-images` project in the Projects list,
 and select the **Members** tab.
 
 1. Click the **+ USER** button to open the **New Member** dialog box.
@@ -85,50 +85,50 @@ and select the **Members** tab.
 
 1. Click **OK** to add the user to your Harbor project.
 
-For more information on the Harbor `Master` role, see 
-[Managing Users](https://goharbor.io/docs/1.10/administration/managing-users/) 
+For more information on the Harbor `Master` role, see
+[Managing Users](https://goharbor.io/docs/1.10/administration/managing-users/)
 in the Harbor documentation.
 
 
 ### <a id='harbor-ca-cert'></a> Retrieve the Harbor CA Certificate
 
-TAS for Kubernetes must use your 
-Harbor registry's CA certificate or self-signed certificate 
-to access the registry.  
+TAS for Kubernetes must use your
+Harbor registry's CA certificate or self-signed certificate
+to access the registry.
 
-<p class="note"><strong>Note:</strong> 
-If you did not use the Ops Manager tile to deploy your Harbor installation, 
-contact your Harbor installation administrator to obtain the CA certificate 
-that issued the Harbor certificate. 
+<p class="note"><strong>Note:</strong>
+If you did not use the Ops Manager tile to deploy your Harbor installation,
+contact your Harbor installation administrator to obtain the CA certificate
+that issued the Harbor certificate.
 </p>
 
-To retrieve the CA certificate or self-signed certificate from an 
+To retrieve the CA certificate or self-signed certificate from an
 Ops Manager-deployed Harbor tile:
 
 1. Log in to Ops Manager as an administrative user and navigate to the **Installation Dashboard**.
 
 1. Click the **VMware Harbor Registry** tile.
 
-1. Navigate to the **Certificate** configuration pane and 
+1. Navigate to the **Certificate** configuration pane and
 scroll down to the **Certificate Authority (CA)** field.
 
-1. Copy the CA certificate:  
-    * If the **Certificate Authority (CA)** field contains a PEM-encoded certificate value, 
-    copy this value.  
-    * If the **Certificate Authority (CA)** field is blank, the certificate for the Harbor installation was 
-    likely issued from the Ops Manager root CA certificate.  
+1. Copy the CA certificate:
+    * If the **Certificate Authority (CA)** field contains a PEM-encoded certificate value,
+    copy this value.
+    * If the **Certificate Authority (CA)** field is blank, the certificate for the Harbor installation was
+    likely issued from the Ops Manager root CA certificate.
 <br>
-        To download the Ops Manager root CA certificate:  
+        To download the Ops Manager root CA certificate:
         1. In the upper upper-right corner of the Ops Manager user interface, click the drop-down with your user name.
         1. Click **Settings**.
         1. In the **Settings** page, click **Advanced Options**.
-        1. In the **Advanced Options** pane, click the **DOWNLOAD ROOT CA CERT** button. 
+        1. In the **Advanced Options** pane, click the **DOWNLOAD ROOT CA CERT** button.
 
-1. Use the retrieved CA certificate as the certificate authority value when 
-    configuring TAS for Kubernetes. For more information, see 
+1. Use the retrieved CA certificate as the certificate authority value when
+    configuring TAS for Kubernetes. For more information, see
     [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
 
- 
+
 
 ### <a id='harbor-config-file'></a> Configure the App Image Registry
 
@@ -136,7 +136,7 @@ To configure TAS for Kubernetes to use your private container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier, and open the `values.yml` file in the `configuration-values` directory.
 
-1. Populate the `app_registry` section of the file with the following:  
+1. Populate the `app_registry` section of the file with the following:
 
     ```yaml
     app_registry:
@@ -153,22 +153,22 @@ To configure TAS for Kubernetes to use your private container image registry:
     Where:
     * `HARBOR-FQDN` is  the fully qualified domain name for your Harbor installation.
     * `APP-REGISTRY-PASSWORD` is the password you submitted for the `tas-app-images-push-pull` user.
-    * `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate for your Harbor 
-    registry. Ensure each line of the CA certificate value is indented four spaces, 
+    * `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate for your Harbor
+    registry. Ensure each line of the CA certificate value is indented four spaces,
     matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
 1. Save the file.
 
 ## <a id='configure-other-registry'></a> Use a Different Image Registry
 
-In addition to supporting a VMware Harbor registry as a container image registry, 
-TAS for Kubernetes also supports using other container image registries, 
-such as a Google Container Registry (GCR) or Docker Hub registry.  
+In addition to supporting a VMware Harbor registry as a container image registry,
+TAS for Kubernetes also supports using other container image registries,
+such as a Google Container Registry (GCR) or Docker Hub registry.
 
-To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container image registry:  
+To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container image registry:
 
-1. Change directory into the `configuration-values` directory you created earlier.  
-1. Open the `values.yml` file.  
-1. Populate the `app_registry` section with the following:  
+1. Change directory into the `configuration-values` directory you created earlier.
+1. Open the `values.yml` file.
+1. Populate the `app_registry` section with the following:
 
     ```yaml
     app_registry:
@@ -180,14 +180,14 @@ To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container i
     ```
 
     Where:
-    * `HOST-FQDN` is the fully qualified domain name for your registry.  
-    * `REPOSITORY` is the full URL for the TAS for Kubernetes 
-    project within your registry.  
-    * `APP-REGISTRY-USERNAME` is the username for an account with access to the 
-    TAS for Kubernetes project within your registry. 
+    * `HOST-FQDN` is the fully qualified domain name for your registry.
+    * `REPOSITORY` is the full URL for the TAS for Kubernetes
+    project within your registry.
+    * `APP-REGISTRY-USERNAME` is the username for an account with access to the
+    TAS for Kubernetes project within your registry.
     * `APP-REGISTRY-PASSWORD` is the password for the specified account.
 
-1. (Optional) To specify a CA certificate for the registry, replace the empty `ca:` property with the following:  
+1. (Optional) To specify a CA certificate for the registry, replace the empty `ca:` property with the following:
 
     ```
       ca: |
@@ -195,16 +195,16 @@ To use GCR, Docker Hub, or other registry as your TAS for Kubernetes container i
         CA-CERTIFICATE-CONTENT
         -----END CERTIFICATE-----
     ```
-    Where `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate for your 
-    registry. Ensure each line of the CA certificate value is indented four spaces, 
-    matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.  
+    Where `CA-CERTIFICATE-CONTENT` is the CA certificate or self-signed certificate for your
+    registry. Ensure each line of the CA certificate value is indented four spaces,
+    matching the indentation of the `BEGIN CERTIFICATE` and `END CERTIFICATE` lines above.
 <br>
-    Specifying a CA certificate is required if your registry does not have a 
+    Specifying a CA certificate is required if your registry does not have a
     certificate signed by a trusted authority.
 
 1. Save the file.
 
 ## <a id="next"></a> Next Steps
 
-After you complete this procedure, proceed to 
-[Configuring System Image Registry](configuring-sys-image-registry.html).  
+After you complete this procedure, proceed to
+[Configuring System Image Registry](configuring-sys-image-registry.html).
