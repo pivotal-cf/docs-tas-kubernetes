@@ -4,31 +4,31 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to create and configure Kubernetes clusters to support
-<%= vars.app_runtime_full %> (TAS for Kubernetes.
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>.
 
 
 ## <a id='overview'></a> Overview
 
 Before creating or configuring Kubernetes clusters,
 ensure your environment and clusters support
-TAS for Kubernetes:
+<%= vars.app_runtime_short %>:
 
 * [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
 * [VMware Tanzu Kubernetes Grid](#grid)
 
 ### <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
-TAS for Kubernetes supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.
+<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.
 
 Ensure the following before creating or configuring Kubernetes clusters
-for TAS for Kubernetes on TKGI:
+for <%= vars.app_runtime_short %> on TKGI:
 
 * Your TKGI version is v1.7 or later.
 * Your Kubernetes clusters have been created with the following characteristics:
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that
-    TAS for Kubernetes uses to store buildpack-based app images.
+    <%= vars.app_runtime_short %> uses to store buildpack-based app images.
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
     the certificate of that CA.
@@ -44,10 +44,10 @@ in the TKGI documentation.
 
 ## <a id='grid'></a> VMware Tanzu Kubernetes Grid
 
-TAS for Kubernetes supports Kubernetes clusters in VMware Tanzu Kubernetes Grid (TKG) environments.
+<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid (TKG) environments.
 
 Ensure the following before creating or configuring Kubernetes clusters
-for TAS for Kubernetes on TKG:
+for <%= vars.app_runtime_short %> on TKG:
 
 * Your Tanzu Kubernetes Grid environment:
     * Is Tanzu Kubernetes Grid version is 1.0 or later.
@@ -62,7 +62,7 @@ for TAS for Kubernetes on TKG:
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that
-    TAS for Kubernetes uses to store buildpack-based app images.
+    <%= vars.app_runtime_short %> uses to store buildpack-based app images.
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
     the certificate of that CA.
@@ -74,7 +74,7 @@ After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the co
 
 ## <a id='verify-default-storage'></a> Verify that a Default Storage Class Exists
 
-TAS for Kubernetes requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that TAS for Kuberenetes calls for.
+<%= vars.app_runtime_short %> requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that TAS for Kuberenetes calls for.
 
 Most of the Kubernetes distributed by the public clouds come with a default storage class. If you are using Kubernetes on a private cloud, you might need to install one instead.
 
@@ -91,6 +91,6 @@ NAME             PROVISIONER                    AGE
 thin (default)   kubernetes.io/vsphere-volume   34h
 ```
 
-* If the list includes an entry for which `(default)` follows the StorageClass name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically. Proceed to [Installing TAS for Kubernetes](index-install.html).
+* If the list includes an entry for which `(default)` follows the StorageClass name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically. Proceed to [Installing <%= vars.app_runtime_short %>](index-install.html).
 
-* If the list does not include a default, you must install one before installing TAS for Kubernetes. See the [Installing a Default Storage Class](installing-default-storage-class.html) topic for information.
+* If the list does not include a default, you must install one before installing <%= vars.app_runtime_short %>. See the [Installing a Default Storage Class](installing-default-storage-class.html) topic for information.
