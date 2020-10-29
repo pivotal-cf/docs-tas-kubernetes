@@ -195,9 +195,11 @@ To configure optional application container certificates:
 
 ### <a id='configure-app-log-destinations'></a> (Optional) Configure Application Log Destinations
 
-You can provide one or more destinations that will receive all application logs.
-These destinations will receive logs in Syslog RFC5424 format. This allows integrations with external
-logging tools like Splunk or ELK.
+You can provide one or more destinations for application logs.
+These destinations receive all application logs in syslog RFC 5424 format.
+This allows integrations with external logging tools like Splunk or ELK.
+
+For more information about the syslog format, see [RFC 5424 - The Syslog Protocol](https://tools.ietf.org/html/rfc5424) in the Internet Engineering Task Force (IETF) documentation.
 
 To configure optional application log destinations:
 
@@ -222,10 +224,11 @@ To configure optional application log destinations:
     Where:
     * `HOSTNAME` is the hostname of the log destination.
     * `PORT` is the TCP port number of the log destination.
-    * `TRANSPORT` is either `tls` or `tcp` (defaults to `tls`), corresponding to TLS-encrypted Syslog over TCP
-      and plaintext Syslog over TCP respectively.
-    * `DISABLE-TLS-VALIDATION` is `true` or `false` (defaults to `false`). If set to `true`, the
-      destination TLS certificate is not validated.
+    * `TRANSPORT` is one of the following:
+      - `tls` for TLS-encrypted syslog over TCP.
+      - `tcp` for plaintext syslog over TCP. This is the default value.
+    * `DISABLE-TLS-VALIDATION` is `true` or `false`. If set to `true`, the
+      destination TLS certificate is not validated. The default value is `false`.
 
 1. Save the `values.yml` file.
 
