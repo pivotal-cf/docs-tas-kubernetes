@@ -18,8 +18,23 @@ Before installing <%= vars.app_runtime_short %>:
 
 To configure installation settings and install <%= vars.app_runtime_short %>:
 
+1. [Prepare the Installation](#prepare-installation) 
 1. [Generate Internal Configuration Values](#generate-configuration-values)
 1. [Install <%= vars.app_runtime_short %>](#install-tas-for-k8s)
+
+
+## <a id='support-backup'></a> Prepare the Installation
+
+To prepare for installing TAS for Kubernetes:  
+
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.  
+1. Change directory to the `tanzu-application-service` directory.  
+1. To enable support for backing up and restoring TAS for Kubernetes, copy the 
+`disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:  
+
+    ```
+    cp config-optional/disaster-recovery.yml config/disaster-recovery.yml
+    ```
 
 ## <a id='generate-configuration-values'></a> Generate Internal Configuration Values
 
@@ -27,7 +42,6 @@ To configure installation settings and install <%= vars.app_runtime_short %>:
 
 To generate the internal values, credentials and certificates needed during <%= vars.app_runtime_short %> installation, use a helper script in the installation resources:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
 1. Change directory to the `tanzu-application-service` directory.
 1. To create new configuration files, run:
 
@@ -288,7 +302,7 @@ use a Kubernetes LoadBalancer Service for the ingress gateway, see
 
 ## <a id='post-installation-configuration'></a> Validate Your <%= vars.app_runtime_short %> Installation
 
-To validate your <%= vars.app_runtime_short %>:
+To validate your <%= vars.app_runtime_short %> installation:
 
 1. Use cf CLI to target the installation at the `api` subdomain of the system domain:
 
@@ -351,6 +365,15 @@ stored in the `cf_admin_password` key in the `configuration-values/_generated-va
     <p class="note">
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
     </p>
+
+To validate Velero installation:  
+
+1. Use kubectl to confirm the backup and restore components have been installed successfully:  
+
+    ```
+    kubectl get pods -n cf-system -l app=cf-metadata
+    ```
+
 
 ## <a id='check-installed-version'></a> Check the Version of <%= vars.app_runtime_short %> on a Cluster
 
