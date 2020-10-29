@@ -22,6 +22,7 @@ modify a copy of the configuration values template:
 * [Configure the Load Balancer](#configure-lb)
 * [Configure the Ingress Gateway Certificates](#configure-ingress-cert)
 * [(Optional) Configure Application Container Certificates](#configure-app-cert)
+* [(Optional) Configure Application Log Destinations](#configure-app-log-destinations)
 
 ### <a id='copy-template'></a> Copy the Configuration Values Template
 
@@ -190,6 +191,42 @@ To configure optional application container certificates:
 
     Ensure each line of the CA certificate value is indented four spaces,
     matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.
+1. Save the `values.yml` file.
+
+### <a id='configure-app-log-destinations'></a> (Optional) Configure Application Log Destinations
+
+You can provide one or more destinations that will receive all application logs.
+These destinations will receive logs in Syslog RFC5424 format. This allows integrations with external
+logging tools like Splunk or ELK.
+
+To configure optional application log destinations:
+
+1. Open `values.yml` in a text editor.
+1. Go to the end of the file.
+1. Add the following text:
+
+    ```yaml
+    app_log_destinations:
+    ```
+
+1. Immediately following that text, add one or more log destinations:
+
+    ```yaml
+    #@overlay/append
+    - host: HOSTNAME
+      port: PORT
+      transport: TRANSPORT
+      insecure_disable_tls_validation: DISABLE-TLS-VALIDATION
+    ```
+
+    Where:
+    * `HOSTNAME` is the hostname of the log destination.
+    * `PORT` is the TCP port number of the log destination.
+    * `TRANSPORT` is either `tls` or `tcp` (defaults to `tls`), corresponding to TLS-encrypted Syslog over TCP
+      and plaintext Syslog over TCP respectively.
+    * `DISABLE-TLS-VALIDATION` is `true` or `false` (defaults to `false`). If set to `true`, the
+      destination TLS certificate is not validated.
+
 1. Save the `values.yml` file.
 
 ## <a id="next"></a> Next Steps
