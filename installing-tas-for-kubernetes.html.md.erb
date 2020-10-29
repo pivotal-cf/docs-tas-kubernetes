@@ -2,6 +2,7 @@
 title: Installing <%= vars.app_runtime_full %>
 owner: Tanzu Application Service Release Engineering
 ---
+<% current_page.data.title = "Installing #{vars.app_runtime_full}" %>
 
 This topic describes how to install <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>)
 from the VMware Tanzu Network and from a relocated image in a private container image registry.
@@ -18,19 +19,19 @@ Before installing <%= vars.app_runtime_short %>:
 
 To configure installation settings and install <%= vars.app_runtime_short %>:
 
-1. [Prepare the Installation](#prepare-installation) 
+1. [Prepare the Installation](#prepare-installation)
 1. [Generate Internal Configuration Values](#generate-configuration-values)
 1. [Install <%= vars.app_runtime_short %>](#install-tas-for-k8s)
 
 
 ## <a id='support-backup'></a> Prepare the Installation
 
-To prepare for installing TAS for Kubernetes:  
+To prepare for installing TAS for Kubernetes:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.  
-1. Change directory to the `tanzu-application-service` directory.  
-1. To enable support for backing up and restoring TAS for Kubernetes, copy the 
-`disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:  
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
+1. Change directory to the `tanzu-application-service` directory.
+1. To enable support for backing up and restoring TAS for Kubernetes, copy the
+`disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:
 
     ```
     cp config-optional/disaster-recovery.yml config/disaster-recovery.yml
@@ -366,9 +367,9 @@ stored in the `cf_admin_password` key in the `configuration-values/_generated-va
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
     </p>
 
-To validate Velero installation:  
+To validate Velero installation:
 
-1. Use kubectl to confirm the backup and restore components have been installed successfully:  
+1. Use kubectl to confirm the backup and restore components have been installed successfully:
 
     ```
     kubectl get pods -n cf-system -l app=cf-metadata
