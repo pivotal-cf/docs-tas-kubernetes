@@ -12,9 +12,226 @@ This topic provides an overview of how to back up
 
 ## <a id='overview'></a> Overview
 
+To back up TAS for Kubernetes:
+
+* [Back Up TAS for Kubernetes](#backup-tas4k8s)
+* [Monitor Backup Progress](#backup-progress)
+* [Review a Completed Backup](#backup-review)
+
+## <a id='prerequisites'></a> Prerequisites
+
+## <a id='backup-tas4k8s'></a> Back Up TAS for Kubernetes
+
+To back up TAS for Kubernetes Tanzu Postgres Instances:  
+
+1. To back up the PGBackrest volume and secrets:  
+
+    ```
+    velero create backup BACKUP-NAME \
+	--include-namespaces NAMESPACES \
+      --selector ‘app in (RESOURCE-LIST)` \
+	--storage-location STORAGE-LOCATION \
+	--volume-snapshot-location SNAPSHOT-LOCATION \
+	--ttl TTL-LENGTH \ 
+	--wait
+	```
+
+    Where:  
+    * `BACKUP-NAME` is the name to apply to the generated backup. 
+    VMware recommends using a backup name that includes a timestamp for ease of discoverability. 
+    For example: `TAS4K8s_$(date -u +"%Y-%m-%dT%H:%M:%SZ")`.  
+<br>
+    * `NAMESPACES` is the comma-delimited list of namespaces for the selected resources to back up.  
+<br>
+    The namespace list for backing up the default TAS for Kubernetes configuration is `postgres-dbs,cf-system`, 
+    where `cf-system` is the default `CF Metadata` namespace, 
+    and `postgres-dbs` is the default TAS for Kubernetes database namespace.  
+<br>
+    * `RESOURCE-LIST` is the comma-delimited list of selected resources to back up.  
+<br>
+    The resource list for backing up the default TAS for Kubernetes configuration is `postgres, cf-metadata`, 
+    where `cf-metadata` is specified for backing up the CF Metadata app, 
+    and `postgres` for backing up the TAS for Kubernetes Postgres instances.  
+<br>
+    * `STORAGE-LOCATION` is the location where Velero should store the generated backup artifacts.  
+<br>
+    * `SNAPSHOT-LOCATION` is the location where Velero should store the generated storage snapshot artifacts.  
+<br>
+    * (Optional) `TTL-LENGTH` is the time to live (TTL) duration until the backup is deleted. 
+    The TTL should be formatted as hours, minutes, seconds: `000H00M00S`. 
+    If you do not specify the TTL duration, the default duration length is `720h0m0s`.  
+<br>
+    * (Optional) Include the `--wait` parameter to follow the backup procedure progress.  
+<br>
+  The recommended command line is:  
+
+    ```
+    velero create backup BACKUP-NAME \
+	--include-namespaces postgres-dbs,cf-system \
+      --selector ‘app in (postgres, cf-metadata)` \
+	--storage-location STORAGE-LOCATION \
+	--volume-snapshot-location SNAPSHOT-LOCATION \
+	--ttl TTL-LENGTH \ 
+	--wait
+	```
+	
+	
 
 
+## <a id='backup-progress'></a> Monitor Backup Progress
+
+To monitor the progress of a running backup:
+
+1. To display information about all back up processes:  
+
+    ```
+    velero get backups
+    ```
+
+    For example: 
+    <pre class="terminal">
+    $ velero get backups
+    
+    NAME     STATUS                       CREATED EXPIRES STORAGE LOCATION  SELECTOR
+    backup_1 Completed 2020-03-24 14:12:29 +0000 UTC     21d          default  (app in (cf-metadata,postgres)
+    </pre>
+
+1. To inspect the backup you just started:
+
+    ```
+    velero describe backup BACKUP-NAME
+    ````
+    Where:  
+    * `BACKUP-NAME` is the name you applied to your backup.  
+<br>
+    * (Optional) Include the `--details` parameter to display a highly verbose output.  
+
+## <a id='backup-review'></a> Review a Completed Backup
+
+To review a completed backup:  
+
+* [Review Backup Logs](#backup-monitor-logs)
+* [Validate the Backup](#backup-validate)
+* [Troubleshoot a Failed Backup](#backup-troubleshoot)
 
 
+### <a id='backup-monitor-logs'></a> Review Backup Logs
 
-### <a id='backup-prepare-instances'></a> Prepare Tanzu Postgres TAS Instances for Backup and Restore
+After a backup has completed, the backup logs can be reviewed for a detailed inspection 
+of the root cause of potential failures.
+
+1. To review the backup logs of a completed backup:  
+
+    ```
+    velero backup logs  BACKUP-NAME
+    ````
+
+    Where `BACKUP-NAME` is the name you applied to your backup. 
+
+
+### <a id='backup-validate'></a> Validate the Backup
+
+To validate a completed backup by reviewing the Cloud Foundry data that was backed up:
+
+1. If you do not have the TAS for Kubernetes installation resources:   
+    1. Download and extract the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes). 
+    For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
+    1. Inspect the TAS for Kubernetes artifact. 
+    Confirm the `get-backup-metadata.sh` script is present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:  
+
+1. To confirm the name of the backup to validate:  
+
+    ```
+    velero get backups
+    ```
+
+    For example:
+    <pre class="terminal">
+    $ velero get backups
+
+    NAME     STATUS                       CREATED EXPIRES STORAGE LOCATION  SELECTOR
+    backup_1 Completed 2020-03-24 14:12:29 +0000 UTC     21d          default  (app in (cf-metadata,postgres)
+
+1. To display a detailed inspection of the backup:
+
+    ```
+    velero describe backup BACKUP-NAME
+    ```
+
+    Where `BACKUP-NAME` is the name you applied to your backup.  
+<br>
+    (Optional) Include the `--details` parameter to display a highly verbose output.  
+
+    For example:
+
+    <pre class="terminal">
+    $ velero describe backup MY_BACKUP_NAME
+
+
+    Name:         tas4k8s-2020-10-13-09h17m49s
+    Namespace:    velero
+    Labels:       velero.io/storage-location=default
+    Annotations:  velero.io/source-cluster-k8s-gitversion=v1.17.9-gke.1504
+                  velero.io/source-cluster-k8s-major-version=1
+                  velero.io/source-cluster-k8s-minor-version=17+
+    
+    Phase:  Completed
+    
+    Errors:    0
+    Warnings:  0
+    
+    Namespaces:
+      Included:  postgres-dbs, cf-system
+      Excluded:  &lt;none>
+
+    Resources:
+      Included:        *
+      Excluded:        &lt;none>
+      Cluster-scoped:  auto
+
+    Label selector:  app in (cf-metadata,postgres)
+
+    Storage Location:  default
+
+    Velero-Native Snapshot PVs:  auto
+
+    TTL:  35040h0m0s
+
+    Hooks:  &lt;none>
+
+    Backup Format Version:  1.1.0
+
+    Started:    2020-10-13 09:17:49 +0000 UTC
+    Completed:  2020-10-13 09:18:46 +0000 UTC
+
+    Expiration:  2024-10-12 09:17:49 +0000 UTC
+
+    Total items to be backed up:  31
+    Items backed up:              31
+
+    Velero-Native Snapshots:  3 of 3 snapshots completed successfully (specify --details for more information)
+    </pre>
+
+1. To generate a JSON file which contains the snapshot of Cloud Foundry at the time of the backup:  
+
+    ```
+    tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
+    ```
+
+    Where 
+    * `BACKUP-NAME` is the name you applied to your backup. 
+    * `OUTPUT-FILENAME` is the name of the Cloud Foundry state file to create for the backup. 
+    The created state file is a JSON formatted file.   
+
+
+    For example:
+    <pre class="terminal">
+    tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh backup_1 cf-metadata.json
+    </pre>
+
+1. To review the created Cloud Foundry outline, open the generated JSON file in your IDE of choice.  
+
+### <a id='backup-troubleshoot'></a> Troubleshoot a Failed Backup
+
+To troubleshoot a failed backup, 
+complete [Review Backup Logs](#backup-monitor-logs), and proceed accordingly.  
