@@ -3,14 +3,13 @@ title: Tanzu Application Service for Kubernetes Release Notes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic contains release notes for Tanzu Application Service for Kubernetes
-(TAS for Kubernetes).
+This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app_runtime_abbr %>).
 
 <%= partial 'evaluation_only' %>
 
 <%= partial 'limitation_notes' %>
 
-## <a id='0-5-0'></a> v0.5.0
+## <a id='0-5-0'></a> v<%= vars.local_product_version %>
 
 **Release Date**: TBD, 2020
 
@@ -23,21 +22,21 @@ This topic contains release notes for Tanzu Application Service for Kubernetes
   </tr>
   <tr>
     <td>Version</td>
-    <td>v0.5.0</td>
+    <td>v<%= vars.local_product_version %></td>
   </tr>
   <tr>
     <td>Release date</td>
     <td>TBD, 2020</td>
   </tr>
 </table>
-To download VMware TAS for Kubernetes v0.5.0, see
-[VMware Tanzu Application Service for Kubernetes]
+To download VMware <%= vars.app_runtime_short %> v<%= vars.local_product_version %>, see
+[VMware <%= vars.app_runtime_full %>]
 (https://network.pivotal.io/products/tas-for-kubernetes)
 on the _VMware Tanzu Network_.
 
 #### <a id='supported-platforms'></a>Supported Kubernetes Distributions
 
-TAS for Kubernetes is compatible with Kubernetes v1.16 and later, and is tested with the following Kubernetes distributions:
+<%= vars.app_runtime_short %> is compatible with Kubernetes v1.16 and later, and is tested with the following Kubernetes distributions:
 
 <table class="nice">
   <tr>
@@ -54,9 +53,9 @@ TAS for Kubernetes is compatible with Kubernetes v1.16 and later, and is tested 
   </tr>
 </table>
 
-#### <a id='installed-components'></a>Installed With 0.5.0
+#### <a id='installed-components'></a>Installed With <%= vars.local_product_version %>
 
-TAS for Kubernetes uses the following components:
+<%= vars.app_runtime_short %> uses the following components:
 
 <table class="nice">
   <tr>
@@ -79,7 +78,7 @@ TAS for Kubernetes uses the following components:
 
 #### <a id='additional-components'></a>Required Additional Components
 
-TAS for Kubernetes requires the following components:
+<%= vars.app_runtime_short %> requires the following components:
 
 <table class="nice">
   <tr>
@@ -102,7 +101,7 @@ TAS for Kubernetes requires the following components:
   <tr>
     <td>Harbor Registry</td>
     <td>.</td>
-  </tr>  
+  </tr>
   <tr>
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
@@ -125,7 +124,7 @@ TAS for Kubernetes requires the following components:
 <%#
 #### <a id='optional-components'></a>Optional Components
 
-TAS for Kubernetes supports the following optional components:
+<%= vars.app_runtime_short %> supports the following optional components:
 
 <table class="nice">
   <tr>
@@ -146,7 +145,7 @@ TAS for Kubernetes supports the following optional components:
 
 #### <a id='supported-environments'></a>Supported Environments
 
-TAS for Kubernetes can be deployed and managed from the following desktop OS environments: 
+<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments:
 
 * 64-bit Mac OS
 * 64-bit Linux OS
@@ -212,14 +211,14 @@ This release has the following issues:
     <td>September 3, 2020</td>
   </tr>
 </table>
-To download VMware TAS for Kubernetes v0.4.0, see
-[VMware Tanzu Application Service for Kubernetes]
+To download VMware <%= vars.app_runtime_short %> v0.4.0, see
+[VMware <%= vars.app_runtime_full %>]
 (https://network.pivotal.io/products/tas-for-kubernetes)
 on the _VMware Tanzu Network_.
 
 #### <a id='installed-components-0-4-0'></a>Installed With v0.4.0
 
-TAS for Kubernetes uses the following components:
+<%= vars.app_runtime_short %> uses the following components:
 
 <table class="nice">
   <tr>
@@ -262,7 +261,7 @@ TAS for Kubernetes uses the following components:
 
 #### <a id='additional-components-0-4-0'></a>Required Additional Components
 
-TAS for Kubernetes requires the following components:
+<%= vars.app_runtime_short %> requires the following components:
 
 <table class="nice">
   <tr>
@@ -285,7 +284,7 @@ TAS for Kubernetes requires the following components:
   <tr>
     <td>Harbor Registry</td>
     <td>.</td>
-  </tr>  
+  </tr>
   <tr>
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
@@ -308,7 +307,7 @@ TAS for Kubernetes requires the following components:
 <%#
 #### <a id='optional-components'></a>Optional Components
 
-TAS for Kubernetes supports the following optional components:
+<%= vars.app_runtime_short %> supports the following optional components:
 
 <table class="nice">
   <tr>
@@ -328,7 +327,7 @@ TAS for Kubernetes supports the following optional components:
 
 #### <a id='supported-platforms-0-4-0'></a>Supported Kubernetes Distributions
 
-TAS for Kubernetes supports the following Kubernetes distributions:
+<%= vars.app_runtime_short %> supports the following Kubernetes distributions:
 
 <table class="nice">
   <tr>
@@ -348,7 +347,7 @@ TAS for Kubernetes supports the following Kubernetes distributions:
 
 #### <a id='supported-environments-0-4-0'></a>Supported Environments
 
-TAS for Kubernetes can be deployed and managed from the following desktop OS environments: 
+<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments:
 
 * 64-bit Mac OS
 * 64-bit Linux OS
@@ -379,17 +378,17 @@ TAS for Kubernetes can be deployed and managed from the following desktop OS env
 
 New features and changes in this release:
 
-- TAS for Kubernetes incorporates Apps Manager
-- TAS for Kubernetes incorporates Usage Service
-- TAS for Kubernetes incorporates Tanzu Buildpacks (with support for airgapped app staging) for Java, NodeJS, and Golang
+- <%= vars.app_runtime_short %> incorporates Apps Manager
+- <%= vars.app_runtime_short %> incorporates Usage Service
+- <%= vars.app_runtime_short %> incorporates Tanzu Buildpacks (with support for airgapped app staging) for Java, NodeJS, and Golang
 - Security enhancements
 
 ### <a id='breaking-0-4-0'></a> Breaking Changes
 
 This release has the following breaking changes:
 
- - App registry configuration files used with TAS for Kubernetes v0.3.0 and earlier
- are not compatible with TAS for Kubernetes v0.4.0 and later.
+ - App registry configuration files used with <%= vars.app_runtime_short %> v0.3.0 and earlier
+ are not compatible with <%= vars.app_runtime_short %> v0.4.0 and later.
  For information about the current app registry configuration file
  format, see [Configure the App Image Registry]
  (configuring-app-image-registry.html#harbor-config-file)
@@ -400,8 +399,8 @@ This release has the following breaking changes:
 
 This release has the following issues:
 
- - **Apps Manager** does not support inviting members. 
- - **Apps Manager** does not support creating container networking policies for apps. 
+ - **Apps Manager** does not support inviting members.
+ - **Apps Manager** does not support creating container networking policies for apps.
 
 ## <a id='0-3-0'></a> v0.3.0
 
@@ -423,14 +422,14 @@ This release has the following issues:
     <td>July 30, 2020</td>
   </tr>
 </table>
-To download VMware TAS for Kubernetes v0.3.0, see 
-[VMware Tanzu Application Service for Kubernetes]
-(https://network.pivotal.io/products/tas-for-kubernetes#/releases/691843) 
+To download VMware <%= vars.app_runtime_short %> v0.3.0, see
+[VMware <%= vars.app_runtime_full %>]
+(https://network.pivotal.io/products/tas-for-kubernetes#/releases/691843)
 on the _VMware Tanzu Network_.
 
 #### <a id='installed-components-0-3-0'></a>Installed With 0.3.0
 
-TAS for Kubernetes uses the following components:
+<%= vars.app_runtime_short %> uses the following components:
 
 <table class="nice">
   <tr>
@@ -453,7 +452,7 @@ TAS for Kubernetes uses the following components:
 
 #### <a id='additional-components-0-3-0'></a>Required Additional Components
 
-TAS for Kubernetes requires the following components:
+<%= vars.app_runtime_short %> requires the following components:
 
 <table class="nice">
   <tr>
@@ -476,7 +475,7 @@ TAS for Kubernetes requires the following components:
   <tr>
     <td>Harbor Registry</td>
     <td>.</td>
-  </tr>   
+  </tr>
   <tr>
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
@@ -499,7 +498,7 @@ TAS for Kubernetes requires the following components:
 <%#
 #### <a id='optional-components'></a>Optional Components
 
-TAS for Kubernetes supports the following optional components:
+<%= vars.app_runtime_short %> supports the following optional components:
 
 <table class="nice">
   <tr>
@@ -519,7 +518,7 @@ TAS for Kubernetes supports the following optional components:
 
 #### <a id='supported-platforms-0-3-0'></a>Supported Kubernetes Distributions
 
-TAS for Kubernetes supports the following Kubernetes distributions:
+<%= vars.app_runtime_short %> supports the following Kubernetes distributions:
 
 <table class="nice">
   <tr>
@@ -539,7 +538,7 @@ TAS for Kubernetes supports the following Kubernetes distributions:
 
 #### <a id='supported-environments-0-3-0'></a>Supported Environments
 
-TAS for Kubernetes can be deployed and managed from the following desktop OS environments:  
+<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments:
 
 * 64-bit Mac OS
 * 64-bit Linux OS
@@ -563,16 +562,16 @@ TAS for Kubernetes can be deployed and managed from the following desktop OS env
     <td></td>
   </tr>
 </table>
-#%> 
+#%>
 
 
 ### <a id='features-0-3-0'></a> Features
 
 New features and changes in this release:
 
-- Platform operators can copy system-component images into another registry and deploy TAS for Kubernetes to use those relocated images.
-- Platform operators can configure their own certificates on the TAS for Kubernetes ingress gateway for TLS termination.
-- TAS for Kubernetes incorporates [Paketo cloud-native buildpacks](https://paketo.io/) for Java, NodeJS, Go, .NET Core, PHP, HTTPD, and nginx.
+- Platform operators can copy system-component images into another registry and deploy <%= vars.app_runtime_short %> to use those relocated images.
+- Platform operators can configure their own certificates on the <%= vars.app_runtime_short %> ingress gateway for TLS termination.
+- <%= vars.app_runtime_short %> incorporates [Paketo cloud-native buildpacks](https://paketo.io/) for Java, NodeJS, Go, .NET Core, PHP, HTTPD, and nginx.
 - Istio sidecar proxies prevent all communication between apps on the Kubernetes Pod network.
 - Bump Istio to version `1.4.5`
 - Bump kpack to version `0.0.9`
@@ -586,10 +585,10 @@ This release has the following issues:
 - The `cf buildpacks` command shows an empty list of buildpacks.
 - Does not support cf CLI `buildpack-administration` commands.
 - App developers cannot select a buildpack for their buildpack-based apps.
-- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
-- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
-- Does not support upgrading an existing TAS for Kubernetes installation to a new version.
-- Does not support re-deploying TAS for Kubernetes with different credentials.
+- The <%= vars.app_runtime_short %> ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- <%= vars.app_runtime_short %> cannot use the AWS Elastic Container Registry as its app image registry.
+- Does not support upgrading an existing <%= vars.app_runtime_short %> installation to a new version.
+- Does not support re-deploying <%= vars.app_runtime_short %> with different credentials.
 
 
 ## <a id='0-2-0'></a> v0.2.0
@@ -624,10 +623,10 @@ This release has the following issues:
 - The `cf buildpacks` command shows an empty list of buildpacks.
 - Does not support cf CLI `buildpack-administration` commands.
 - App developers cannot select a buildpack for their buildpack-based apps.
-- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
-- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
-- Does not support upgrading an existing TAS for Kubernetes installation to a new version.
-- Does not support re-deploying TAS for Kubernetes with different credentials.
+- The <%= vars.app_runtime_short %> ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- <%= vars.app_runtime_short %> cannot use the AWS Elastic Container Registry as its app image registry.
+- Does not support upgrading an existing <%= vars.app_runtime_short %> installation to a new version.
+- Does not support re-deploying <%= vars.app_runtime_short %> with different credentials.
 
 ## <a id='0-1-0'></a> v0.1.0
 
@@ -661,7 +660,7 @@ This release has the following issues:
 - Does not support cf CLI `buildpack-administration` commands.
 - App developers cannot select a buildpack for their buildpack-based apps.
 - Running buildpack-based apps requires the `diego_docker` feature flag to be set.
-- The TAS for Kubernetes ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
-- TAS for Kubernetes cannot use the AWS Elastic Container Registry as its app image registry.
+- The <%= vars.app_runtime_short %> ingress gateway service may interfere with traffic for other Kubernetes Services in the cluster.
+- <%= vars.app_runtime_short %> cannot use the AWS Elastic Container Registry as its app image registry.
 - Does not support upgrading an existing TAS installation to a new version.
 - Does not support re-deploying TAS with different credentials.

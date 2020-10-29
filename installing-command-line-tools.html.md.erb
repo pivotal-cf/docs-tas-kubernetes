@@ -3,19 +3,19 @@ title: Installing Command-Line Tools
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to install command-line tools required to install 
-Tanzu Application Service for Kubernetes (TAS for Kubernetes).
+This topic describes how to install command-line tools required to install
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 ## <a id='overview'></a> Overview
 
-TAS for Kubernetes installation procedures require a 
-Linux or macOS workstation with the following command-line tools installed:  
+<%= vars.app_runtime_short %> installation procedures require a
+Linux or macOS workstation with the following command-line tools installed:
 
 * Cloud Foundry CLI
 * Docker CLI
 * Kubernetes CLI
 * BOSH CLI
-* k14s utilities  
+* k14s utilities
 
 The k14s utilities are Kubernetes support tools:
 
@@ -41,10 +41,10 @@ The k14s utilities are Kubernetes support tools:
 
 ## <a id='command-line-tools'></a> Install Your Command-Line Tools
 
-This section guides you through installing the necessary CLIs and k14 utilities on your workstation: 
+This section guides you through installing the necessary CLIs and k14 utilities on your workstation:
 
 1. Review [Required Additional Components]
-(release-notes.html#additional-components) in _TAS for Kubernetes Release Notes_ 
+(release-notes.html#additional-components) in _<%= vars.app_runtime_short %> Release Notes_
 for the versions of the command line tools to install.
 
 1. Install the cf CLI. See [Installing the cf CLI]
@@ -57,8 +57,8 @@ for the versions of the command line tools to install.
 (https://docs.pivotal.io/tkgi/installing-kubectl-cli.html).
 
 1. <a id='install-bosh-cli'></a>Install the `BOSH CLI`:
-    1. Download the `BOSH CLI` binary for your version of TAS for Kubernetes from 
-    [VMware Tanzu Application Service for Kubernetes](https://network.pivotal.io/products/tas-for-kubernetes) 
+    1. Download the `BOSH CLI` binary for your version of <%= vars.app_runtime_short %> from
+    [VMware <%= vars.app_runtime_full %>](https://network.pivotal.io/products/tas-for-kubernetes)
     on the _VMware Tanzu Network_.
     1. Rename the downloaded binary to <code>bosh</code>.
     1. To make the BOSH CLI binary executable:
@@ -67,9 +67,9 @@ for the versions of the command line tools to install.
     <pre>$ mv bosh /usr/local/bin/bosh</pre>
 
 1. Install `kapp`:
-    1. Download the `kapp` binary for your operating system from 
+    1. Download the `kapp` binary for your operating system from
     [kapp](https://network.pivotal.io/products/kapp)
-    on the _VMware Tanzu Network_. 
+    on the _VMware Tanzu Network_.
     1. Rename the downloaded binary to <code>kapp</code>.
     1. To make the <code>kapp</code> binary executable:
     <pre>$ chmod +x kapp</pre>
@@ -77,9 +77,9 @@ for the versions of the command line tools to install.
     <pre>$ mv kapp /usr/local/bin/kapp</pre>
 
 1. Install `kbld`:
-    1. Download the `kbld` binary for your operating system from 
+    1. Download the `kbld` binary for your operating system from
     [kbld](https://network.pivotal.io/products/kbld)
-    on the _VMware Tanzu Network_.  
+    on the _VMware Tanzu Network_.
     1. Rename the downloaded binary to <code>kbld</code>.
     1. To make the <code>kbld</code> binary executable:
     <pre>$ chmod +x kbld</pre>
@@ -87,9 +87,9 @@ for the versions of the command line tools to install.
     <pre>$ mv kbld /usr/local/bin/kbld</pre>
 
 1. Install `ytt`:
-    1. Download the `ytt` binary for your operating system from 
+    1. Download the `ytt` binary for your operating system from
     [ytt](https://network.pivotal.io/products/ytt)
-    on the _VMware Tanzu Network_.  
+    on the _VMware Tanzu Network_.
     1. Rename the downloaded binary to <code>ytt</code>.
     1. To make the <code>ytt</code> binary executable:
     <pre>$ chmod +x ytt</pre>

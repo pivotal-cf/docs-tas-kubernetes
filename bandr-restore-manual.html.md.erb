@@ -1,10 +1,10 @@
 ---
-title: Restoring Tanzu Application Service for Kubernetes
+title: Restoring <%= vars.app_runtime_full %>
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic provides an overview of how to restore 
-Tanzu Application Service for Kubernetes (TAS for Kubernetes) from a backup.
+This topic provides an overview of how to restore
+<%= vars.app_runtime_full %> from a backup.
 
 <%= partial 'evaluation_only' %>
 
@@ -18,50 +18,50 @@ You do have 2 options while restoring TAS4K8s:
 Restore to a new platform with no state - this scenario is typical for a full disaster recovery
 Restore in place while deleting all current state of the platform - this scenario maybe used when things went so bad that it is worth losing some recent changes in favor of restoring a healthy baseline
 
-* [Restore TAS for Kubernetes](#restore-tas)  
-* [Monitor Restore Progress](#restore-monitoring)  
-* [Review a Completed Restore](#restore-review)  
+* [Restore <%= vars.app_runtime_short %>](#restore-tas)
+* [Monitor Restore Progress](#restore-monitoring)
+* [Review a Completed Restore](#restore-review)
 
 ## <a id='prerequisites'></a> Prerequisites
 
-You must have access to the TAS for Kubernetes Velero backup artifacts you plan to restore.  
+You must have access to the <%= vars.app_runtime_short %> Velero backup artifacts you plan to restore.
 
 
-## <a id='restore-tas'></a> Restore TAS for Kubernetes
+## <a id='restore-tas'></a> Restore <%= vars.app_runtime_short %>
 
-To restore a TAS for Kubernetes backup:  
+To restore a <%= vars.app_runtime_short %> backup:
 
 * [Prepare the Velero Backup Artifacts](#restore-prepare)
-* [Start a TAS for Kubernetes Velero Restore](#restore-start)  
+* [Start a <%= vars.app_runtime_short %> Velero Restore](#restore-start)
 
 ### <a id='restore-prepare'></a> Prepare the Velero Backup Artifacts
 
-To prepare your TAS for Kubernetes Velero backup artifacts:  
+To prepare your <%= vars.app_runtime_short %> Velero backup artifacts:
 
-1. Determine the name of the backup to be restored:  
+1. Determine the name of the backup to be restored:
 
     ```
     $ velero backup get
     ```
 
-1. (Optional) To see backup metadata for any of the backups, 
+1. (Optional) To see backup metadata for any of the backups,
 generate a JSON file containing a snapshot of Cloud Foundry at the time of the backup.
 
     ```
     ./bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
     ```
 
-    Where:  
-    * `BACKUP-NAME` is the name of the backup you want to validate against.  
-    * `OUTPUT-FILENAME` is the name of the backup state JSON file to create.  
+    Where:
+    * `BACKUP-NAME` is the name of the backup you want to validate against.
+    * `OUTPUT-FILENAME` is the name of the backup state JSON file to create.
 
-    For example: 
+    For example:
     <pre class="terminal">
     $ ./bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
- 
 
-1. To prepare database resources for a restoration:  
+
+1. To prepare database resources for a restoration:
 
     ```
     kubectl -n postgres-dbs delete postgresinstance.postgres.pivotal.io/ccdb --wait
@@ -72,14 +72,14 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
 
     The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
 
-    <p class="note"><strong>Note:</strong> This process deletes some kubernetes resources 
-    to force velero to restore the db pod's persistent volume to the snapshotted version. 
+    <p class="note"><strong>Note:</strong> This process deletes some kubernetes resources
+    to force velero to restore the db pod's persistent volume to the snapshotted version.
     This is required to restore the correct data.
     </p>
 
-### <a id='restore-start'></a> Start a TAS for Kubernetes Velero Restore
+### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Velero Restore
 
-To restore TAS for Kubernetes Tanzu Postgres Instances:  
+To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
 1. To restore the PGBackrest volume and secrets:
 
@@ -90,17 +90,17 @@ To restore TAS for Kubernetes Tanzu Postgres Instances:
     --wait
     ```
 
-    Where:  
-    * `BACKUP-NAME` is the name of the velero backup artifact to be restored.  
-	* `RESTORE-NAME` is the name of the restore process.  
+    Where:
+    * `BACKUP-NAME` is the name of the velero backup artifact to be restored.
+	* `RESTORE-NAME` is the name of the restore process.
 		Name of the restoration
-	
-    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.  
+
+    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
 
 1. To recreate the PostgresInstance resources, complete step 3 of [Provision Tanzu Postgres Databases]
-(https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-system-databases.html#provision-tanzu-postgres-databases) 
+(https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-system-databases.html#provision-tanzu-postgres-databases)
 in _Configuring Your System Databases_.
-1. To restore your data:  
+1. To restore your data:
 
     ```
     kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pg_ctl stop
@@ -111,23 +111,23 @@ in _Configuring Your System Databases_.
     kubectl -n postgres-dbs delete pod/uaadb-0
     ```
 
-1. To re-annotate and label your pods, complete 
+1. To re-annotate and label your pods, complete
 [Prepare Tanzu Postgres TAS Instances for Backup and Restore]
-(bandr-backup-manual.html#backup-prepare-instances) in _Backing Up TAS for Kubernetes_.
+(bandr-backup-manual.html#backup-prepare-instances) in _Backing Up <%= vars.app_runtime_short %>_.
 
 ## <a id='restore-monitoring'></a> Monitor Restore Progress
 
-To inspect the status of a restore:  
+To inspect the status of a restore:
 
-* [Review All Restores](#restore-monitor-all)  
-* [Inspect a Single Restore](#restore-monitor-single)  
+* [Review All Restores](#restore-monitor-all)
+* [Inspect a Single Restore](#restore-monitor-single)
 
 ### <a id='restore-monitor-all'></a> Review All Restores
 
-To see the names and status of all restores:  
+To see the names and status of all restores:
 
 1. Open a command line.
-1. To display information about all restores:  
+1. To display information about all restores:
 
     ```
     velero get restores
@@ -144,10 +144,10 @@ To see the names and status of all restores:
 
 ### <a id='restore-monitor-single'></a> Inspect a Single Restore
 
-To review the status of a single restore:  
+To review the status of a single restore:
 
-1. Determine the name of the restore. For more information, see [Review All Restores](#restore-monitor-all) above.  
-1. To display information about a single restore:  
+1. Determine the name of the restore. For more information, see [Review All Restores](#restore-monitor-all) above.
+1. To display information about a single restore:
 
     ```
     velero describe restore RESTORE-NAME
@@ -184,47 +184,47 @@ To review the status of a single restore:
     Restore PVs:  auto
     </pre>
 
-## <a id='restore-review'></a> Review a Completed Restore 
+## <a id='restore-review'></a> Review a Completed Restore
 
-To review and validate a completed restore:  
+To review and validate a completed restore:
 
-* [Review Restore Logs](#restore-monitor-logs)  
-* [Validate the Restore](#restore-validate)  
-* [Troubleshoot a Failed Restore](#restore-troubleshoot)  
+* [Review Restore Logs](#restore-monitor-logs)
+* [Validate the Restore](#restore-validate)
+* [Troubleshoot a Failed Restore](#restore-troubleshoot)
 
 ### <a id='restore-monitor-logs'></a> Review Restore Logs
 
-You can inspect the logs for your restore after the restore has completed. 
-Review the logs for any failures and their root causes.    
+You can inspect the logs for your restore after the restore has completed.
+Review the logs for any failures and their root causes.
 
-1. To review the logs for a particular restore:  
+1. To review the logs for a particular restore:
 
     ```
     velero restore logs RESTORE-NAME
     ```
 
-    Where `RESTORE-NAME` is name you provided as your restore name.  
+    Where `RESTORE-NAME` is name you provided as your restore name.
 
 ### <a id='restore-validate'></a> Validate the Restore
 
-Given a velero restore has completed and there were no errors or warnings, 
+Given a velero restore has completed and there were no errors or warnings,
 the backup-recovery solution provides a simple way to help validate the restored Cloud Foundry data.
 
-The Cloud Foundry Metadata reporting tool provides a simple script to get the Cloud Foundry 
+The Cloud Foundry Metadata reporting tool provides a simple script to get the Cloud Foundry
 state which was captured during a previous backup, and given this output can compare it to the live, running Cloud Foundry.
 
-<p class="note"><strong>Note:</strong> This is not a perfect snapshot of the data in Cloud Foundry and should only be used as an aid to verifying the data. 
-The validation follows the Cloud Foundry constructs of “users, organizations, spaces and apps” 
+<p class="note"><strong>Note:</strong> This is not a perfect snapshot of the data in Cloud Foundry and should only be used as an aid to verifying the data.
+The validation follows the Cloud Foundry constructs of “users, organizations, spaces and apps”
 to measure what data was in Cloud Foundry during a backup.
 </p>
 
-To validate a completed restore:  
+To validate a completed restore:
 
-1. If you do not have the TAS for Kubernetes installation resources, 
-download the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes). 
+1. If you do not have the <%= vars.app_runtime_short %> installation resources,
+download the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
 For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
-1. Inspect the TAS for Kubernetes artifact. 
-Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:  
+1. Inspect the <%= vars.app_runtime_short %> artifact.
+Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:
     * `get-backup-metadata.sh`
     * `compare-backup-metadata.sh`
 1. To determine the name of the backup used to restore your system:
@@ -248,12 +248,12 @@ Confirm the following are present in the `tanzu-application-service/config/_ytt_
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
     ```
 
-    Where:  
-    * `BACKUP-NAME` is the name of the backup you restored.  
-    * `OUTPUT-FILENAME` is the name of the Cloud Foundry state file to create for the backup. 
-    The created state file is a JSON formatted file.  
+    Where:
+    * `BACKUP-NAME` is the name of the backup you restored.
+    * `OUTPUT-FILENAME` is the name of the Cloud Foundry state file to create for the backup.
+    The created state file is a JSON formatted file.
 
-    For example: 
+    For example:
     <pre class="terminal">
     $ ./bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
@@ -263,16 +263,16 @@ Confirm the following are present in the `tanzu-application-service/config/_ytt_
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/compare-backup-metadata.sh OUTPUT-FILENAME
     ```
-    Where `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step.  
+    Where `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step.
 <br>
-    The script displays the difference between the current restored Cloud Foundry state and 
-    the system's state at the time the backup was created.  
+    The script displays the difference between the current restored Cloud Foundry state and
+    the system's state at the time the backup was created.
 
 ### <a id='restore-troubleshoot'></a> Troubleshoot a Failed Restore
 
-To troubleshoot a failed restore:  
+To troubleshoot a failed restore:
 
 1. Review the logs for your restore. For more information, see [Review Restore Logs](#restore-monitor-logs)
-1. Debug the failed restore. 
+1. Debug the failed restore.
 For information about debugging a failed restore, see [Debugging Restores]
-(https://velero.io/docs/main/debugging-restores/) in the Velero documentation.  
+(https://velero.io/docs/main/debugging-restores/) in the Velero documentation.
