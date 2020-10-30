@@ -7,6 +7,14 @@ owner: Tanzu Application Service Release Engineering
 This topic describes how to install <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>)
 from the VMware Tanzu Network and from a relocated image in a private container image registry.
 
+## <a id='overview'></a> Overview
+
+To configure installation settings and install TAS for Kubernetes:
+
+1. [Prepare the Installation](#prepare-installation)
+1. [Generate Internal Configuration Values](#generate-configuration-values)
+1. [Install TAS for Kubernetes](#install-tas-for-k8s)
+
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install TAS for Kubernetes, you must:
@@ -16,15 +24,6 @@ See [Configuring Installation Values](configuring-installation-values.html).
 + Configure Apps Manager. See [Configuring Apps Manager](configuring-apps-manager.html).
 + Install Cloud Foundry Command Line Interface (cf CLI) v7.0.1 or later.
 See [Upgrading to cf CLI v7](https://docs.pivotal.io/application-service/2-10/cf-cli/v7.html).
-
-## <a id='overview'></a> Overview
-
-To configure installation settings and install <%= vars.app_runtime_short %>:
-
-1. [Prepare the Installation](#prepare-installation)
-1. [Generate Internal Configuration Values](#generate-configuration-values)
-1. [Install <%= vars.app_runtime_short %>](#install-tas-for-k8s)
-
 
 ## <a id='support-backup'></a> Prepare the Installation
 
