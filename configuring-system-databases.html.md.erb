@@ -5,7 +5,7 @@ owner: Tanzu Application Service Release Engineering
 
 <strong><%= modified_date %></strong>
 
-This topic describes how to configure Tanzu Application Service for Kubernetes (TAS for Kubernetes) to use Tanzu Postgres for User Account and Authentication (UAA), Cloud Controller, and Usage service.
+This topic describes how to configure <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>) to use Tanzu Postgres for User Account and Authentication (UAA), Cloud Controller, and Usage service.
 
 ## <a id='overview'></a>Overview
 
@@ -29,7 +29,7 @@ The UAA, Cloud Controller, and Usage service each need a Tanzu Postgres database
 
 To configure these three databases:
 
-1. Create a file named `postgres-databases.yml` and store it outside of the scope of TAS for Kuberentes. Note that this file is only used for deploying the databases. It is not part of the TAS for Kubernetes configuration.
+1. Create a file named `postgres-databases.yml` and store it outside of the scope of TAS for Kuberentes. Note that this file is only used for deploying the databases. It is not part of the <%= vars.app_runtime_short %> configuration.
 
 1. Copy and paste the following text into the `postgres-databases.yml` file:
 

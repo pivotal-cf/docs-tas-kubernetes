@@ -3,37 +3,38 @@ title: Configuring Installation Values
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure installation resources before deploying Tanzu Application Service for Kubernetes (TAS for Kubernetes) to a Kubernetes cluster.
+This topic describes how to configure installation resources before deploying <%= vars.app_runtime_full %> (TAS) to a Kubernetes cluster.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before proceeding, complete all sections in:  
+Before proceeding, complete all sections in:
 
-* [Preparing to Install TAS for Kubernetes](preparing-to-install-tas-for-kubernetes.html)  
-* [Installing Command-Line Tools](installing-command-line-tools.html)  
+* [Preparing to Install <%= vars.app_runtime_short %>](preparing-to-install-tas-for-kubernetes.html)
+* [Installing Command-Line Tools](installing-command-line-tools.html)
 
 ## <a id='configure-values'></a> Configure Installation Values
 
-To configure installation values for TAS for Kubernetes, 
-modify a copy of the configuration values template:  
+To configure installation values for <%= vars.app_runtime_short %>,
+modify a copy of the configuration values template:
 
-* [Copy the Configuration Values Template](#copy-template)  
-* [Configure the System Domain](#configure-system-domain)  
-* [Configure the Load Balancer](#configure-lb)  
-* [Configure the Ingress Gateway Certificates](#configure-ingress-cert)  
+* [Copy the Configuration Values Template](#copy-template)
+* [Configure the System Domain](#configure-system-domain)
+* [Configure the Load Balancer](#configure-lb)
+* [Configure the Ingress Gateway Certificates](#configure-ingress-cert)
 * [(Optional) Configure Application Container Certificates](#configure-app-cert)
+* [(Optional) Configure Application Log Destinations](#configure-app-log-destinations)
 
-### <a id='copy-template'></a> Copy the Configuration Values Template  
+### <a id='copy-template'></a> Copy the Configuration Values Template
 
-The configuration values template gives you the flexibility to 
-configure different parts of the system in a single file. 
-Use a copy of the template as your baseline configuration.   
+The configuration values template gives you the flexibility to
+configure different parts of the system in a single file.
+Use a copy of the template as your baseline configuration.
 
-To copy the configuration values template:  
+To copy the configuration values template:
 
 1. Open a command line.
 1. Change directory to the parent directory that contains the `tanzu-application-service` directory.
-1. Create a new directory named `configuration-values`. 
+1. Create a new directory named `configuration-values`.
 Use the new directory to store configuration values for this installation.
 1. Duplicate the sample values file:
 
@@ -44,31 +45,34 @@ Use the new directory to store configuration values for this installation.
     Customize the new `values.yml` as your configuration values file.
 
 
-### <a id='configure-system-domain'></a> Configure the System Domain 
+### <a id='configure-system-domain'></a> Configure the System Domain
 
-To configure you system domain:  
+To configure your system domain:
 
-1. Open `values.yml` in a text editor.  
-1. Locate the `system_domain` section in the `values.yml` file.  
+1. Open `values.yml` in a text editor.
+1. Locate the `system_domain` section in the `values.yml` file.
 1. Configure the system domain:
 
     ```yaml
     system_domain: "SYSTEM-DOMAIN"
     app_domains:
     #@overlay/append
-    - "apps.SYSTEM-DOMAIN"
+    - "APP-DOMAIN"
     ```
-    Where `SYSTEM-DOMAIN` is the system domain you previously selected for your TAS for Kubernetes installation.
-1. Save the `values.yml` file.  
+    Where:
+    - `SYSTEM-DOMAIN` is the system domain you previously selected for your <%= vars.app_runtime_short %> installation.
+    - `APP-DOMAIN` is a separate, unique domain for hosting apps.
 
-### <a id='configure-lb'></a> Configure the Load Balancer  
+1. Save the `values.yml` file.
 
-To configure you LoadBalancer service:  
+### <a id='configure-lb'></a> Configure the Load Balancer
 
-1. Open `values.yml` in a text editor.  
-1. Locate the `load_balancer` section in the `values.yml` file.  
-1. Configure the LoadBalancer service:  
-    
+To configure your LoadBalancer service:
+
+1. Open `values.yml` in a text editor.
+1. Locate the `load_balancer` section in the `values.yml` file.
+1. Configure the LoadBalancer service:
+
     ```yaml
     ingress:
       load_balancer:
@@ -76,11 +80,10 @@ To configure you LoadBalancer service:
         static_external_ip: "LOAD-BALANCER"
       external_traffic_policy: "POLICY"
     ```
-
     Where:
     * `ENABLED` configures the provisioning of the Kubernetes ingress with a `LoadBalancer` Istio ingress service.
-    To provision a `LoadBalancer` for the Istio ingress gateway required for TAS for Kubernetes, 
-    enable `LoadBalancer` as follows:  
+    To provision a `LoadBalancer` for the Istio ingress gateway required for <%= vars.app_runtime_short %>,
+    enable `LoadBalancer` as follows:
     <table>
       <tr>
         <th>Deployment Environment</th>
@@ -114,30 +117,30 @@ To configure you LoadBalancer service:
         <td>TKGI on GCP</td>
         <td><code>True</code></td>
       </tr>
-    </table>  
+    </table>
     For more information, see [Kubernetes Services]
-    (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) 
-    in the Kubernetes documentation.  
+    (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+    in the Kubernetes documentation.
     <br>
-    * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.  
-    * `POLICY` is the endpoint this ingress routes external traffic to:   
-        * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.  
-        * For TKG and other environments that do not support node-local endpoints, 
+    * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.
+    * `POLICY` is the endpoint this ingress routes external traffic to:
+        * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.
+        * For TKG and other environments that do not support node-local endpoints,
         configure `external_traffic_policy` as `Cluster`.
-1. Save the `values.yml` file.  
+1. Save the `values.yml` file.
 
-### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates  
+### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates
 
-TAS for Kubernetes requires a certificate to terminate TLS at the ingress gateway
-and generates a self-signed TLS certificate for the ingress gateway 
-if you do not provide one before installing.  
+<%= vars.app_runtime_short %> requires a certificate to terminate TLS at the ingress gateway
+and generates a self-signed TLS certificate for the ingress gateway
+if you do not provide one before installing.
 
-To configure Ingress gateway certificates:  
+To configure Ingress gateway certificates:
 
-1. Open `values.yml` in a text editor.  
-1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.  
-1. Configure the Ingress gateway certificates:  
-    
+1. Open `values.yml` in a text editor.
+1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.
+1. Configure the Ingress gateway certificates:
+
     ```yaml
     system_certificate:
       crt: "SYSTEM-CERT"
@@ -148,27 +151,26 @@ To configure Ingress gateway certificates:
       key: "WORKLOAD-KEY"
       ca: "WORKLOAD-CA"
     ```
-
     Where:
-    * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain (e.g., `*.SYSTEM-DOMAIN`)
-    * `SYSTEM-KEY` is the Base64-encoded private key for the system certificate.  
-    * `SYSTEM-CA` is the Base64-encoded CA certificate used to sign the system certificate.  
-    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain (e.g., `*.apps.SYSTEM-DOMAIN`)
-    * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.  
-    * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.  
-1. Save the `values.yml` file.  
+    * `SYSTEM-CERT` is the Base64-encoded certificate for the wildcard subdomain of the system domain. For example, `*.SYSTEM-DOMAIN`.
+    * `SYSTEM-KEY` is the Base64-encoded private key for the system certificate.
+    * `SYSTEM-CA` is the Base64-encoded CA certificate used to sign the system certificate.
+    * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain. For example, `*.APP-DOMAIN`.
+    * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.
+    * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.
+1. Save the `values.yml` file.
 
-### <a id='configure-app-cert'></a> (Optional) Configure Application Container Certificates 
+### <a id='configure-app-cert'></a> (Optional) Configure Application Container Certificates
 
-You can provide one or more certificates for the TAS deployed applications to trust. 
-These certificates will be injected into the application trust store to 
-allow apps to communicate with each other in a secure manner.  
+You can provide one or more certificates for the TAS-deployed applications to trust.
+These certificates are injected into the application trust store to
+allow apps to communicate with each other securely.
 
-To configure optional application container certificates:  
+To configure optional application container certificates:
 
-1. Open `values.yml` in a text editor.  
-1. Locate the `app_containers` section in the `values.yml` file.  
-1. Configure the application container certificates:  
+1. Open `values.yml` in a text editor.
+1. Locate the `app_containers` section in the `values.yml` file.
+1. Configure the application container certificates:
 
     ```yaml
      app_containers:
@@ -181,25 +183,63 @@ To configure optional application container certificates:
           SECOND-CA-CERTIFICATE-CONTENT
           -----END CERTIFICATE-----
     ```
+    Where:
+    * `FIRST-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service.
+    or application that you want your TAS-deployed app to trust.
+    * `SECOND-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service
+    or application that you want your TAS-deployed app to trust.
+
+    Ensure each line of the CA certificate value is indented four spaces,
+    matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.
+1. Save the `values.yml` file.
+
+### <a id='configure-app-log-destinations'></a> (Optional) Configure Application Log Destinations
+
+You can provide one or more destinations for application logs.
+These destinations receive all application logs in syslog RFC 5424 format.
+This allows integrations with external logging tools like Splunk or ELK.
+
+For more information about the syslog format, see [RFC 5424 - The Syslog Protocol](https://tools.ietf.org/html/rfc5424) in the Internet Engineering Task Force (IETF) documentation.
+
+To configure optional application log destinations:
+
+1. Open `values.yml` in a text editor.
+1. Go to the end of the file.
+1. Add the following text:
+
+    ```yaml
+    app_log_destinations:
+    ```
+
+1. Immediately following that text, add one or more log destinations:
+
+    ```yaml
+    #@overlay/append
+    - host: HOSTNAME
+      port: PORT
+      transport: TRANSPORT
+      insecure_disable_tls_validation: DISABLE-TLS-VALIDATION
+    ```
 
     Where:
-    * `FIRST-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service 
-    or application that you want your TAS deployed app to trust.  
-    * `SECOND-CA-CERTIFICATE-CONTENT` is a CA certificate or self-signed certificate of a service 
-    or application that you want your TAS deployed app to trust.  
+    * `HOSTNAME` is the hostname of the log destination.
+    * `PORT` is the TCP port number of the log destination.
+    * `TRANSPORT` is one of the following:
+      - `tls` for TLS-encrypted syslog over TCP.
+      - `tcp` for plaintext syslog over TCP. This is the default value.
+    * `DISABLE-TLS-VALIDATION` is `true` or `false`. If set to `true`, the
+      destination TLS certificate is not validated. The default value is `false`.
 
-    Ensure each line of the CA certificate value is indented four spaces, 
-    matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.  
-1. Save the `values.yml` file.  
+1. Save the `values.yml` file.
 
 ## <a id="next"></a> Next Steps
 
 After you complete this procedure, complete all of the following configuration procedures:
 
-* [Configuring Your App Image Registry](configuring-app-image-registry.html)  
-* [Configuring Your System Image Registry](configuring-sys-image-registry.html)  
-* [Configuring Your System Databases](configuring-system-databases.html)  
-* [Configuring Apps Manger](configuring-apps-manager.html)  
+* [Configuring Your App Image Registry](configuring-app-image-registry.html)
+* [Configuring Your System Image Registry](configuring-sys-image-registry.html)
+* [Configuring Your System Databases](configuring-system-databases.html)
+* [Configuring Apps Manger](configuring-apps-manager.html)
 
 <%#
 1. **Application image registry configuration:**
@@ -226,7 +266,7 @@ After you complete this procedure, complete all of the following configuration p
 
 1. **System databases configuration:**
 
-    TAS for Kubernetes requires credentials to an external database.
+    <%= vars.app_runtime_short %> requires credentials to an external database.
 
     For instructions on how to configure the system database,
     see [Configuring Your System Databases](configuring-system-databases.html).
@@ -252,5 +292,5 @@ After you complete this procedure, complete all of the following configuration p
         name: usage_service
     ```
 
-1. **Apps Manager configration:** for more information, see [Configuring Apps Manger](configuring-apps-manager.html)
+1. **Apps Manager configuration:** for more information, see [Configuring Apps Manager](configuring-apps-manager.html)
 %>

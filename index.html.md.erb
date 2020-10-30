@@ -1,10 +1,11 @@
 ---
-title: Tanzu Application Service for Kubernetes
+title: <%= vars.app_runtime_full %>
 owner: Tanzu Application Service Release Engineering
 ---
+<% current_page.data.title = "Installing #{vars.app_runtime_full}" %>
 
-This topic provides an overview of 
-Tanzu Application Service for Kubernetes (TAS for Kubernetes).
+This topic provides an overview of
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 <%= partial 'evaluation_only' %>
 
@@ -12,12 +13,12 @@ Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 ## <a id='overview'></a> Overview
 
-TAS for Kubernetes brings the development experience of [Tanzu Application Service](https://docs.pivotal.io/application-service/concepts/index.html) to the Kubernetes container orchestrator.
+<%= vars.app_runtime_short %> brings the development experience of [Tanzu Application Service](https://docs.pivotal.io/application-service/concepts/index.html) to the Kubernetes container orchestrator.
 It includes the most important features of Tanzu Application Service, such as `cf push` for buildpack-based apps, while running
 both the system components and the application instances as Kubernetes workloads.
 
 ## <a id='getting-started'></a> Getting Started
 
-See [Preparing to Install Tanzu Application Service for Kubernetes]
-(preparing-to-install-tas-for-kubernetes.html) to set up the 
-dependencies required to install TAS for Kubernetes.
+See [Preparing to Install <%= vars.app_runtime_full %>]
+(preparing-to-install-tas-for-kubernetes.html) to set up the
+dependencies required to install <%= vars.app_runtime_short %>.
