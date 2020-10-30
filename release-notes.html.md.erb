@@ -29,6 +29,7 @@ This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app
     <td>TBD, 2020</td>
   </tr>
 </table>
+
 To download VMware <%= vars.app_runtime_short %> v<%= vars.local_product_version %>, see
 [VMware <%= vars.app_runtime_full %>]
 (https://network.pivotal.io/products/tas-for-kubernetes)
@@ -91,9 +92,9 @@ on the _VMware Tanzu Network_.
   </tr>
   <tr>
     <td>cf CLI</td>
-    <td>v6.51.0</td>
+    <td>v7.0.1 or later</td>
   </tr>
-<%#
+
   <tr>
     <td>Docker CLI</td>
     <td>.</td>
@@ -106,7 +107,6 @@ on the _VMware Tanzu Network_.
     <td>kubectl, the Kubernetes CLI</td>
     <td>.</td>
   </tr>
-#%>
   <tr>
     <td>kapp</td>
     <td>v0.29.0 or later</td>
@@ -121,7 +121,7 @@ on the _VMware Tanzu Network_.
   </tr>
 </table>
 
-<%#
+
 #### <a id='optional-components'></a>Optional Components
 
 <%= vars.app_runtime_short %> supports the following optional components:
@@ -140,7 +140,6 @@ on the _VMware Tanzu Network_.
     <td>.</td>
   </tr>
 </table>
-#%>
 
 
 #### <a id='supported-environments'></a>Supported Environments
@@ -150,7 +149,6 @@ on the _VMware Tanzu Network_.
 * 64-bit Mac OS
 * 64-bit Linux OS
 
-<%#
 <table class="nice">
   <tr>
     <th>Deployment Environment</th>
@@ -169,7 +167,6 @@ on the _VMware Tanzu Network_.
     <td></td>
   </tr>
 </table>
-#%>
 
 
 ### <a id='features-0-5-0'></a> Features
@@ -188,8 +185,7 @@ This release has the following breaking changes:
 
 This release has the following issues:
 
- -
- -
+ - Pushing apps or retrieving app logs with `cf logs` requires cf CLI v7.0.1 or later
 
 ## <a id='0-4-0'></a> v0.4.0
 
