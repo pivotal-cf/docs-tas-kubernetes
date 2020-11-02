@@ -30,7 +30,7 @@ To back up TAS for Kubernetes Tanzu Postgres Instances:
     ```
     velero create backup BACKUP-NAME \
 	--include-namespaces NAMESPACES \
-      --selector ‘app in (RESOURCE-LIST)` \
+	--selector ‘app in (RESOURCE-LIST)` \
 	--storage-location STORAGE-LOCATION \
 	--volume-snapshot-location SNAPSHOT-LOCATION \
 	--ttl TTL-LENGTH \
@@ -45,8 +45,7 @@ To back up TAS for Kubernetes Tanzu Postgres Instances:
     * `NAMESPACES` is the comma-delimited list of namespaces for the selected resources to back up.
 <br>
     The namespace list for backing up the default TAS for Kubernetes configuration is `postgres-dbs,cf-system`,
-    where `cf-system` is the default `CF Metadata` namespace,
-    and `postgres-dbs` is the default TAS for Kubernetes database namespace.
+    where `postgres-dbs` is the default TAS for Kubernetes database namespace.
 <br>
     * `RESOURCE-LIST` is the comma-delimited list of selected resources to back up.
 <br>
@@ -69,7 +68,7 @@ To back up TAS for Kubernetes Tanzu Postgres Instances:
     ```
     velero create backup BACKUP-NAME \
 	--include-namespaces postgres-dbs,cf-system \
-      --selector ‘app in (postgres, cf-metadata)` \
+	--selector ‘app in (postgres, cf-metadata)` \
 	--storage-location STORAGE-LOCATION \
 	--volume-snapshot-location SNAPSHOT-LOCATION \
 	--ttl TTL-LENGTH \
@@ -138,7 +137,7 @@ To validate a completed backup by reviewing the Cloud Foundry data that was back
     1. Download and extract the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
     For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
     1. Inspect the TAS for Kubernetes artifact.
-    Confirm the `get-backup-metadata.sh` script is present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:
+    Confirm the `get-backup-metadata.sh` script is present in the following directory: `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin`.
 
 1. To confirm the name of the backup to validate:
 
