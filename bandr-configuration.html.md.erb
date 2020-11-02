@@ -95,7 +95,7 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     exclude_pvc_from_backup() {
       local pvc pv
       pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
+      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.spec.volumeName}')"
       kubectl -n postgres-dbs label pv "${pv}" velero.io/exclude-from-backup=true --overwrite=true
       kubectl -n postgres-dbs label pvc "${pvc}" velero.io/exclude-from-backup=true --overwrite=true
     }
@@ -108,17 +108,17 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
     * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
 
-    Exclude persistent volumes from your backup you ensure a reliable restore process.  
+    Excluding persistent volumes from your backup ensures a reliable snapshot restore process.  
 
 1. To verify the annotations have been applied:  
 
     ```
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     ```
 
     For example:
     <pre class="terminal">
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     {
       "pre.hook.backup.velero.io/command": "[\"pgbackrest\",\"--stanza=ccdb\",\"--type=full\",\"backup\"]",
       "pre.hook.backup.velero.io/timeout": "60s"
@@ -139,9 +139,9 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     check_label() {
       local pvc pv
       pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
+      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.spec.volumeName}')"
+      kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.metadata.labels}'
+      kubectl -n postgres-dbs get pv "${pv}" -o jsonpath='{.metadata.labels}'
     }
 
     check_label "CCDB-NAME"
@@ -161,9 +161,9 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     check_label() {
       local pvc pv
       pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
+      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.spec.volumeName}')"
+      kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.metadata.labels}'
+      kubectl -n postgres-dbs get pv "${pv}" -o jsonpath='{.metadata.labels}'
     }
 
     check_label "ccdb-pgdata-ccdb-0"
