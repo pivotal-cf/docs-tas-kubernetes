@@ -16,6 +16,11 @@ ensure your environment and clusters support
 * [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
 * [VMware Tanzu Kubernetes Grid](#grid)
 
+### Cluster Sizing and Resource Requirements
+* Your Kubernetes clusters should have been created with:
+	* At least 5 worker nodes.
+	* Each worker node has at least 4 CPU and 6&nbsp;GB of memory available for allocation.
+
 ### <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
 <%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.
@@ -25,8 +30,6 @@ for <%= vars.app_runtime_short %> on TKGI:
 
 * Your TKGI version is v1.7 or later.
 * Your Kubernetes clusters have been created with the following characteristics:
-    * The Kubernetes cluster has at least 5 worker nodes.
-    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that
     <%= vars.app_runtime_short %> uses to store buildpack-based app images.
     If the registry has a certificate issued from a private certificate authority (CA),
@@ -59,8 +62,6 @@ for <%= vars.app_runtime_short %> on TKG:
         kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
         ```
 * Your Kubernetes clusters have been created with the following characteristics:
-    * The Kubernetes cluster has at least 5 worker nodes.
-    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
     * The worker nodes in the Kubernetes clusters trust the container image registry that
     <%= vars.app_runtime_short %> uses to store buildpack-based app images.
     If the registry has a certificate issued from a private certificate authority (CA),
