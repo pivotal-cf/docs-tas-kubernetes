@@ -72,19 +72,15 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
 
     ```
     kubectl -n postgres-dbs annotate pod \
-      --selector='postgres-instance=CCDB-NAME' \
+      --selector='postgres-instance=ccdb' \
       'pre.hook.backup.velero.io/command=["pgbackrest","--stanza=ccdb","--type=full","backup"]' \
       'pre.hook.backup.velero.io/timeout=60s'
 
     kubectl -n postgres-dbs annotate pod \
-      --selector='postgres-instance=UAADB-NAME' \
+      --selector='postgres-instance=uaadb' \
       'pre.hook.backup.velero.io/command=["pgbackrest","--stanza=uaadb","--type=full","backup"]' \
       'pre.hook.backup.velero.io/timeout=60s'
     ```
-
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
 
 1. To label the data persistent volumes to ensure they are not included in your backups:
 
@@ -100,15 +96,10 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
       kubectl -n postgres-dbs label pvc "${pvc}" velero.io/exclude-from-backup=true --overwrite=true
     }
 
-    exclude_pvc_from_backup "CCDB-NAME"
-    exclude_pvc_from_backup "UAADB-NAME"
+    exclude_pvc_from_backup "ccdb-pgdata-ccdb-0"
+    exclude_pvc_from_backup "uaadb-pgdata-uaadb-0"
     ```
 
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
-
-    
     This step excludes persistent volumes from your backup to ensure a reliable snapshot restore process.  
 
 1. To verify the annotations have been applied:  
@@ -145,13 +136,9 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
       kubectl -n postgres-dbs get pv "${pv}" -o jsonpath='{.metadata.labels}'
     }
 
-    check_label "CCDB-NAME"
-    check_label "UAADB-NAME"
+    check_label "ccdb-pgdata-ccdb-0"
+    check_label "uaadb-pgdata-ccdb-0"
     ```
-
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
 
     For example:
 
