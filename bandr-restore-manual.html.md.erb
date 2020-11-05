@@ -108,8 +108,8 @@ in _Configuring Your System Databases_.
     kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pgbackrest --stanza=ccdb --delta restore
     kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pg_ctl stop
     kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pgbackrest --stanza=uaadb --delta restore
-    kubectl -n postgres-dbs delete pod/ccdb-0
-    kubectl -n postgres-dbs delete pod/uaadb-0
+    kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pg_ctl start
+    kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pg_ctl start
     ```
 
 1. To re-annotate and label your pods, complete
