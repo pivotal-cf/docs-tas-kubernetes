@@ -73,9 +73,16 @@ To generate the internal values, credentials and certificates needed during <%= 
 </p>
 
 <p class= "note warning">
-  <strong>Warning:</strong> The Cloud API currently doesn't support encryption key rotation in the Kubernetes stack. Changing the encryption key will cause failures on redeployment. Therefore the <code>capi.database.encryption_key</code> value should not be modified after it is initially set.
+  <strong>Warning:</strong> Do not rotate encryption keys in the Kubernetes stack in this version of <%= vars.app_runtime_short %>. 
+  The <code>capi.database.encryption_key</code> value should not be modified after it is initially set because
+  the Cloud API fails during <code>cf push</code> for Kubernetes clusters with a modified encryption key. 
 </p>
 
+<p class= "note warning">
+  <strong>Warning:</strong> Do not rotate the blobstore secret key in this version of <%= vars.app_runtime_short %>. 
+  The <code>blobstore.secret_access_key</code> value should not be altered after it is initially set because
+  redeployments fail when using configurations with a modified blobstore secret key. 
+</p>
 
 ## <a id='install-tas-for-k8s'></a> Install <%= vars.app_runtime_short %>
 

@@ -1,5 +1,5 @@
 ---
-title: Backing Up Tanzu Application Service for Kubernetes using Automation
+title: Backing Up Tanzu Application Service for Kubernetes Using Automation
 owner: Tanzu Application Service Release Engineering
 ---
 
@@ -11,3 +11,259 @@ Tanzu Application Service for Kubernetes (TAS for Kubernetes) using automation.
 <%= partial 'limitation_notes' %>
 
 ## <a id='overview'></a> Overview
+
+To backup TAS for Kubernetes using automation:  
+
+1. [Create and Configure a Service Account for Backing Up](#backup-service-account)  
+1. [Install Velero](#backup-install-velero)  
+1. [Automate Your Velero Backup](#backup-create-script)  
+1. [Review the Automates Velero Backup](#backup-review-automated)  
+
+## <a id='prerequisites'></a> Prerequisites
+
+Complete the configuration for manual back up before proceeding with configuring automated back up. 
+For more information, see [Backing Up <%= vars.app_runtime_full %>](bandr-backup-manual.html).  
+
+## <a id='backup-service-account'></a> Create and Configure a Service Account for Backing Up
+
+1. To create a service account to run the automated backup, 
+use your IaaS tools to create the account.  
+<br>
+    For example, to create a service account on GCP:
+    <pre class="terminal"> 
+    gcloud iam service-accounts create velero-service-account \
+        --display-name "Velero service account"
+    </pre>
+
+1. Grant the new Velero service account permissions needed to complete the backup.  
+<br>
+    For example, to grant the service account permissions on GCP:
+    <pre class="terminal"> 
+    SERVICE\_ACCOUNT\_EMAIL=$(gcloud iam service-accounts list \
+      --filter="displayName:Velero service account" \
+      --format 'value(email)')
+    
+    PROJECT\_ID=$(gcloud config get-value project)
+    
+    ROLE\_PERMISSIONS=(
+        compute.disks.get
+        compute.disks.create
+        compute.disks.createSnapshot
+        compute.snapshots.get
+        compute.snapshots.create
+        compute.snapshots.useReadOnly
+        compute.snapshots.delete
+        compute.zones.get
+        storage.buckets.get
+        storage.objects.create
+        storage.objects.delete
+        storage.objects.list
+    )
+    
+    gcloud iam roles create velero.server \
+        --project $PROJECT\_ID \
+        --title "Velero Server" \
+        --permissions "$(IFS=","; echo "${ROLE\_PERMISSIONS[*]}")"
+    
+    gcloud projects add-iam-policy-binding $PROJECT\_ID \
+        --member serviceAccount:$SERVICE\_ACCOUNT\_EMAIL \
+        --role projects/$PROJECT\_ID/roles/velero.server
+    
+    gsutil iam ch serviceAccount:$SERVICE\_ACCOUNT\_EMAIL:objectAdmin gs://velero-demo-bucket
+    </pre>
+
+1. To create a service account key, use your IaaS tools to create the key. 
+Specify for the IaaS tool to create a `credentials-velero` output file to your local directory.  
+<br>
+    For example, to create a service account key on GCP:
+    <pre class="terminal"> 
+    gcloud iam service-accounts keys create credentials-velero \
+        --iam-account $SERVICE\_ACCOUNT\_EMAIL
+    </pre>
+
+## <a id='backup-install-velero'></a> Install Velero
+
+1. If, you have not already done so, 
+install Velero to the Kubernetes clusters you want to backup using automation. 
+For more information, see [Set Up and Install Velero and Back Up Components]
+(bandr-backup-manual.html#setup-backup-comp) in _Backing Up <%= vars.app_runtime_full %>_.  
+<br>    
+    For example, to install Velero on GCP:
+    <pre class="terminal"> 
+    velero install \
+    --provider gcp \
+    --plugins velero/velero-plugin-for-gcp:v1.1.0 \
+    --bucket velero-demo-bucket \
+    --secret-file credentials-velero
+    </pre>
+
+## <a id='backup-create-script'></a> Automate Your Velero Backup
+
+1. To create a Velero backup script, create a bash script with the following content:
+
+    ```
+    #!/usr/bin/env bash
+    
+    set -euo pipefail
+    
+    if ! kubectl get namespace cf-system &> /dev/null
+    then
+        echo "error: cf-system namespace not found"
+        echo "  Please ensure Tanzu Application Service is installed on this cluster"
+        exit 1
+    fi
+    
+    backup_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
+    
+    ONE_DAY=24
+    ONE_YEAR=365
+    FOUR_YEARS="$((4*${ONE_YEAR}*${ONE_DAY}))h"
+    
+    velero create backup "${backup_name}" \
+       --include-namespaces cf-system,postgres-dbs \
+        --selector ‘app in (cf-metadata, postgres) \
+        --ttl "${FOUR_YEARS}" \
+        --wait
+    ```
+
+1. To automate Velero back up using a Concourse pipeline:
+    1. Create the following Concourse configuration:
+
+        ```
+        ---
+        resources:
+        - name: every-3h
+          type: time
+          icon: clock-outline
+          source:
+            interval: 3h
+        
+        jobs:
+        - name: backup
+          plan:
+          - get: every-3h
+            trigger: true
+          - task: create-backup
+            config:
+              platform: linux
+              image_resource:
+                type: registry-image
+                source:
+                  repository: IMAGE-REPOSITORY
+              params:
+                SERVICE_ACCOUNT_KEY: ((service-account-key))
+                SERVICE_ZONE: ((service-zone))
+                SERVICE_CLUSTER_NAME: ((service-cluster-name))
+              run:
+                path: /bin/bash
+                args:
+                  - -c
+                  - |
+                    set -eu
+        
+                    gcloud auth activate-service-account --key-file=<(echo "$SERVICE_ACCOUNT_KEY")
+                    gcloud container clusters get-credentials "${SERVICE_CLUSTER_NAME}" --zone "${SERVICE_ZONE}"
+        
+        
+                    if ! kubectl get namespace cf-system &> /dev/null
+                    then
+                      echo "error: cf-system namespace not found"
+                      echo "  Please ensure Tanzu Application Service is installed on this cluster"
+                      exit 1
+                    fi
+        
+                    backup_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
+        
+                    ONE_DAY=24
+                    ONE_YEAR=365
+                    FOUR_YEARS="$((4*${ONE_YEAR}*${ONE_DAY}))h"
+        
+                    velero create backup "${backup_name}" \
+                      --include-namespaces postgres-dbs,cf-system \
+                      --selector 'app in (cf-metadata, postgres)' \
+                      --ttl "${FOUR_YEARS}" \
+                      --wait
+        
+                    velero backup describe "${backup_name}" --details
+        ```
+
+        Where `IMAGE-REPOSITORY` is the registry location for storing your backups.  
+<br>
+        For example:  
+
+        ```
+        ---
+        resources:
+        - name: every-3h
+          type: time
+          icon: clock-outline
+          source:
+            interval: 3h
+        jobs:
+        - name: backup
+          plan:
+          - get: every-3h
+            trigger: true
+          - task: create-backup
+            config:
+              platform: linux
+              image\_resource:
+                type: registry-image
+                source:
+                  repository: pcfplatformrecovery/backup-and-restore-cf-for-k8s
+              params:
+                SERVICE\_ACCOUNT\_KEY: ((service-account-key))
+                SERVICE\_ZONE: ((service-zone))
+                SERVICE\_CLUSTER\_NAME: ((service-cluster-name))
+              run:
+                path: /bin/bash
+                args:
+                  - -c
+                  - |
+                    set -eu
+        
+                    gcloud auth activate-service-account --key-file=<(echo "$SERVICE\_ACCOUNT\_KEY")
+                    gcloud container clusters get-credentials "${SERVICE\_CLUSTER\_NAME}" --zone "${SERVICE\_ZONE}"
+        
+        
+                    if ! kubectl get namespace cf-system &> /dev/null
+                    then
+                      echo "error: cf-system namespace not found"
+                      echo "  Please ensure Tanzu Application Service is installed on this cluster"
+                      exit 1
+                    fi
+        
+                    backup\_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
+        
+                    ONE\_DAY=24
+                    ONE\_YEAR=365
+                    FOUR\_YEARS="$((4*${ONE\_YEAR}*${ONE\_DAY}))h"
+        
+                    velero create backup "${backup\_name}" \
+                      --include-namespaces postgres-dbs,cf-system \
+                      --selector 'app in (cf-metadata, postgres)' \
+                      --ttl "${FOUR\_YEARS}" \
+                      --wait
+        
+                    velero backup describe "${backup\_name}" --details
+        ```
+
+    1. Configure the pipeline to run with the following required parameters:
+
+        ```
+        --var service-account-key=”SERVICE-ACCOUNT-KEY”
+        --var service-zone=”ZONE-NAME”
+        --var service-cluster-name=”CLUSTER-NAME"
+        ```
+
+        Where:  
+        * `SERVICE-ACCOUNT-KEY` is the content of service account key.  
+        * `ZONE-NAME` is the project zone where cluster is deployed.  
+        * `CLUSTER-NAME` is the name of the cluster to be backed up.  
+
+## <a id='backup-review-automated'></a> Review the Automated Velero Backup
+
+To review or troubleshoot an automated backup, 
+follow the steps in [Review a Completed Backup](bandr-backup-manual.html#backup-review) 
+in _Backing Up <%= vars.app_runtime_full %>_.
+

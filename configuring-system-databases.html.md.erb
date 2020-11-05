@@ -20,8 +20,8 @@ To create and configure databases for these system components:
 
 Before you provision the databases, you must:
 
-* Install Tanzu Postgres. See [Installing VMware Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/0-4/installing.html).
-* Create the Postgres operator release on your cluster. See [Creating a Postgres Operator Release](http://postgres-kubernetes.docs.pivotal.io/0-4/create-release.html).
+* Install Tanzu Postgres. See [Installing VMware Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/1-0/installing.html).
+* Create the Postgres operator release on your cluster. See [Creating a Postgres Operator Release](http://postgres-kubernetes.docs.pivotal.io/1-0/create-release.html).
 
 ## <a id='provision-postgres-databases'></a>Provision Tanzu Postgres Databases
 
@@ -39,8 +39,8 @@ To configure these three databases:
     metadata:
       name: postgres-dbs
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: ccdb
       namespace: postgres-dbs
@@ -54,8 +54,8 @@ To configure these three databases:
         dbname: cloud_controller
         username: cloud_controller
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: uaadb
       namespace: postgres-dbs
@@ -69,8 +69,8 @@ To configure these three databases:
         dbname: uaa
         username: uaa
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: usagedb
       namespace: postgres-dbs

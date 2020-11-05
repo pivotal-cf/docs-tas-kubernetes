@@ -100,17 +100,17 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     exclude_pvc_from_backup "uaadb-pgdata-uaadb-0"
     ```
 
-    Exclude persistent volumes from your backup you ensure a reliable restore process.  
+    This step excludes persistent volumes from your backup to ensure a reliable snapshot restore process.  
 
 1. To verify the annotations have been applied:  
 
     ```
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     ```
 
     For example:
     <pre class="terminal">
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     {
       "pre.hook.backup.velero.io/command": "[\"pgbackrest\",\"--stanza=ccdb\",\"--type=full\",\"backup\"]",
       "pre.hook.backup.velero.io/timeout": "60s"
@@ -131,9 +131,9 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     check_label() {
       local pvc pv
       pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
+      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.spec.volumeName}')"
+      kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.metadata.labels}'
+      kubectl -n postgres-dbs get pv "${pv}" -o jsonpath='{.metadata.labels}'
     }
 
     check_label "ccdb-pgdata-ccdb-0"
@@ -149,9 +149,9 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     check_label() {
       local pvc pv
       pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
+      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.spec.volumeName}')"
+      kubectl -n postgres-dbs get pvc "${pvc}" -o jsonpath='{.metadata.labels}'
+      kubectl -n postgres-dbs get pv "${pv}" -o jsonpath='{.metadata.labels}'
     }
 
     check_label "ccdb-pgdata-ccdb-0"
