@@ -4,7 +4,7 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic describes how to create and configure Kubernetes clusters to support
-<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>.
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 
 ## <a id='overview'></a> Overview
@@ -74,7 +74,7 @@ After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the co
 
 ## <a id='verify-default-storage'></a> Verify that a Default Storage Class Exists
 
-<%= vars.app_runtime_short %> requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that TAS for Kuberenetes calls for.
+<%= vars.app_runtime_short %> requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that <%= vars.app_runtime_short %> calls for.
 
 Most of the Kubernetes distributed by the public clouds come with a default storage class. If you are using Kubernetes on a private cloud, you might need to install one instead.
 

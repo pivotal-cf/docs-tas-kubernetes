@@ -9,15 +9,15 @@ from the VMware Tanzu Network and from a relocated image in a private container 
 
 ## <a id='overview'></a> Overview
 
-To configure installation settings and install TAS for Kubernetes:
+To configure installation settings and install <%= vars.app_runtime_short %>:
 
 1. [Prepare the Installation](#prepare-installation)
 1. [Generate Internal Configuration Values](#generate-configuration-values)
-1. [Install TAS for Kubernetes](#install-tas-for-k8s)
+1. [Install <%= vars.app_runtime_short %>](#install-tas-for-k8s)
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install TAS for Kubernetes, you must:
+Before you install <%= vars.app_runtime_short %>, you must:
 
 + Configure all of the required or recommended installation resources.
 See [Configuring Installation Values](configuring-installation-values.html).
@@ -27,11 +27,11 @@ See [Upgrading to cf CLI v7](https://docs.pivotal.io/application-service/2-10/cf
 
 ## <a id='support-backup'></a> Prepare the Installation
 
-To prepare for installing TAS for Kubernetes:
+To prepare for installing <%= vars.app_runtime_short %>:
 
 1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
 1. Change directory to the `tanzu-application-service` directory.
-1. To enable support for backing up and restoring TAS for Kubernetes, copy the
+1. To enable support for backing up and restoring <%= vars.app_runtime_short %>, copy the
 `disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:
 
     ```
@@ -311,7 +311,7 @@ use a Kubernetes LoadBalancer Service for the ingress gateway, see
 
 ## <a id='post-installation-configuration'></a> Validate Your <%= vars.app_runtime_short %> Installation
 
-<p class="note"><strong>Note</strong>: Managing apps and services on TAS for Kubernetes requires cf CLI v7.0.1 or later.</p>
+<p class="note"><strong>Note</strong>: Managing apps and services on <%= vars.app_runtime_short %> requires cf CLI v7.0.1 or later.</p>
 
 To validate your <%= vars.app_runtime_short %> installation:
 

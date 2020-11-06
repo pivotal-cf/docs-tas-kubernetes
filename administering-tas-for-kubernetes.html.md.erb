@@ -8,7 +8,7 @@ This topic outlines the process for administering <%= vars.app_runtime_full %> (
 
 ##<a id='administer'></a>Administer <%= vars.app_runtime_short %>
 
-To administer Tanzu Application Service (TAS) for Kubernetes after initial installation:
+To administer <%= vars.app_runtime_short %> after initial installation:
 
 1. **Create TAS Orgs and Spaces**: Create orgs and spaces by following the instructions
 in the _<%= vars.standard_runtime_name %> Administrator Guide_,
@@ -17,7 +17,7 @@ see [Orgs, Spaces, Roles, and Permissions]
 <br>
     Developers create and manage their apps and service instances within spaces.
 Every app, service, and route that developers create is scoped to a space.
-Each space belongs to an org in the TAS installation.
+Each space belongs to an org in the <%= vars.app_runtime_short %> installation.
 
 1. **Create TAS Quota Plans**: Create quota plans by following the instructions
 in the _<%= vars.standard_runtime_name %> Administrator Guide_,
@@ -25,7 +25,7 @@ see [Creating and Modifying Quota Plans]
 (https://docs.pivotal.io/application-service/adminguide/quota-plans.html).
 <br>
     Quota plans are named sets of memory, service, and instance usage quotas that constrain
-the usage of organizations within a TAS installation.
+the usage of organizations within a <%= vars.app_runtime_short %> installation.
 
 1. **Manage Service Brokers**: Make services available to app developers by
 registering the service brokers and making the service plans public.
@@ -33,7 +33,7 @@ See
 [Managing Service Brokers](https://docs.pivotal.io/application-service/services/managing-service-brokers.html)
 in the _<%= vars.standard_runtime_name %> Administrator Guide_.
 <br>
-    Developers typically need to connect their apps running on TAS to dependencies such as data services.
+    Developers typically need to connect their apps running on <%= vars.app_runtime_short %> to dependencies such as data services.
 Service brokers give developers a self-service mechanism to provision these dependencies
 and to connect them to their apps.
 

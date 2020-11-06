@@ -13,17 +13,17 @@ This topic provides an overview of how to back up
 
 ## <a id='overview'></a> Overview
 
-To back up TAS for Kubernetes:
+To back up <%= vars.app_runtime_short %>:
 
-* [Back Up TAS for Kubernetes](#backup-tas4k8s)
+* [Back Up <%= vars.app_runtime_short %>](#backup-tas4k8s)
 * [Monitor Backup Progress](#backup-progress)
 * [Review a Completed Backup](#backup-review)
 
 ## <a id='prerequisites'></a> Prerequisites
 
-## <a id='backup-tas4k8s'></a> Back Up TAS for Kubernetes
+## <a id='backup-tas4k8s'></a> Back Up <%= vars.app_runtime_short %>
 
-To back up TAS for Kubernetes Tanzu Postgres Instances:
+To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
 1. To back up the PGBackrest volume and secrets:
 
@@ -44,14 +44,14 @@ To back up TAS for Kubernetes Tanzu Postgres Instances:
 <br>
     * `NAMESPACES` is the comma-delimited list of namespaces for the selected resources to back up.
 <br>
-    The namespace list for backing up the default TAS for Kubernetes configuration is `postgres-dbs,cf-system`,
-    where `postgres-dbs` is the default TAS for Kubernetes database namespace.
+    The namespace list for backing up the default <%= vars.app_runtime_short %> configuration is `postgres-dbs,cf-system`,
+    where `postgres-dbs` is the default <%= vars.app_runtime_short %> database namespace.
 <br>
     * `RESOURCE-LIST` is the comma-delimited list of selected resources to back up.
 <br>
-    The resource list for backing up the default TAS for Kubernetes configuration is `postgres, cf-metadata`,
+    The resource list for backing up the default <%= vars.app_runtime_short %> configuration is `postgres, cf-metadata`,
     where `cf-metadata` is specified for backing up the CF Metadata app,
-    and `postgres` for backing up the TAS for Kubernetes Postgres instances.
+    and `postgres` for backing up the <%= vars.app_runtime_short %> Postgres instances.
 <br>
     * `STORAGE-LOCATION` is the location where Velero should store the generated backup artifacts.
 <br>
@@ -133,10 +133,10 @@ of the root cause of potential failures.
 
 To validate a completed backup by reviewing the Cloud Foundry data that was backed up:
 
-1. If you do not have the TAS for Kubernetes installation resources:
+1. If you do not have the <%= vars.app_runtime_short %> installation resources:
     1. Download and extract the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
     For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
-    1. Inspect the TAS for Kubernetes artifact.
+    1. Inspect the <%= vars.app_runtime_short %> artifact.
     Confirm the `get-backup-metadata.sh` script is present in the following directory: `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin`.
 
 1. To confirm the name of the backup to validate:
