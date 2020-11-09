@@ -46,6 +46,8 @@ in the TKGI documentation.
 
 <%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid (TKG) environments.
 
+# TODO: this is unclear language and should include more hand-holding
+
 Ensure the following before creating or configuring Kubernetes clusters
 for <%= vars.app_runtime_short %> on TKG:
 
@@ -67,12 +69,22 @@ for <%= vars.app_runtime_short %> on TKG:
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
     the certificate of that CA.
 
+# TODO: the above should explain to include options for that in the tkg create cluster command, missing commands for how to tell your cluster to trust the private registry
+
+tkg create cluster [name] --plan=[plan] --worker-machine-count [5+]
+
+# TODO: if we wire up the CF4K8S add_metrics_server_components value to TAS we don't need the extra apply?
+
+# TODO: the container image registry part of that is super unclear... makes it sound like we need to do something in or before our create command
+
 For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
-(https://docs.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).
+(https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).
 
 After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that kubectl targets the cluster.
 
 ## <a id='verify-default-storage'></a> Verify that a Default Storage Class Exists
+
+# TODO: define some of the jargon, or link to definitions. Make clear that you don't have to touch the blobstore if you don't have to, but NEED storage class
 
 <%= vars.app_runtime_short %> requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that TAS for Kuberenetes calls for.
 
@@ -81,7 +93,7 @@ Most of the Kubernetes distributed by the public clouds come with a default stor
 To verify that your Kubernetes cluster already has a default storage class installed, retrieve the list of StorageClass resources in the cluster:
 
 ```bash
-kubectl get storage class
+kubectl get storageclass
 ```
 
 Review the returned list of StorageClass resources:

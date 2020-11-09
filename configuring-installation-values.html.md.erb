@@ -47,6 +47,8 @@ Use the new directory to store configuration values for this installation.
 
 ### <a id='configure-system-domain'></a> Configure the System Domain
 
+# TODO: example of a system domain and app domain to make sure that the system domain isn't used as base domain for the app domain
+
 To configure your system domain:
 
 1. Open `values.yml` in a text editor.
@@ -128,6 +130,8 @@ To configure your LoadBalancer service:
         * For TKG and other environments that do not support node-local endpoints,
         configure `external_traffic_policy` as `Cluster`.
 1. Save the `values.yml` file.
+
+# TODO: if you're setting the static external ip you might as well setup dns (further down) at the same time
 
 ### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates
 
