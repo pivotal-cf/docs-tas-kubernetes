@@ -29,7 +29,7 @@ See [Upgrading to cf CLI v7](https://docs.pivotal.io/application-service/2-10/cf
 
 To prepare for installing <%= vars.app_runtime_short %>:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
+1. Verify that your root directory contains `config` and `tanzu-application-service` directories.
 1. Change directory to the `tanzu-application-service` directory.
 1. To enable support for backing up and restoring <%= vars.app_runtime_short %>, copy the
 `disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:
@@ -51,23 +51,23 @@ To generate the internal values, credentials and certificates needed during <%= 
     ./bin/generate-values.sh CONFIG-VALUES-PATH
     ```
 <br>
-    Where `CONFIG-VALUES-PATH` is the path to the `configuration-values` directory.
-    For example, `../configuration-values`.
+    Where `CONFIG-VALUES-PATH` is the path to the `config` directory.
+    For example, `../config`.
 <br>
     The `generate-values` script creates:
     * **_generated-values.yml**: The `_generated-values.yml` file contains generated configuration values
     that will be read during installation.
-    The default location for the `_generated-values.yml` file is: `../configuration-values/_generated-values.yml`.
+    The default location for the `_generated-values.yml` file is: `../config/_generated-values.yml`.
  <br>
     * **tas-vars**: The `tas-vars` data store contains credentials and certificates
     that are not used during <%= vars.app_runtime_short %> installation but may be needed for future value generation.
-    The default location for the `tas-vars` data store is: `../configuration-values/vars-store/tas-vars`.
+    The default location for the `tas-vars` data store is: `../config/vars-store/tas-vars`.
 <br>
     * **Certificates**: Self-signed `system-certificate` and `workload-certificate` certificates are created
     if you did not provide these certificates when completing the steps in [Configuring Installation Values](configuring-installation-values.html).
 
 
-<p class="note">Ensure all of the generated files in the <code>configuration-values</code> directory are stored securely.
+<p class="note">Ensure all of the generated files in the <code>config</code> directory are stored securely.
     These files contain important installation secrets and should be preserved
     for future installations.
 </p>
@@ -111,7 +111,7 @@ To install <%= vars.app_runtime_short %> from the VMware Tanzu Network:
 1. To create a cluster configurations file:
 
     ```bash
-    ./bin/cluster-detect.sh > ../configuration-values/cluster-values.yml
+    ./bin/cluster-detect.sh > ../config/cluster-values.yml
     ```
 
     The `cluster-detect` script communicates with the kube API to determine deployment values
@@ -120,7 +120,7 @@ To install <%= vars.app_runtime_short %> from the VMware Tanzu Network:
 1. To install <%= vars.app_runtime_short %>, run the installation script:
 
     ```bash
-    ./bin/install-tas.sh ../configuration-values
+    ./bin/install-tas.sh ../config
     ```
 
     The command installs <%= vars.app_runtime_short %> using the deployment values you generated previously.
@@ -144,7 +144,7 @@ To install <%= vars.app_runtime_short %>:
 1. To create a cluster configurations file:
 
     ```bash
-    ./bin/cluster-detect.sh > ../configuration-values/cluster-values.yml
+    ./bin/cluster-detect.sh > ../config/cluster-values.yml
     ```
 
     The `cluster-detect` script communicates with the kube API to determine deployment values
@@ -155,7 +155,7 @@ To install <%= vars.app_runtime_short %>:
 
     ```
     ytt -f config \
-          -f ../configuration-values | \
+          -f ../config | \
           kbld -f- -f relocated_images.yml > /tmp/final_deployment.yml
     kapp deploy -a cf -f /tmp/final_deployment.yml
     ```
@@ -324,14 +324,14 @@ To validate your <%= vars.app_runtime_short %> installation:
     ```
 
     Where `SYSTEM-DOMAIN` is your <%= vars.app_runtime_short %> installation system domain.
-1. Change directory into the directory containing the `tanzu-application-service` and `configuration-values`
+1. Change directory into the directory containing the `tanzu-application-service` and `config`
 directories.
 
 1. To set the `CF_ADMIN_PASSWORD` environment variable to the CF administrative password
-stored in the `cf_admin_password` key in the `configuration-values/_generated-values.yml` file:
+stored in the `cf_admin_password` key in the `config/_generated-values.yml` file:
 
     ```
-    CF_ADMIN_PASSWORD="$(bosh interpolate configuration-values/_generated-values.yml \
+    CF_ADMIN_PASSWORD="$(bosh interpolate config/_generated-values.yml \
             --path /cf_admin_password)"
     ```
 
