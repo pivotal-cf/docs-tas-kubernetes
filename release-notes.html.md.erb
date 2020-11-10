@@ -9,9 +9,9 @@ This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app
 
 <%= partial 'limitation_notes' %>
 
-## <a id='0-5-0'></a> v<%= vars.local_product_version %>
+## <a id='0-6-0'></a> v<%= vars.local_product_version %>
 
-**Release Date**: TBD, 2020
+**Release Date**: November 12, 2020
 
 ### <a id='product-snapshot'></a>Product Snapshot
 
@@ -26,7 +26,7 @@ This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app
   </tr>
   <tr>
     <td>Release date</td>
-    <td>TBD, 2020</td>
+    <td>November 12, 2020</td>
   </tr>
 </table>
 
@@ -35,7 +35,7 @@ To download VMware <%= vars.app_runtime_short %> v<%= vars.local_product_version
 (https://network.pivotal.io/products/tas-for-kubernetes)
 on the _VMware Tanzu Network_.
 
-#### <a id='supported-platforms'></a>Supported Kubernetes Distributions
+#### <a id='0-6-0-supported-platforms'></a>Supported Kubernetes Distributions
 
 <%= vars.app_runtime_short %> is compatible with Kubernetes v1.16 and later, and is tested with the following Kubernetes distributions:
 
@@ -58,7 +58,7 @@ on the _VMware Tanzu Network_.
   </tr>
 </table>
 
-#### <a id='installed-components'></a>Installed With <%= vars.local_product_version %>
+#### <a id='0-6-0-installed-components'></a>Installed With <%= vars.local_product_version %>
 
 <%= vars.app_runtime_short %> uses the following components:
 
@@ -81,7 +81,7 @@ on the _VMware Tanzu Network_.
   </tr>
 </table>
 
-#### <a id='additional-components'></a>Required Additional Components
+#### <a id='0-6-0-additional-components'></a>Required Additional Components
 
 <%= vars.app_runtime_short %> requires the following components:
 
@@ -126,7 +126,7 @@ on the _VMware Tanzu Network_.
 </table>
 
 
-#### <a id='optional-components'></a>Optional Components
+#### <a id='0-6-0-optional-components'></a>Optional Components
 
 <%= vars.app_runtime_short %> supports the following optional components:
 
@@ -146,7 +146,7 @@ on the _VMware Tanzu Network_.
 </table>
 
 
-#### <a id='supported-environments'></a>Supported Environments
+#### <a id='0-6-0-supported-environments'></a>Supported Environments
 
 <%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments:
 
@@ -173,208 +173,7 @@ on the _VMware Tanzu Network_.
 </table>
 
 
-### <a id='features-0-5-0'></a> Features
-
-New features and changes in this release:
-
-- None
-
-### <a id='breaking-0-5-0'></a> Breaking Changes
-
-This release has the following breaking changes:
-
- -
-
-### <a id='known-issues-0-5-0'></a> Known Issues
-
-This release has the following issues:
-
- - Pushing apps or retrieving app logs with `cf logs` requires cf CLI v7.0.1 or later
-
-## <a id='0-4-0'></a> v0.4.0
-
-**Release Date**: September 3, 2020
-
-### <a id='product-snapshot-0-4-0'></a>Product Snapshot
-
-<table class="nice">
-  <tr>
-    <th>Release</th>
-    <th width=40%>Details</th>
-  </tr>
-  <tr>
-    <td>Version</td>
-    <td>v0.4.0</td>
-  </tr>
-  <tr>
-    <td>Release date</td>
-    <td>September 3, 2020</td>
-  </tr>
-</table>
-To download VMware <%= vars.app_runtime_short %> v0.4.0, see
-[VMware <%= vars.app_runtime_full %>]
-(https://network.pivotal.io/products/tas-for-kubernetes)
-on the _VMware Tanzu Network_.
-
-#### <a id='installed-components-0-4-0'></a>Installed With v0.4.0
-
-<%= vars.app_runtime_short %> uses the following components:
-
-<table class="nice">
-  <tr>
-    <th>Element</th>
-    <th width=40%>Details</th>
-  </tr>
-  <tr>
-    <td>cf-for-k8s</td>
-    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/80c2f99a67f761b540f035f8d1bdd8360aa52a13">Commit 80c2f99</a></td>
-  </tr>
-  <tr>
-    <td>Usage Service</td>
-    <td><a href="https://github.com/pivotal/usage-service-k8s-release/commit/d3ba9e2f08cd8241c128f30e2ddbf9fbb9e52ab0">Commit d3ba9e2</a></td>
-  </tr>
-  <tr>
-    <td>Apps Manager</td>
-    <td><a href="https://github.com/pivotal/apps-manager-k8s-release/commit/792c6a0e2a634470399a7789d68485898323b90e">Commit 792c6a0</a></td>
-  </tr>
-  <tr>
-    <td>Node.js Buildpack for VMware Tanzu</td>
-    <td><a href="https://network.pivotal.io/products/tanzu-nodejs-buildpack/">v1.0.4</a></td>
-  </tr>
-  <tr>
-    <td>Go Buildpack for VMware Tanzu</td>
-    <td><a href="https://network.pivotal.io/products/tanzu-go-buildpack/">v1.0.3</a></td>
-  </tr>
-  <tr>
-    <td>Java Buildpack for VMware Tanzu</td>
-    <td><a href="https://network.pivotal.io/products/tanzu-java-buildpack/">v2.5.0</a></td>
-  </tr>
-  <tr>
-    <td>Istio</td>
-    <td>v1.4.5</td>
-  </tr>
-  <tr>
-    <td>kpack</td>
-    <td>v0.0.9</td>
-  </tr>
-</table>
-
-#### <a id='additional-components-0-4-0'></a>Required Additional Components
-
-<%= vars.app_runtime_short %> requires the following components:
-
-<table class="nice">
-  <tr>
-    <th>Element</th>
-    <th width=40%>Details</th>
-  </tr>
-  <tr>
-    <td>BOSH CLI</td>
-    <td>v6.3.1</td>
-  </tr>
-  <tr>
-    <td>cf CLI</td>
-    <td>v6.51.0</td>
-  </tr>
-<%#
-  <tr>
-    <td>Docker CLI</td>
-    <td>.</td>
-  </tr>
-  <tr>
-    <td>Harbor Registry</td>
-    <td>.</td>
-  </tr>
-  <tr>
-    <td>kubectl, the Kubernetes CLI</td>
-    <td>.</td>
-  </tr>
-#%>
-  <tr>
-    <td>kapp</td>
-    <td>v0.33.0 or later</td>
-  </tr>
-  <tr>
-    <td>kbld</td>
-    <td>v0.23.0 or later</td>
-  </tr>
-  <tr>
-    <td>ytt</td>
-    <td>v0.28.0 or later</td>
-  </tr>
-</table>
-
-<%#
-#### <a id='optional-components'></a>Optional Components
-
-<%= vars.app_runtime_short %> supports the following optional components:
-
-<table class="nice">
-  <tr>
-    <th>Element</th>
-    <th>Details</th>
-  </tr>
-  <tr>
-    <td>.</td>
-    <td>.</td>
-  </tr>
-  <tr>
-    <td>.</td>
-    <td>.</td>
-  </tr>
-</table>
-#%>
-
-#### <a id='supported-platforms-0-4-0'></a>Supported Kubernetes Distributions
-
-<%= vars.app_runtime_short %> supports the following Kubernetes distributions:
-
-<table class="nice">
-  <tr>
-    <th>Platform</th>
-    <th width=40%>Version</th>
-  </tr>
-  <tr>
-    <td>Tanzu Kubernetes Grid</td>
-    <td>v1.0, with <code>metrics-server</code></td>
-  </tr>
-  <tr>
-    <td>Tanzu Kubernetes Grid Integrated Edition</td>
-    <td>v1.7, v1.8, and v1.9</td>
-  </tr>
-</table>
-
-
-#### <a id='supported-environments-0-4-0'></a>Supported Environments
-
-<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments:
-
-* 64-bit Mac OS
-* 64-bit Linux OS
-
-<%#
-<table class="nice">
-  <tr>
-    <th>Deployment Environment</th>
-    <th >Version</th>
-  </tr>
-  <tr>
-    <td>vSphere with Flannel</td>
-    <td>.</td>
-  </tr>
-  <tr>
-    <th>Supported IaaSs</th>
-    <th></th>
-  </tr>
-  <tr>
-    <td>.</td>
-    <td></td>
-  </tr>
-</table>
-#%>
-
-
-### <a id='features-0-4-0'></a> Features
+### <a id='0-6-0-features'></a> Features
 
 New features and changes in this release:
 
@@ -383,7 +182,7 @@ New features and changes in this release:
 - <%= vars.app_runtime_short %> incorporates Tanzu Buildpacks (with support for airgapped app staging) for Java, NodeJS, and Golang
 - Security enhancements
 
-### <a id='breaking-0-4-0'></a> Breaking Changes
+### <a id='0-6-0-breaking'></a> Breaking Changes
 
 This release has the following breaking changes:
 
@@ -395,12 +194,13 @@ This release has the following breaking changes:
  and [Use a Different Image Registry]
  (configuring-app-image-registry.html#configure-other-registry) in _Configuring Your App Image Registry_.
 
-### <a id='known-issues-0-4-0'></a> Known Issues
+### <a id='0-6-0-known-issues'></a> Known Issues
 
 This release has the following issues:
 
  - **Apps Manager** does not support inviting members.
  - **Apps Manager** does not support creating container networking policies for apps.
+ - Pushing apps or retrieving app logs with `cf logs` requires cf CLI v7.0.1 or later
 
 ## <a id='0-3-0'></a> v0.3.0
 
@@ -498,7 +298,8 @@ on the _VMware Tanzu Network_.
 <%#
 #### <a id='optional-components'></a>Optional Components
 
-<%= vars.app_runtime_short %> supports the following optional components:
+<%= vars.app_runtime_short %
+> supports the following optional components:
 
 <table class="nice">
   <tr>
