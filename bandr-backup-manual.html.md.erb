@@ -32,7 +32,6 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 	--include-namespaces NAMESPACES \
 	--selector ‘app in (RESOURCE-LIST)` \
 	--storage-location STORAGE-LOCATION \
-	--volume-snapshot-location SNAPSHOT-LOCATION \
 	--ttl TTL-LENGTH \
 	--wait
 	```
@@ -55,8 +54,6 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 <br>
     * `STORAGE-LOCATION` is the location where Velero should store the generated backup artifacts.
 <br>
-    * `SNAPSHOT-LOCATION` is the location where Velero should store the generated storage snapshot artifacts.
-<br>
     * (Optional) `TTL-LENGTH` is the time to live (TTL) duration until the backup is deleted.
     The TTL should be formatted as hours, minutes, seconds: `000H00M00S`.
     If you do not specify the TTL duration, the default duration length is `720h0m0s`.
@@ -70,7 +67,6 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 	--include-namespaces postgres-dbs,cf-system \
 	--selector ‘app in (postgres, cf-metadata)` \
 	--storage-location STORAGE-LOCATION \
-	--volume-snapshot-location SNAPSHOT-LOCATION \
 	--ttl TTL-LENGTH \
 	--wait
 	```
