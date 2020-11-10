@@ -91,11 +91,8 @@ NAME             PROVISIONER                    AGE
 thin (default)   kubernetes.io/vsphere-volume   34h
 ```
 
-* If the list includes an entry for which `(default)` follows the StorageClass name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically. Proceed to [Installing <%= vars.app_runtime_short %>](index-install.html).
-
-* If the list does not include a default, you must install one before installing <%= vars.app_runtime_short %>. See the [Installing a Default Storage Class](installing-default-storage-class.html) topic for information.
-
 ## <a id="next"></a> Next Steps
 
-After you complete this procedure, proceed to 
-[Installing a Default Storage Class](installing-default-storage-class.html).
+* If the list of StorageClass resources includes an entry for which `(default)` follows the StorageClass name, then the Kubernetes cluster has a default storage class installed already, and you are ready to provision volumes dynamically. Proceed to [Installing <%= vars.app_runtime_short %>](index-install.html).
+
+* If the list does not include a default, you must install one before installing <%= vars.app_runtime_short %>. See the [Installing a Default Storage Class](installing-default-storage-class.html) topic for information.
