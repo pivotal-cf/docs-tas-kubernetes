@@ -66,9 +66,11 @@ in _Velero Plugin for vSphere_ in GitHub.
 
 ## <a id='prepare-postgres'></a> Prepare Postgres Databases for Backup
 
-1. Following instructions in the [Setting up the Environment](http://postgres-kubernetes.docs.pivotal.io/1-0/backup-restore.html#backup_prerequisites) section of the Tanzu Postgres Documentation.
-
 To prepare your <%= vars.app_runtime_short %> Postgres instances for backup and restore:  
+
+1. Complete the steps in [Setting up the Environment]
+(http://postgres-kubernetes.docs.pivotal.io/1-0/backup-restore.html#backup_prerequisites) 
+in the _VMware Tanzu SQL for Postgres_ documentation.  
 
 1. Annotate the Postgres Pods to ensure full backups are made through Velero:
 
