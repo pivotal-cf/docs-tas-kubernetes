@@ -45,10 +45,10 @@ Use the new directory to store configuration values for this installation.
 1. Duplicate the sample values file:
 
     ```
-    cp tanzu-application-service/sample-values.yml configuration-values/values.yml
+    cp tanzu-application-service/sample-values.yml configuration-values/_values.yml
     ```
 
-    Customize the new `values.yml` as your configuration values file.
+    Customize the new `_values.yml` as your configuration values file.
 
 ## <a id='configure-values'></a> Configure Installation Values
 
@@ -63,8 +63,8 @@ modify your copy of the configuration values template:
 
 To configure your system domain:
 
-1. Open `values.yml` in a text editor.
-1. Locate the `system_domain` section in the `values.yml` file.
+1. Open `_values.yml` in a text editor.
+1. Locate the `system_domain` section in the `_values.yml` file.
 1. Configure the system domain:
 
     ```yaml
@@ -77,14 +77,14 @@ To configure your system domain:
     - `SYSTEM-DOMAIN` is the system domain you previously selected for your <%= vars.app_runtime_short %> installation.
     - `APP-DOMAIN` is a separate, unique domain for hosting apps.
 
-1. Save the `values.yml` file.
+1. Save the `_values.yml` file.
 
 ### <a id='configure-lb'></a> Configure the Load Balancer
 
 To configure your LoadBalancer service:
 
-1. Open `values.yml` in a text editor.
-1. Locate the `load_balancer` section in the `values.yml` file.
+1. Open `_values.yml` in a text editor.
+1. Locate the `load_balancer` section in the `_values.yml` file.
 1. Configure the LoadBalancer service:
 
     ```yaml
@@ -141,7 +141,7 @@ To configure your LoadBalancer service:
         * For environments that support node-local endpoints, configure `external_traffic_policy` as `Local`.
         * For TKG and other environments that do not support node-local endpoints,
         configure `external_traffic_policy` as `Cluster`.
-1. Save the `values.yml` file.
+1. Save the `_values.yml` file.
 
 
 ### <a id='configure-app-log-destinations'></a> (Optional) Configure Application Log Destinations
@@ -154,7 +154,7 @@ For more information about the syslog format, see [RFC 5424 - The Syslog Protoco
 
 To configure optional application log destinations:
 
-1. Open `values.yml` in a text editor.
+1. Open `_values.yml` in a text editor.
 1. Go to the end of the file.
 1. Add the following text:
 
@@ -181,7 +181,7 @@ To configure optional application log destinations:
     * `DISABLE-TLS-VALIDATION` is `true` or `false`. If set to `true`, the
       destination TLS certificate is not validated. The default value is `false`.
 
-1. Save the `values.yml` file.  
+1. Save the `_values.yml` file.  
 
 ## <a id='configure-certs'></a> Configure Certificates
 
@@ -199,8 +199,8 @@ if you do not provide one before installing.
 
 To configure Ingress gateway certificates:
 
-1. Open `values.yml` in a text editor.
-1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.
+1. Open `_values.yml` in a text editor.
+1. Locate the `system_certificate` and `workloads_certificate` sections in the `_values.yml` file.
 1. Configure the Ingress gateway certificates:
 
     ```yaml
@@ -220,7 +220,7 @@ To configure Ingress gateway certificates:
     * `WORKLOAD-CERT` is the Base64-encoded certificate for the wildcard subdomain of the app domain. For example, `*.APP-DOMAIN`.
     * `WORKLOAD-KEY` is the Base64-encoded private key for the workload certificate.
     * `WORKLOAD-CA` is the Base64-encoded CA certificate used to sign the workload certificate.
-1. Save the `values.yml` file.
+1. Save the `_values.yml` file.
 
 ### <a id='configure-app-cert'></a> (Optional) Configure Application Container Certificates
 
@@ -230,8 +230,8 @@ allow apps to communicate with each other securely.
 
 To configure optional application container certificates:
 
-1. Open `values.yml` in a text editor.
-1. Locate the `app_containers` section in the `values.yml` file.
+1. Open `_values.yml` in a text editor.
+1. Locate the `app_containers` section in the `_values.yml` file.
 1. Configure the application container certificates:
 
     ```yaml
@@ -253,7 +253,7 @@ To configure optional application container certificates:
 
     Ensure each line of the CA certificate value is indented four spaces,
     matching the indentation of the surrounding `BEGIN CERTIFICATE` and `END CERTIFICATE` lines.
-1. Save the `values.yml` file.
+1. Save the `_values.yml` file.
 
 ## <a id="next"></a> Next Steps
 
