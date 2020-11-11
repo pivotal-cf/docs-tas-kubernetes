@@ -63,37 +63,98 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
 
 ### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Restore of Tanzu Postgres
 
-To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances.
+To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances: 
 
-```
-# Get the pg_auto_failover child process pid
-$ kubectl -n postgres-dbs exec -t ccdb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
-# Stop the pg_auto_failover child process
-$ kubectl -n postgres-dbs exec -t ccdb-0 -- kill -STOP <pid from above>
-# Stop the Postgres instance
-$ kubectl -n postgres-dbs exec -t ccdb-0 -- pg_ctl stop
-# Perform the restore
-$ kubectl -n postgres-dbs exec -t ccdb-0 -- pgbackrest restore --stanza=ccdb --delta --db-include=cloud_controller --type name --target BACKUP_NAME
-# Restart pg_auto_failover child process (which will bring a Postgres process back up)
-$ kubectl -n postgres-dbs exec -t ccdb-0 -- kill -CONT <pid from above>
-```
-	
-```
-# Get the pg_auto_failover child process pid
-$ kubectl -n postgres-dbs exec -t uaadb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
-# Stop the pg_auto_failover child process
-$ kubectl -n postgres-dbs exec -t uaadb-0 -- kill -STOP <pid from above>
-# Stop the Postgres instance
-$ kubectl -n postgres-dbs exec -t uaadb-0 -- pg_ctl stop
-# Perform the restore
-$ kubectl -n postgres-dbs exec -t uaadb-0 -- pgbackrest restore --stanza=uaadb --delta --db-include=uaa --type name --target BACKUP_NAME
-# Restart pg_auto_failover child process (which will bring a Postgres process back up)
-$ kubectl -n postgres-dbs exec -t uaadb-0 -- kill -CONT <pid from above>
-```
-	
- Where:
-    * `BACKUP-NAME` is the name of the backup you want to restore from. 
-	This can found by running `$ kubectl -n postgres-dbs exec -t pgbackrest info --stanza=ccdb`
+1. To fetch the name of the backup to restore:
+
+    ```
+    kubectl -n postgres-dbs exec -t pgbackrest info --stanza=ccdb  
+    ```
+
+1. [Restore the CCDB Tanzu Postgres Database](#restore-ccdb)
+1. [Restore the UAADB Tanzu Postgres Database](#restore-uaadb)
+
+
+#### <a id='restore-ccdb'></a> Restore the CCDB Tanzu Postgres Database 
+
+To restore <%= vars.app_runtime_short %> CCDB Tanzu Postgres Instance:
+
+1. To fetch the pid for the CCDB `pg_auto_failover` child process:  
+
+    ```
+    kubectl -n postgres-dbs exec -t ccdb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
+    ```
+
+1. To stop the the CCDB `pg_auto_failover` child process:  
+
+    ```
+    kubectl -n postgres-dbs exec -t ccdb-0 -- kill -STOP CCDB-PID
+    ```
+
+    Where `CCDB-PID` is the pid you collected in the last step.
+
+1. To stop the Postgres instance:  
+
+    ```
+    kubectl -n postgres-dbs exec -t ccdb-0 -- pg_ctl stop
+    ```
+
+1. To restore the CCDB Postgres database:  
+
+    ```
+    kubectl -n postgres-dbs exec -t ccdb-0 -- pgbackrest restore --stanza=ccdb --delta --db-include=cloud_controller --type name --target BACKUP-NAME
+    ```
+
+     Where `BACKUP-NAME` is the name of the backup you want to restore from.  
+
+1. To restart the CCDB `pg_auto_failover` child process and restart the Postgres process:  
+
+    ```
+    kubectl -n postgres-dbs exec -t ccdb-0 -- kill -CONT CCDB-PID
+    ```
+
+    Where `CCDB-PID` is the pid you collected in the step above.
+
+#### <a id='restore-uaadb'></a> Restore the UAADB Tanzu Postgres Database 
+
+To restore <%= vars.app_runtime_short %> UAADB Tanzu Postgres Instance:
+
+1. To fetch the pid for the UAADB `pg_auto_failover` child process:  
+
+    ```
+    kubectl -n postgres-dbs exec -t uaadb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
+    ```
+
+1. To stop the the UAADB `pg_auto_failover` child process:      
+
+    ```
+    kubectl -n postgres-dbs exec -t uaadb-0 -- kill -STOP UAADB-PID
+    ```
+
+    Where `UAADB-PID` is the pid you collected in the last step.
+
+1. To stop the Postgres instance:  
+
+    ```
+    kubectl -n postgres-dbs exec -t uaadb-0 -- pg_ctl stop
+    ```
+
+1. To restore the UAADB Postgres database:  
+
+    ```
+    kubectl -n postgres-dbs exec -t uaadb-0 -- pgbackrest restore --stanza=uaadb --delta --db-include=uaa --type name --target BACKUP-NAME
+    ```
+
+     Where `BACKUP-NAME` is the name of the backup you want to restore from.  
+
+1. To restart the UAADB `pg_auto_failover` child process and restart the Postgres process:  
+
+    ```
+    kubectl -n postgres-dbs exec -t uaadb-0 -- kill -CONT UAADB-PID
+    ```
+
+    Where `UAADB-PID` is the pid you collected in the step above.
+    ```
 	
 ### <a id='restore-validate'></a> Validate the Restore
 
