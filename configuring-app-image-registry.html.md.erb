@@ -64,7 +64,7 @@ in the Harbor documentation.
 <p class="note"><strong>Note:</strong>
   If you specify custom project and user names in the
   Harbor configuration procedure above, use the same project and user names when configuring the
-  <code>_values.yml</code> file. For more information, see <a href="#harbor-config-file">
+  <code>values.yml</code> file. For more information, see <a href="#harbor-config-file">
     Configure the App Image Registry</a>, below.
 </p>
 
@@ -134,7 +134,7 @@ scroll down to the **Certificate Authority (CA)** field.
 
 To configure <%= vars.app_runtime_short %> to use your private container image registry:
 
-1. Change directory into the `configuration-values` directory you created earlier, and open the `_values.yml` file in the `configuration-values` directory.
+1. Change directory into the `configuration-values` directory you created earlier, and open the `values.yml` file in the `configuration-values` directory.
 
 1. Populate the `app_registry` section of the file with the following:
 
@@ -167,7 +167,7 @@ such as a Google Container Registry (GCR) or Docker Hub registry.
 To use GCR, Docker Hub, or other registry as your <%= vars.app_runtime_short %> container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
-1. Open the `_values.yml` file.
+1. Open the `values.yml` file.
 1. Populate the `app_registry` section with the following:
 
     ```yaml
