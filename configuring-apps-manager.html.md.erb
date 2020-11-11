@@ -40,24 +40,24 @@ Before configuring Apps Manager, complete the following:
 
 * Complete the steps in
 [Configuring Installation Values](configuring-installation-values.html).
-* Ensure that your installation has a `config` directory within the
+* Ensure that your installation has a `configuration-values` directory within the
 `tanzu-application-service` directory. For more information, see
 [Generate Internal Configuration Values](configuring-installation-values.html#generate-configuration-values)
 in _Configuring Installation Values for <%= vars.app_runtime_short %>_.
 
 ## <a id='create-configuration'></a> Create the Apps Manager Configuration File
 
-Create and store your Apps Manager configuration values file within the `config`
+Create and store your Apps Manager configuration values file within the `configuration-values`
 directory used to store <%= vars.app_runtime_short %> configuration values.
 
 To create the `apps-manager-values.yml` Apps Manager configuration file:
 
 1. Open a command line and change directory to the parent directory that contains `tanzu-application-service` directory.
-1. Confirm there is a `config` subdirectory in this directory.
+1. Confirm there is a `configuration-values` subdirectory in this directory.
 1. To copy the Apps Manager Sample Values file as your baseline `apps-manager-values.yml` Apps Manager configuration:
 
     ```
-    cp tanzu-application-service/sample-apps-manager-values.yml config/apps-manager-values.yml
+    cp tanzu-application-service/sample-apps-manager-values.yml configuration-values/apps-manager-values.yml
     ```
 
 
@@ -66,7 +66,7 @@ You can customize Apps Manager by modifying the `apps-manager-values.yml` config
 
 To customize Apps Manager:
 
-1. Change directory to the `config` directory.
+1. Change directory to the `configuration-values` directory.
 
 1. Edit the `apps-manager-values.yml` file.
 
