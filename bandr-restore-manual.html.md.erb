@@ -33,7 +33,7 @@ You must have access to the <%= vars.app_runtime_short %> Velero backup artifact
 To restore a <%= vars.app_runtime_short %> backup:
 
 * [Prepare the Velero Backup Artifacts](#restore-prepare)
-* [Start a <%= vars.app_runtime_short %> Velero Restore](#restore-start)
+* [Start a <%= vars.app_runtime_short %> Restore](#restore-start)
 
 ### <a id='restore-prepare'></a> Prepare the Velero Backup Artifacts
 
@@ -61,154 +61,43 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
     $ ./bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
 
+### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Restore of Tanzu Postgres
 
-1. To prepare database resources for a restoration:
+To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances.
 
-    ```
-    kubectl -n postgres-dbs delete postgresinstance.postgres.pivotal.io/ccdb --wait
-    kubectl -n postgres-dbs delete pvc --selector postgres-instance=ccdb
-    kubectl -n postgres-dbs delete postgresinstance.postgres.pivotal.io/uaadb --wait
-    kubectl -n postgres-dbs delete pvc --selector postgres-instance=uaadb
-    ```
-
-    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
-
-    <p class="note"><strong>Note:</strong> This process deletes some kubernetes resources
-    to force velero to restore the db pod's persistent volume to the snapshotted version.
-    This is required to restore the correct data.
-    </p>
-
-### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Velero Restore
-
-To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances:
-
-1. To restore the PGBackrest volume and secrets:
-
-    ```
-    velero create restore RESTORE-NAME \
-    --from-backup BACKUP-NAME \
-    --include-resources persistentvolume,persistentvolumeclaim,secret \
-    --wait
-    ```
-
-    Where:
-    * `BACKUP-NAME` is the name of the velero backup artifact to be restored.
-	* `RESTORE-NAME` is the name of the restore process.
-		Name of the restoration
-
-    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
-
-1. To recreate the PostgresInstance resources, complete step 3 of [Provision Tanzu Postgres Databases]
-(https://docs-pcf-staging.cfapps.io/tas-kubernetes/0-n/configuring-system-databases.html#provision-tanzu-postgres-databases)
-in _Configuring Your System Databases_.
-1. To restore your data:
-
-    ```
-    kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pg_ctl stop
-    kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pgbackrest --stanza=ccdb --delta restore
-    kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pg_ctl stop
-    kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pgbackrest --stanza=uaadb --delta restore
-    kubectl -n postgres-dbs exec -it pod/ccdb-0 -- pg_ctl start
-    kubectl -n postgres-dbs exec -it pod/uaadb-0 -- pg_ctl start
-    ```
-
-1. To re-annotate and label your pods, complete
-[Prepare Tanzu Postgres TAS Instances for Backup and Restore]
-(bandr-backup-manual.html#backup-prepare-instances) in _Backing Up <%= vars.app_runtime_short %>_.
-
-## <a id='restore-monitoring'></a> Monitor Restore Progress
-
-To inspect the status of a restore:
-
-* [Review All Restores](#restore-monitor-all)
-* [Inspect a Single Restore](#restore-monitor-single)
-
-### <a id='restore-monitor-all'></a> Review All Restores
-
-To see the names and status of all restores:
-
-1. Open a command line.
-1. To display information about all restores:
-
-    ```
-    velero get restores
-    ```
-
-    For example:
-
-    <pre class="terminal">
-    $ velero get restores
-
-    NAME    STATUS                       CREATED EXPIRES STORAGE LOCATION  SELECTOR
-    restore_1 Completed 2020-03-24 14:12:29 +0000 UTC    21d          default    &lt;none&gt;
-    </pre>
-
-### <a id='restore-monitor-single'></a> Inspect a Single Restore
-
-To review the status of a single restore:
-
-1. Determine the name of the restore. For more information, see [Review All Restores](#restore-monitor-all) above.
-1. To display information about a single restore:
-
-    ```
-    velero describe restore RESTORE-NAME
-    ```
-
-    For example:
-
-    <pre class="terminal">
-    $ velero describe restore MY_RESTORE_NAME
-    Note: Add --details flag for highly verbose output
-
-    Name:         MY_RESTORE_NAME
-    Namespace:    default
-    Labels:       &lt;none&gt;
-    Annotations:  &lt;none&gt;
-
-    Phase:  Completed
-
-    Backup:  MY_BACKUP_NAME
-
-    Namespaces:
-      Included:  *
-      Excluded:  &lt;none&gt;
-
-    Resources:
-      Included:        *
-      Excluded:        nodes, events, events.events.k8s.io, backups.velero.io, restores.velero.io, resticrepositories.velero.io
-      Cluster-scoped:  auto
-
-    Namespace mappings:  &lt;none&gt;
-
-    Label selector:  &lt;none&gt;
-
-    Restore PVs:  auto
-    </pre>
-
-## <a id='restore-review'></a> Review a Completed Restore
-
-To review and validate a completed restore:
-
-* [Review Restore Logs](#restore-monitor-logs)
-* [Validate the Restore](#restore-validate)
-* [Troubleshoot a Failed Restore](#restore-troubleshoot)
-
-### <a id='restore-monitor-logs'></a> Review Restore Logs
-
-You can inspect the logs for your restore after the restore has completed.
-Review the logs for any failures and their root causes.
-
-1. To review the logs for a particular restore:
-
-    ```
-    velero restore logs RESTORE-NAME
-    ```
-
-    Where `RESTORE-NAME` is name you provided as your restore name.
-
+```
+# Get the pg_auto_failover child process pid
+$ kubectl -n postgres-dbs exec -t ccdb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
+# Stop the pg_auto_failover child process
+$ kubectl -n postgres-dbs exec -t ccdb-0 -- kill -STOP <pid from above>
+# Stop the Postgres instance
+$ kubectl -n postgres-dbs exec -t ccdb-0 -- pg_ctl stop
+# Perform the restore
+$ kubectl -n postgres-dbs exec -t ccdb-0 -- pgbackrest restore --stanza=ccdb --delta --db-include=cloud_controller --type name --target BACKUP_NAME
+# Restart pg_auto_failover child process (which will bring a Postgres process back up)
+$ kubectl -n postgres-dbs exec -t ccdb-0 -- kill -CONT <pid from above>
+```
+	
+```
+# Get the pg_auto_failover child process pid
+$ kubectl -n postgres-dbs exec -t uaadb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
+# Stop the pg_auto_failover child process
+$ kubectl -n postgres-dbs exec -t uaadb-0 -- kill -STOP <pid from above>
+# Stop the Postgres instance
+$ kubectl -n postgres-dbs exec -t uaadb-0 -- pg_ctl stop
+# Perform the restore
+$ kubectl -n postgres-dbs exec -t uaadb-0 -- pgbackrest restore --stanza=uaadb --delta --db-include=uaa --type name --target BACKUP_NAME
+# Restart pg_auto_failover child process (which will bring a Postgres process back up)
+$ kubectl -n postgres-dbs exec -t uaadb-0 -- kill -CONT <pid from above>
+```
+	
+ Where:
+    * `BACKUP-NAME` is the name of the backup you want to restore from. 
+	This can found by running `$ kubectl -n postgres-dbs exec -t pgbackrest info --stanza=ccdb`
+	
 ### <a id='restore-validate'></a> Validate the Restore
 
-Given a velero restore has completed and there were no errors or warnings,
+Given a restore has completed and there were no errors or warnings,
 the backup-recovery solution provides a simple way to help validate the restored Cloud Foundry data.
 
 The Cloud Foundry Metadata reporting tool provides a simple script to get the Cloud Foundry
@@ -268,12 +157,3 @@ Confirm the following are present in the `tanzu-application-service/config/_ytt_
 <br>
     The script displays the difference between the current restored Cloud Foundry state and
     the system's state at the time the backup was created.
-
-### <a id='restore-troubleshoot'></a> Troubleshoot a Failed Restore
-
-To troubleshoot a failed restore:
-
-1. Review the logs for your restore. For more information, see [Review Restore Logs](#restore-monitor-logs)
-1. Debug the failed restore.
-For information about debugging a failed restore, see [Debugging Restores]
-(https://velero.io/docs/main/debugging-restores/) in the Velero documentation.
