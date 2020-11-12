@@ -72,8 +72,9 @@ To relocate the <%= vars.app_runtime_short %> image to a private container image
 
 * [Download the <%= vars.app_runtime_short %> Images](#downloading-the-images)
 * [Upload the <%= vars.app_runtime_short %> Images to the Private Container Image Registry](#uploading-the-images)
+* [Customize Your Configuration to Use Your Private System Registry](#configure-for-private-registry)
 
-#### <a id='downloading-the-images'></a> Download the <%= vars.app_runtime_short %> Images
+### <a id='downloading-the-images'></a> Download the <%= vars.app_runtime_short %> Images
 
 To download the <%= vars.app_runtime_short %> Images from the VMware Tanzu Network Registry:
 
@@ -102,7 +103,7 @@ To download the <%= vars.app_runtime_short %> Images from the VMware Tanzu Netwo
 
     Packaging the image takes about 5 minutes to complete.
 
-#### <a id='uploading-the-images'></a> Upload the <%= vars.app_runtime_short %> Images to the Private Container Image Registry
+### <a id='uploading-the-images'></a> Upload the <%= vars.app_runtime_short %> Images to the Private Container Image Registry
 
 To upload the <%= vars.app_runtime_short %> images to the private container image registry:
 
@@ -161,7 +162,6 @@ To customize your configuration files for your private registry:
 1. Move the `config/image-overrides.yml` file to the `config-optional` directory.  
 1. Open `configuration-values/values.yml` in a text editor.
 1. To point the system registry variables to the private registry, 
-
 configure the `system_registry` section:
 
     ```
@@ -182,4 +182,4 @@ configure the `system_registry` section:
 ## <a id="next"></a> Next Steps
 
 After you complete this procedure, proceed to
-[Configuring Your System Database](configuring-system-databases.html).
+[Configuring Your System Databases](configuring-system-databases.html).
