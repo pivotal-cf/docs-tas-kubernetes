@@ -3,7 +3,7 @@ title: Installing a Default Storage Class
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to install a default storage class on your Kubernetes clusters to support <%= vars.app_runtime_short %>.
+This topic describes how to install a default storage class on your Kubernetes clusters to support <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 <p class="note"><strong>Note:</strong>
   If your Kubernetes cluster already comes with a default storage class, skip this procedure. See <a href='preparing-kubernetes-cluster.html#verify-default-storage'>Verify that a Default Storage Class Exists</a> in <em>Preparing the Kubernetes Cluster</em>.
@@ -103,8 +103,15 @@ To install a default storage class for a TKG-provisioned cluster on AWS:
     kapp deploy -a default-storage-class -f aws-default-storage-class.yml
     ```
 
+1. To verify that there is a storage class marked with `(default)` in your `StorageClass` list:  
+
+    ```
+    kubectl get storageclass
+    ```
+
+
 ## <a id="next"></a>Next Steps
 
-Verify that there is a storage class marked with `(default)` in your `StorageClass` list by running `kubectl get storageclass`.
 
-After verifying that there is a default storage class, proceed to [Installing <%= vars.app_runtime_short %>](index-install.html).
+After you complete this procedure, proceed to 
+[Configuring Installation Values](configuring-installation-values.html).

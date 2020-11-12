@@ -65,7 +65,7 @@ in the Harbor documentation.
   If you specify custom project and user names in the
   Harbor configuration procedure above, use the same project and user names when configuring the
   <code>values.yml</code> file. For more information, see <a href="#harbor-config-file">
-    Configure the App Image Registry</a>, below.
+    Configure the App Image Registry</a> below.
 </p>
 
 ### <a id='harbor-project-configure'></a> Configure the Harbor Project
@@ -126,7 +126,7 @@ scroll down to the **Certificate Authority (CA)** field.
 
 1. Use the retrieved CA certificate as the certificate authority value when
     configuring <%= vars.app_runtime_short %>. For more information, see
-    [Create the Harbor Image Registry Configuration File](#harbor-config-file), below.
+    [Create the Harbor Image Registry Configuration File](#harbor-config-file) below.
 
 
 
@@ -161,10 +161,9 @@ To configure <%= vars.app_runtime_short %> to use your private container image r
 ## <a id='configure-other-registry'></a> Use a Different Image Registry
 
 In addition to supporting a VMware Harbor registry as a container image registry,
-<%= vars.app_runtime_short %> also supports using other container image registries,
-such as a Google Container Registry (GCR) or Docker Hub registry.
+<%= vars.app_runtime_short %> also supports using other container image registries.  
 
-To use GCR, Docker Hub, or other registry as your <%= vars.app_runtime_short %> container image registry:
+To use Google Container Registry (GCR), Docker Hub, or another registry as your <%= vars.app_runtime_short %> container image registry:
 
 1. Change directory into the `configuration-values` directory you created earlier.
 1. Open the `values.yml` file.

@@ -4,7 +4,7 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic provides an overview of how to configure back up and recovery for 
-Tanzu Application Service for Kubernetes (TAS for Kubernetes).
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 <%= partial 'evaluation_only' %>
 
@@ -12,12 +12,12 @@ Tanzu Application Service for Kubernetes (TAS for Kubernetes).
 
 ## <a id='overview'></a> Overview
 
-After installing TAS for Kubernetes, you must 
-prepare your TAS for Kubernetes Postgres databases for backup and restore operations.
-To prepare your TAS for Kubernetes Postgres databases, see 
+After installing <%= vars.app_runtime_short %>, you must 
+prepare your <%= vars.app_runtime_short %> Postgres databases for backup and restore operations.
+To prepare your <%= vars.app_runtime_short %> Postgres databases, see 
 [Prepare Postgres Databases for Backup](#prepare-postgres) below.  
 
-To enable backup and recovery functions for TAS for Kubernetes, 
+To enable backup and recovery functions for <%= vars.app_runtime_short %>, 
 install and configure Velero in your environment. 
 To install and configure Velero, see [Set Up and Install Velero and Back Up Components]
 (#setup-backup-comp) below.
@@ -25,11 +25,11 @@ To install and configure Velero, see [Set Up and Install Velero and Back Up Comp
 
 ## <a id='prerequisites'></a> Prerequisites
 
-The following are required before configuring backup and recovery for TAS for Kubernetes:  
+The following are required before configuring backup and recovery for <%= vars.app_runtime_short %>:  
 
-* TAS for Kubernetes has been installed. For more information, see 
+* <%= vars.app_runtime_short %> has been installed. For more information, see 
 [Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html).  
-* TAS for Kubernetes has been configured 
+* <%= vars.app_runtime_short %> has been configured 
 to use an external Tanzu Postgres Pod for the CCDB and UAA databases.  
 * Kubernetes command line tool (kubectl) has been installed in your environment. 
 For more information, see [Installing Command-Line Tools](installing-command-line-tools.html).  
@@ -39,7 +39,7 @@ For more information, see [Supported Kubernetes Distributions]
 
 ### <a id='prerequisites-vsphere'></a> Prerequisites for vSphere
 
-The following are additional requirements for configuring backup and recovery for TAS for Kubernetes on vSphere:
+The following are additional requirements for configuring backup and recovery for <%= vars.app_runtime_short %> on vSphere:
 
 * The vSphere backup and recovery user account must meet additional requirements:  
     * vSphere CSI driver user requirements. 
@@ -66,59 +66,36 @@ in _Velero Plugin for vSphere_ in GitHub.
 
 ## <a id='prepare-postgres'></a> Prepare Postgres Databases for Backup
 
-To prepare your TAS for Kubernetes Postgres instances for backup and restore:  
+To prepare your <%= vars.app_runtime_short %> Postgres instances for backup and restore:  
+
+1. Complete the steps in [Setting up the Environment]
+(http://postgres-kubernetes.docs.pivotal.io/1-0/backup-restore.html#backup_prerequisites) 
+in the _VMware Tanzu SQL for Postgres_ documentation.  
 
 1. Annotate the Postgres Pods to ensure full backups are made through Velero:
 
     ```
     kubectl -n postgres-dbs annotate pod \
-      --selector='postgres-instance=CCDB-NAME' \
-      'pre.hook.backup.velero.io/command=["pgbackrest","--stanza=ccdb","--type=full","backup"]' \
-      'pre.hook.backup.velero.io/timeout=60s'
+      ccdb-0 \
+      '["/bin/bash", "-c", "pgbackrest stanza-create --stanza=ccdb --pg1-path=/pgsql/data && pgbackrest backup --stanza=ccdb"]' \
+      'pre.hook.backup.velero.io/timeout=120s'
 
     kubectl -n postgres-dbs annotate pod \
-      --selector='postgres-instance=UAADB-NAME' \
-      'pre.hook.backup.velero.io/command=["pgbackrest","--stanza=uaadb","--type=full","backup"]' \
-      'pre.hook.backup.velero.io/timeout=60s'
+      uaadb-0 \
+      '["/bin/bash", "-c", "pgbackrest stanza-create --stanza=uaadb --pg1-path=/pgsql/data && pgbackrest backup --stanza=uaadb"]' \
+      'pre.hook.backup.velero.io/timeout=120s'
     ```
 
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
-
-1. To label the data persistent volumes to ensure they are not included in your backups:
-
-    ```
-    #!/usr/bin/env bash
-    set -eux
-    
-    exclude_pvc_from_backup() {
-      local pvc pv
-      pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs label pv "${pv}" velero.io/exclude-from-backup=true --overwrite=true
-      kubectl -n postgres-dbs label pvc "${pvc}" velero.io/exclude-from-backup=true --overwrite=true
-    }
-
-    exclude_pvc_from_backup "CCDB-NAME"
-    exclude_pvc_from_backup "UAADB-NAME"
-    ```
-
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
-
-    Exclude persistent volumes from your backup you ensure a reliable restore process.  
 
 1. To verify the annotations have been applied:  
 
     ```
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     ```
 
     For example:
     <pre class="terminal">
-    kubectl -n postgres-dbs get pod -o json | jq -r .items[].metadata.annotations
+    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
     {
       "pre.hook.backup.velero.io/command": "[\"pgbackrest\",\"--stanza=ccdb\",\"--type=full\",\"backup\"]",
       "pre.hook.backup.velero.io/timeout": "60s"
@@ -130,72 +107,11 @@ To prepare your TAS for Kubernetes Postgres instances for backup and restore:
     </pre>
 
 
-1. To verify the labels have been applied:  
-
-    ```
-    #!/usr/bin/env bash
-    set -eu
-
-    check_label() {
-      local pvc pv
-      pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
-    }
-
-    check_label "CCDB-NAME"
-    check_label "UAADB-NAME"
-    ```
-
-    Where:  
-    * `CCDB-NAME` is the name of the Postgres CCDB Pod.  
-    * `UAADB-NAME` is the name of the Postgres UAADB Pod. 
-
-    For example:
-
-    <pre class="terminal">
-    #!/usr/bin/env bash
-    set -eu
-
-    check_label() {
-      local pvc pv
-      pvc="$1"
-      pv="$(kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq  -r .spec.volumeName)"
-      kubectl -n postgres-dbs get pvc "${pvc}" -o json | jq -r .metadata.labels
-      kubectl -n postgres-dbs get pv "${pv}" -o json | jq -r .metadata.labels
-    }
-
-    check_label "ccdb-pgdata-ccdb-0"
-    check_label "uaadb-pgdata-uaadb-0"
-
-    {
-      "app": "postgres",
-      "postgres-instance": "ccdb",
-      "velero.io/exclude-from-backup": "true"
-    }
-    {
-      ...
-      "velero.io/exclude-from-backup": "true"
-    }
-    {
-      "app": "postgres",
-      "postgres-instance": "uaadb",
-      "velero.io/exclude-from-backup": "true"
-    }
-    {
-      ...
-      "velero.io/exclude-from-backup": "true"
-    }
-    </pre>
-
-
 ## <a id='setup-backup-comp'></a> Set Up and Install Velero and Back Up Components
 
-Velero and an Iaas specific Velero plugin must be installed and configured 
-to use Velero to backup and restore TAS for Kubernetes.  
+Velero and an Iaas specific Velero plugin must be installed to back up and restore <%= vars.app_runtime_short %>.  
 
-The Velero plugin requires specific IaaS permissions to enable  
+The Velero plugin requires specific IaaS permissions to enable 
 disk snapshotting, storage bucket read/write permissions and other backup and restore features.
 
 To set up back up components:  
@@ -214,7 +130,7 @@ follow the steps required by your IaaS:
 
 ### <a id='setup-backup-comp-aws'></a> Set Up Back Up Components on AWS
 
-To install and configure Velero for TAS for Kubernetes on AWS:  
+To install and configure Velero for <%= vars.app_runtime_short %> on AWS:  
 
 1. To create a storage bucket for Velero, follow the steps in [Create S3 bucket]
 (https://github.com/vmware-tanzu/velero-plugin-for-aws#Create-S3-bucket) 
@@ -231,7 +147,7 @@ in _Velero plugins for AWS_ in GitHub.
 
 ### <a id='setup-backup-comp-azure'></a> Set Up Back Up Components on Azure
 
-To install and configure Velero for TAS for Kubernetes on Azure:  
+To install and configure Velero for <%= vars.app_runtime_short %> on Azure:  
 
 1. To create a storage container for Velero, follow the steps in [Create Azure storage account and blob container]
 (https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Create-Azure-storage-account-and-blob-container) 
@@ -248,7 +164,7 @@ in _Velero plugins for Azure_ in GitHub.
 
 ### <a id='setup-backup-comp-gcp'></a> Set Up Back Up Components on GCP
 
-To install and configure Velero for TAS for Kubernetes on GCP:  
+To install and configure Velero for <%= vars.app_runtime_short %> on GCP:  
 
 1. To create a storage container for Velero, follow the steps in [Create an GCS bucket]
 (https://github.com/vmware-tanzu/velero-plugin-for-gcp#Create-an-GCS-bucket) 
@@ -265,7 +181,7 @@ in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 
 ### <a id='setup-backup-comp-vsphere'></a> Set Up Back Up Components on vSphere
 
-To install and configure Velero for TAS for Kubernetes on vSphere:  
+To install and configure Velero for <%= vars.app_runtime_short %> on vSphere:  
 
 1. Confirm you have completed the steps in [Prerequisites for vSphere](#prerequisites-vsphere) above.  
 1. To create a storage location for Velero:  

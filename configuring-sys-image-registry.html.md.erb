@@ -12,7 +12,7 @@ Before installing <%= vars.app_runtime_short %>, complete the following:
 
 * Ensure you have a [VMware Tanzu Network](https://network.pivotal.io/) account to
 use to download container images from the VMware Tanzu Network Registry.
-  Ensure this account has a signed <%= vars.app_runtime_short %> EULA.
+  Ensure this account has a signed <%= vars.app_runtime_short %> End-User License Agreement (EULA).
 * Follow the procedures in:
     * [Preparing to Install <%= vars.app_runtime_full %>](preparing-to-install-tas-for-kubernetes.html)
     * [Configuring Installation Values](configuring-installation-values.html)
@@ -25,19 +25,21 @@ use to download container images from the VMware Tanzu Network Registry.
 In Kubernetes, containers can be re-created at various times and a system image for the new container will be pulled
 from your system registry. The system registry you use for <%= vars.app_runtime_short %> must always be available when a container is started on a new host.
 
-You can use either the VMware Tanzu Network or a private container image registry as your system registry.
+You can use either the VMware Tanzu Network or a private container image registry as your system registry:
 
-You should install <%= vars.app_runtime_short %> from a private container image registry for the following situations:
-
-* Your deployment has limited network egress because of firewall or network bandwidth.
-* You want to reduce the external runtime dependencies of your <%= vars.app_runtime_short %> installation.
-
-<br>
-To configure the VMware Tanzu Network as your system registry, follow the procedures in
+* To configure the VMware Tanzu Network as your system registry, follow the procedures in
 [Configure the VMware Tanzu Network as Your System Registry](#configure-for-tanzu-network).
 
-To configure a private container image registry as your system registry, follow the procedures in
-[Configure a Private Container Image Registry as Your System Registry](#configure-for-private).
+* To configure a private container image registry as your system registry, follow the procedures in
+[Configure a Private Container Image Registry as Your System Registry](#configure-for-private).  
+<br>
+    Install from a private container image registry for the following situations:
+
+    * Your deployment has limited network egress because of firewall or network bandwidth.
+    * You want to reduce the external runtime dependencies of your <%= vars.app_runtime_short %> installation.
+
+<br>
+
 
 ## <a id='configure-for-tanzu-network'></a> Configure the VMware Tanzu Network as Your System Registry
 
@@ -73,7 +75,7 @@ To relocate the <%= vars.app_runtime_short %> image to a private container image
 
 #### <a id='downloading-the-images'></a> Download the <%= vars.app_runtime_short %> Images
 
-To download the <%= vars.app_runtime_short %> Images from VMware Tanzu Network Registry:
+To download the <%= vars.app_runtime_short %> Images from the VMware Tanzu Network Registry:
 
 1. In your terminal, navigate to the `tanzu-application-service` directory.
 
@@ -179,5 +181,5 @@ configure the `system_registry` section:
 
 ## <a id="next"></a> Next Steps
 
-After you complete this procedure, proceed to 
-[Configuring System Database](configuring-system-databases.html).
+After you complete this procedure, proceed to
+[Configuring Your System Database](configuring-system-databases.html).

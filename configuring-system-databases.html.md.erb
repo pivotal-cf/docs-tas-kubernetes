@@ -20,8 +20,8 @@ To create and configure databases for these system components:
 
 Before you provision the databases, you must:
 
-* Install Tanzu Postgres. See [Installing VMware Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/0-4/installing.html).
-* Create the Postgres operator release on your cluster. See [Creating a Postgres Operator Release](http://postgres-kubernetes.docs.pivotal.io/0-4/create-release.html).
+* Install Tanzu Postgres. See [Installing VMware Tanzu Postgres](http://postgres-kubernetes.docs.pivotal.io/1-0/installing.html).
+* Create the Postgres operator release on your cluster. See [Creating a Postgres Operator Release](http://postgres-kubernetes.docs.pivotal.io/1-0/create-release.html).
 
 ## <a id='provision-postgres-databases'></a>Provision Tanzu Postgres Databases
 
@@ -29,7 +29,7 @@ The UAA, Cloud Controller, and Usage service each need a Tanzu Postgres database
 
 To configure these three databases:
 
-1. Create a file named `postgres-databases.yml` and store it outside of the scope of TAS for Kuberentes. Note that this file is only used for deploying the databases. It is not part of the <%= vars.app_runtime_short %> configuration.
+1. Create a file named `postgres-databases.yml` and store it outside of the scope of <%= vars.app_runtime_short %>. Note that this file is only used for deploying the databases. It is not part of the <%= vars.app_runtime_short %> configuration.
 
 1. Copy and paste the following text into the `postgres-databases.yml` file:
 
@@ -39,8 +39,8 @@ To configure these three databases:
     metadata:
       name: postgres-dbs
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: ccdb
       namespace: postgres-dbs
@@ -49,13 +49,13 @@ To configure these three databases:
       cpu: "0.5"
       storageClassName: STORAGE-CLASS
       serviceType: ClusterIP
-      storageSize: 300M
+      storageSize: 10G
       pgConfig:
         dbname: cloud_controller
         username: cloud_controller
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: uaadb
       namespace: postgres-dbs
@@ -64,13 +64,13 @@ To configure these three databases:
       cpu: "0.5"
       storageClassName: STORAGE-CLASS
       serviceType: ClusterIP
-      storageSize: 300M
+      storageSize: 10G
       pgConfig:
         dbname: uaa
         username: uaa
     ---
-    apiVersion: "postgres.pivotal.io/v1"
-    kind: "PostgresInstance"
+    apiVersion: "sql.tanzu.vmware.com/v1"
+    kind: "Postgres"
     metadata:
       name: usagedb
       namespace: postgres-dbs
@@ -79,7 +79,7 @@ To configure these three databases:
       cpu: "0.5"
       storageClassName: STORAGE-CLASS
       serviceType: ClusterIP
-      storageSize: 300M
+      storageSize: 10G
       pgConfig:
         dbname: usage_service
         username: usage_service

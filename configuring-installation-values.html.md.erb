@@ -3,7 +3,7 @@ title: Configuring Installation Values
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic describes how to configure installation resources before deploying <%= vars.app_runtime_full %> (TAS) to a Kubernetes cluster.
+This topic describes how to configure installation resources before deploying <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>) to a Kubernetes cluster.
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -12,18 +12,25 @@ Before proceeding, complete all sections in:
 * [Preparing to Install <%= vars.app_runtime_short %>](preparing-to-install-tas-for-kubernetes.html)
 * [Installing Command-Line Tools](installing-command-line-tools.html)
 
-## <a id='configure-values'></a> Configure Installation Values
+## <a id='overview'></a> Overview
 
 To configure installation values for <%= vars.app_runtime_short %>,
 modify a copy of the configuration values template:
 
 * [Copy the Configuration Values Template](#copy-template)
+* [Configure Installation Values](#configure-values)
+* [Configure Certificates](#configure-certs)
+
+<%#
+* [Copy the Configuration Values Template](#copy-template)
 * [Configure the System Domain](#configure-system-domain)
 * [Configure the Load Balancer](#configure-lb)
 * [Configure the Ingress Gateway Certificates](#configure-ingress-cert)
 * [(Optional) Configure Application Container Certificates](#configure-app-cert)
+* [(Optional) Configure Application Log Destinations](#configure-app-log-destinations)
+%>
 
-### <a id='copy-template'></a> Copy the Configuration Values Template
+## <a id='copy-template'></a> Copy the Configuration Values Template
 
 The configuration values template gives you the flexibility to
 configure different parts of the system in a single file.
@@ -43,6 +50,14 @@ Use the new directory to store configuration values for this installation.
 
     Customize the new `values.yml` as your configuration values file.
 
+## <a id='configure-values'></a> Configure Installation Values
+
+To configure <%= vars.app_runtime_short %> installation values,
+modify your copy of the configuration values template:
+
+* [Configure the System Domain](#configure-system-domain)
+* [Configure the Load Balancer](#configure-lb)
+* [(Optional) Configure Application Log Destinations](#configure-app-log-destinations)
 
 ### <a id='configure-system-domain'></a> Configure the System Domain
 
@@ -119,7 +134,7 @@ To configure your LoadBalancer service:
     </table>
     For more information, see [Kubernetes Services]
     (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-    in the Kubernetes documentation.
+    in the Kubernetes documentation.  
     <br>
     * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.
     * `POLICY` is the endpoint this ingress routes external traffic to:
@@ -128,17 +143,65 @@ To configure your LoadBalancer service:
         configure `external_traffic_policy` as `Cluster`.
 1. Save the `values.yml` file.
 
+
+### <a id='configure-app-log-destinations'></a> (Optional) Configure Application Log Destinations
+
+You can provide one or more destinations for application logs.
+These destinations receive all application logs in syslog RFC 5424 format.
+This allows integrations with external logging tools like Splunk or ELK.
+
+For more information about the syslog format, see [RFC 5424 - The Syslog Protocol](https://tools.ietf.org/html/rfc5424) in the Internet Engineering Task Force (IETF) documentation.
+
+To configure optional application log destinations:
+
+1. Open `values.yml` in a text editor.
+1. Go to the end of the file.
+1. Add the following text:
+
+    ```yaml
+    app_log_destinations:
+    ```
+
+1. Immediately following that text, add one or more log destinations:
+
+    ```yaml
+    #@overlay/append
+    - host: HOSTNAME
+      port: PORT
+      transport: TRANSPORT
+      insecure_disable_tls_validation: DISABLE-TLS-VALIDATION
+    ```
+
+    Where:
+    * `HOSTNAME` is the hostname of the log destination.
+    * `PORT` is the TCP port number of the log destination.
+    * `TRANSPORT` is one of the following:
+      - `tls` for TLS-encrypted syslog over TCP.
+      - `tcp` for plaintext syslog over TCP. This is the default value.
+    * `DISABLE-TLS-VALIDATION` is `true` or `false`. If set to `true`, the
+      destination TLS certificate is not validated. The default value is `false`.
+
+1. Save the `values.yml` file.  
+
+## <a id='configure-certs'></a> Configure Certificates
+
+To configure <%= vars.app_runtime_short %> certificate values,
+modify your copy of the configuration values template:
+
+* [Configure the Ingress Gateway Certificates](#configure-ingress-cert)
+* [(Optional) Configure Application Container Certificates](#configure-app-cert)
+
 ### <a id='configure-ingress-cert'></a> Configure the Ingress Gateway Certificates
 
 <%= vars.app_runtime_short %> requires a certificate to terminate TLS at the ingress gateway
 and generates a self-signed TLS certificate for the ingress gateway
 if you do not provide one before installing.
 
-To configure Ingress gateway certificates:
+To configure ingress gateway certificates:
 
 1. Open `values.yml` in a text editor.
 1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.
-1. Configure the Ingress gateway certificates:
+1. Configure the ingress gateway certificates:
 
     ```yaml
     system_certificate:
@@ -201,6 +264,8 @@ After you complete this procedure, complete all of the following configuration p
 * [Configuring Your System Databases](configuring-system-databases.html)
 * [Configuring Apps Manger](configuring-apps-manager.html)
 
+
+
 <%#
 1. **Application image registry configuration:**
 
@@ -226,7 +291,7 @@ After you complete this procedure, complete all of the following configuration p
 
 1. **System databases configuration:**
 
-    <%= vars.app_runtime_short %> requires credentials to an external database.
+    <%= vars.app_runtime_short % > requires credentials to an external database.
 
     For instructions on how to configure the system database,
     see [Configuring Your System Databases](configuring-system-databases.html).

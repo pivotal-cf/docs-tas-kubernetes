@@ -1,36 +1,38 @@
 ---
-title: Installing <%= vars.app_runtime_full %>
+title: Installing Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
+<% current_page.data.title = "Installing #{vars.app_runtime_full}" %>
 
 This topic describes how to install <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>)
 from the VMware Tanzu Network and from a relocated image in a private container image registry.
-
-## <a id='prerequisites'></a> Prerequisites
-
-Before installing <%= vars.app_runtime_short %>:
-
-1. Ensure that you have configured all of the required or recommended installation resources by reviewing
-[Configuring Installation Values](configuring-installation-values.html).
-1. Ensure that you have configured the Apps Manager. For more information, see [Configuring Apps Manager](configuring-apps-manager.html).
 
 ## <a id='overview'></a> Overview
 
 To configure installation settings and install <%= vars.app_runtime_short %>:
 
-1. [Prepare the Installation](#prepare-installation) 
+1. [Prepare the Installation](#prepare-installation)
 1. [Generate Internal Configuration Values](#generate-configuration-values)
 1. [Install <%= vars.app_runtime_short %>](#install-tas-for-k8s)
 
+## <a id='prerequisites'></a> Prerequisites
+
+Before you install <%= vars.app_runtime_short %>, you must:
+
++ Configure all of the required or recommended installation resources.
+See [Configuring Installation Values](configuring-installation-values.html).
++ Configure Apps Manager. See [Configuring Apps Manager](configuring-apps-manager.html).
++ Install Cloud Foundry Command Line Interface (cf CLI) v7.0.1 or later.
+See [Upgrading to cf CLI v7](https://docs.pivotal.io/application-service/2-10/cf-cli/v7.html).
 
 ## <a id='support-backup'></a> Prepare the Installation
 
-To prepare for installing TAS for Kubernetes:  
+To prepare for installing <%= vars.app_runtime_short %>:
 
-1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.  
-1. Change directory to the `tanzu-application-service` directory.  
-1. To enable support for backing up and restoring TAS for Kubernetes, copy the 
-`disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:  
+1. Verify that your root directory contains `configuration-values` and `tanzu-application-service` directories.
+1. Change directory to the `tanzu-application-service` directory.
+1. To enable support for backing up and restoring <%= vars.app_runtime_short %>, copy the
+`disaster-recovery.yml` file from the `config-optional` directory to the `config` directory:
 
     ```
     cp config-optional/disaster-recovery.yml config/disaster-recovery.yml
@@ -71,9 +73,16 @@ To generate the internal values, credentials and certificates needed during <%= 
 </p>
 
 <p class= "note warning">
-  <strong>Warning:</strong> The Cloud API currently doesn't support encryption key rotation in the Kubernetes stack. Changing the encryption key will cause failures on redeployment. Therefore the <code>capi.database.encryption_key</code> value should not be modified after it is initially set.
+  <strong>Warning:</strong> Do not rotate encryption keys in the Kubernetes stack in this version of <%= vars.app_runtime_short %>. 
+  The <code>capi.database.encryption_key</code> value should not be modified after it is initially set because
+  the Cloud API fails during <code>cf push</code> for Kubernetes clusters with a modified encryption key. 
 </p>
 
+<p class= "note warning">
+  <strong>Warning:</strong> Do not rotate the blobstore secret key in this version of <%= vars.app_runtime_short %>. 
+  The <code>blobstore.secret_access_key</code> value should not be altered after it is initially set because
+  redeployments fail when using configurations with a modified blobstore secret key. 
+</p>
 
 ## <a id='install-tas-for-k8s'></a> Install <%= vars.app_runtime_short %>
 
@@ -83,7 +92,7 @@ To install <%= vars.app_runtime_short %>:
     * [Install <%= vars.app_runtime_short %> from the VMware Tanzu Network](#install-tas-for-k8s-from-network)
     * [Install <%= vars.app_runtime_short %> from a Private System Registry](#post-image-relocation)
 
-1. [Configure DNS for Ingress Gateway](#post-installation-networking-configuration)
+1. [Configure DNS for the <%= vars.app_runtime_short %> Ingress Gateway](#post-installation-networking-configuration)
 1. [Validate Your <%= vars.app_runtime_short %> Installation](installing-tas-for-kubernetes.html#post-installation-configuration)
 
 ### <a id='install-tas-for-k8s-from-network'></a> Install <%= vars.app_runtime_short %> from the VMware Tanzu Network
@@ -151,62 +160,73 @@ To install <%= vars.app_runtime_short %>:
     kapp deploy -a cf -f /tmp/final_deployment.yml
     ```
 
-## <a id='post-installation-networking-configuration'></a> Configure DNS for Ingress Gateway
+## <a id='post-installation-networking-configuration'></a> Configure DNS for the <%= vars.app_runtime_short %> Ingress Gateway
 
 To configure DNS entries for the <%= vars.app_runtime_short %> ingress gateway:
 
-* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
-<br>
-    By default, <%= vars.app_runtime_short %> does not create a Kubernetes `LoadBalancer` service
-    for the ingress gateway. Complete the following:
-    1. [Use a LoadBalancer Service for the Ingress Gateway]
-    (configuring-installation-values.html#adjust-installation-resources-networking)
-    1. [Configure DNS With a Kubernetes Load Balancer for Ingress Gateway]
+* If you intend to use a Kubernetes `LoadBalancer` service for the ingress gateway, 
+create and configure a Kubernetes `LoadBalancer` service:  
+    1. [Configure the Load Balancer]
+    (configuring-installation-values.html#configure-lb)  
+    1. [Configure the Ingress Gateway DNS With a Kubernetes Load Balancer]
     (#post-installation-dns-with-k8s-lb)
 <br>
-* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway:
+* If you do not intend to use a Kubernetes `LoadBalancer` service for the ingress gateway, 
+configure DNS without the `LoadBalancer` service:  
+    * If you are using an external load balancer for the ingress gateway:  
+    [Configure the Ingress Gateway DNS With an External Load Balancer](#post-installation-dns-with-lb)  
 <br>
-    To configure DNS, complete one of the following:
-    * If you are using an external load balancer for the ingress gateway:
-    [Configure DNS With an External Load Balancer for Ingress Gateway](#post-installation-dns-with-lb)
-    * If you are not using an external load balancer for the ingress gateway:
-    [Configure DNS Without a Load Balancer for Ingress Gateway](#post-installation-dns-no-lb)
+    * If you are not using an external load balancer for the ingress gateway:  
+    [Configure the Ingress Gateway DNS Without a Load Balancer](#post-installation-dns-no-lb)
 
-### <a id='post-installation-dns-no-lb'></a> Configure DNS Without a Load Balancer for Ingress Gateway
 
-This section describes how to configure your DNS
-if you do not have an external load balancer to use for ingress and
-have deployed <%= vars.app_runtime_short %> without a Kubernetes LoadBalancer service
-for the ingress gateway.
 
-To set up your DNS records to establish ingress connectivity directly to the worker nodes:
+### <a id='post-installation-dns-with-k8s-lb'></a> Configure the Ingress Gateway DNS With a Kubernetes Load Balancer
 
-1. To retrieve the list of existing worker nodes with their external IP addresses:
+This section describes how to configure DNS if you have configured <%= vars.app_runtime_short %> to
+use a Kubernetes LoadBalancer Service for the ingress gateway.
+
+To configure DNS with your system domain resolving to the external IP address of the load balancer:
+
+1. To retrieve the value of the external IP address or hostname assigned to the Istio ingress gateway service:
 
     ```
-    kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
+    kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+    kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
     ```
     For example:
     <pre class="terminal">
-    $ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
-NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
-5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
-a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
-a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
-af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
-cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
-</pre>
+    $ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+    10.193.105.162
+    $ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+    ae7b1093f9c3b44fd9982b828b32ccad-2445920965.us-west-2.elb.amazonaws.com
+    </pre>
 
-1. Create a wildcard `A` record for the system domain in your DNS zone,
-resolving to the set of external IP addresses for the worker nodes:
+1. In your DNS zone, create an entry for your system domain:
+    * If you have an external IP address, create a wildcard `A` record for the system domain,
+        resolving to the external IP address:
 
-    ```
-    *.SYSTEM-DOMAIN
-    ```
-    Where `SYSTEM-DOMAIN` is the system domain. Include the `*.` wildcard prefix so that all subdomains
-    of the system domain also resolve to the IP addresses.
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain.
+    <br>
+    * If you have a hostname, create a wildcard CNAME record for the system domain,
+        resolving to the hostname:
 
-### <a id='post-installation-dns-with-lb'></a> Configure DNS With an External Load Balancer for Ingress Gateway
+        ```
+        *.SYSTEM-DOMAIN
+        ```
+        Where `SYSTEM-DOMAIN` is the system domain.
+
+    Ensure you include the `*.` wildcard prefix in the new record so that all subdomains of the system domain also resolve to the load balancer.
+
+For information about configuring <%= vars.app_runtime_short %> to
+use a Kubernetes LoadBalancer Service for the ingress gateway, see
+[Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
+
+
+### <a id='post-installation-dns-with-lb'></a> Configure the Ingress Gateway DNS With an External Load Balancer
 
 This section describes how to configure DNS
 if you have an external load balancer to use for ingress to the <%= vars.app_runtime_short %> installation and
@@ -256,51 +276,44 @@ internal IP addresses for the Kubernetes worker nodes.
     Ensure you include the `*.` wildcard prefix in the new record
     so that all subdomains of the system domain also resolve to this IP address.
 
-### <a id='post-installation-dns-with-k8s-lb'></a> Configure DNS With a Kubernetes Load Balancer for Ingress Gateway
+### <a id='post-installation-dns-no-lb'></a> Configure the Ingress Gateway DNS Without a Load Balancer
 
-This section describes how to configure DNS if you have configured <%= vars.app_runtime_short %> to
-use a Kubernetes LoadBalancer Service for the ingress gateway.
+This section describes how to configure your DNS
+if you do not have an external load balancer to use for ingress and
+have deployed <%= vars.app_runtime_short %> without a Kubernetes LoadBalancer service
+for the ingress gateway.
 
-To configure DNS with your system domain resolving to the external IP address of the load balancer:
+To set up your DNS records to establish ingress connectivity directly to the worker nodes:
 
-1. To retrieve the value of the external IP address or hostname assigned to the Istio ingress gateway service:
+1. To retrieve the list of existing worker nodes with their external IP addresses:
 
     ```
-    kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
-    kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+    kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
     ```
     For example:
     <pre class="terminal">
-    $ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
-    10.193.105.162
-    $ kubectl -n istio-system get service istio-ingressgateway -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
-    ae7b1093f9c3b44fd9982b828b32ccad-2445920965.us-west-2.elb.amazonaws.com
-    </pre>
+    $ kubectl get node --selector='!node-role.kubernetes.io/master' -o wide
+NAME                                   STATUS   ROLES    AGE     VERSION   INTERNAL-IP    EXTERNAL-IP
+5e329c31-f1d7-4548-936b-3a58d4b166d3   Ready    \<none>   5h49m   v1.15.5   10.85.87.133   10.85.87.133
+a6ad3f07-787c-4d90-b8e1-032be34e9d7f   Ready    \<none>   5h43m   v1.15.5   10.85.87.134   10.85.87.134
+a8eb78a2-e3b4-4d8a-8c32-67bf0e13c0bf   Ready    \<none>   5h43m   v1.15.5   10.85.87.135   10.85.87.135
+af7dc8da-a7b0-4cf2-a940-c9248168e609   Ready    \<none>   5h43m   v1.15.5   10.85.87.136   10.85.87.136
+cc6ef11f-e253-4553-9cb0-bebc7d958f64   Ready    \<none>   5h42m   v1.15.5   10.85.87.137   10.85.87.137
+</pre>
 
-1. In your DNS zone, create an entry for your system domain:
-    * If you have an external IP address, create a wildcard `A` record for the system domain,
-        resolving to the external IP address:
+1. Create a wildcard `A` record for the system domain in your DNS zone,
+resolving to the set of external IP addresses for the worker nodes:
 
-        ```
-        *.SYSTEM-DOMAIN
-        ```
-        Where `SYSTEM-DOMAIN` is the system domain.
-    <br>
-    * If you have a hostname, create a wildcard CNAME record for the system domain,
-        resolving to the hostname:
+    ```
+    *.SYSTEM-DOMAIN
+    ```
+    Where `SYSTEM-DOMAIN` is the system domain. Include the `*.` wildcard prefix so that all subdomains
+    of the system domain also resolve to the IP addresses.
 
-        ```
-        *.SYSTEM-DOMAIN
-        ```
-        Where `SYSTEM-DOMAIN` is the system domain.
-
-    Ensure you include the `*.` wildcard prefix in the new record so that all subdomains of the system domain also resolve to the load balancer.
-
-For information about configuring <%= vars.app_runtime_short %> to
-use a Kubernetes LoadBalancer Service for the ingress gateway, see
-[Use a LoadBalancer Service for the Ingress Gateway](configuring-installation-values.html#adjust-installation-resources-networking),
 
 ## <a id='post-installation-configuration'></a> Validate Your <%= vars.app_runtime_short %> Installation
+
+<p class="note"><strong>Note</strong>: Managing apps and services on <%= vars.app_runtime_short %> requires cf CLI v7.0.1 or later.</p>
 
 To validate your <%= vars.app_runtime_short %> installation:
 
@@ -366,9 +379,9 @@ stored in the `cf_admin_password` key in the `configuration-values/_generated-va
       <strong>Note:</strong> The route for the test application defaults to a subdomain of the system domain.
     </p>
 
-To validate Velero installation:  
+To validate Velero installation:
 
-1. Use kubectl to confirm the backup and restore components have been installed successfully:  
+1. Use kubectl to confirm the backup and restore components have been installed successfully:
 
     ```
     kubectl get pods -n cf-system -l app=cf-metadata
@@ -393,3 +406,8 @@ For example:
 <pre class="terminal">
 map[commit:53ad0edd093dbad71debc193541b5c6f0b2b094d version:0.4.0-build.57]
 </pre>
+
+## <a id="next"></a> Next Steps
+
+After you complete this procedure, proceed to
+[Configuring Back Up and Restore for <%= vars.app_runtime_full %>](bandr-configuration.html).
