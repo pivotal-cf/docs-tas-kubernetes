@@ -49,9 +49,9 @@ system components from the [VMware Tanzu Network container registry](https://reg
 
 To configure <%= vars.app_runtime_short %> with VMware Tanzu Network user credentials:
 
-1. Change directory into the `config` directory you created earlier.
-1. Open the `_values.yml` file.
-1. Populate the `system_registry` section in the `_values.yml` file with the following:
+1. Navigate to the `configuration-values` directory you created earlier.
+1. Open the `values.yml` file.
+1. Populate the `system_registry` section in the `values.yml` file with the following:
 
     ```yaml
     system_registry:
@@ -151,13 +151,17 @@ To upload the <%= vars.app_runtime_short %> images to the private container imag
         * `PROJECT` is the project name in your private registry
         * `IMAGE` is the image name to reallocate the images.
 
+
+<p class="note"><strong>Note:</strong>All of the required TAS images you upload have the same image name, but different SHAs.</p>
+
 ### <a id='configure-for-private-registry'></a> Customize Your Configuration to Use Your Private System Registry
 
 To customize your configuration files for your private registry:
 
-1. Move the `config/image-overrides.yml` file to the `config-optional` directory.
-1. Open `config/_values.yml` in a text editor.
-1. To point the system registry variables to the private registry,
+1. Move the `config/image-overrides.yml` file to the `config-optional` directory.  
+1. Open `configuration-values/values.yml` in a text editor.
+1. To point the system registry variables to the private registry, 
+
 configure the `system_registry` section:
 
     ```
@@ -172,8 +176,8 @@ configure the `system_registry` section:
     Where:
     * `REGISTRY-HOSTNAME` is the hostname of your private registry.
     * `REGISTRY-USERNAME` is a user account with write access to the private registry.
-    * `REGISTRY-PASSWORD` is the password for the user account.
-1. Save the `_values.yml` file.
+    * `REGISTRY-PASSWORD` is the password for the user account.  
+1. Save the `values.yml` file.
 
 ## <a id="next"></a> Next Steps
 
