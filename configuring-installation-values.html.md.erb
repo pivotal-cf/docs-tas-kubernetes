@@ -134,7 +134,7 @@ To configure your LoadBalancer service:
     </table>
     For more information, see [Kubernetes Services]
     (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
-    in the Kubernetes documentation.
+    in the Kubernetes documentation.  
     <br>
     * `LOAD-BALANCER` is the static external IP address for the LoadBalancer, if the load balancer is enabled.
     * `POLICY` is the endpoint this ingress routes external traffic to:
@@ -197,11 +197,11 @@ modify your copy of the configuration values template:
 and generates a self-signed TLS certificate for the ingress gateway
 if you do not provide one before installing.
 
-To configure Ingress gateway certificates:
+To configure ingress gateway certificates:
 
 1. Open `values.yml` in a text editor.
 1. Locate the `system_certificate` and `workloads_certificate` sections in the `values.yml` file.
-1. Configure the Ingress gateway certificates:
+1. Configure the ingress gateway certificates:
 
     ```yaml
     system_certificate:
