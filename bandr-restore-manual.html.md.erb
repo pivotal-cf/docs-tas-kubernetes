@@ -16,8 +16,9 @@ This topic provides an overview of how to restore
 Velero supports a granular restore, which means you can tell velero to restore only specific resources from the backup. Unfortunately this is not the case for <%= vars.app_runtime_short %> database backup, it has no granularity and all the organizations, spaces & application will be restored as one.
 
 You do have 2 options while restoring <%= vars.app_runtime_short %>:
-Restore to a new platform with no state - this scenario is typical for a full disaster recovery
-Restore in place while deleting all current state of the platform - this scenario maybe used when things went so bad that it is worth losing some recent changes in favor of restoring a healthy baseline
+
+1. Restore to a new platform with no state - this scenario is typical for a full disaster recovery
+1. Restore in place while deleting all current state of the platform - this scenario maybe used when things went so bad that it is worth losing some recent changes in favor of restoring a healthy baseline
 
 * [Restore <%= vars.app_runtime_short %>](#restore-tas)
 * [Monitor Restore Progress](#restore-monitoring)
@@ -33,7 +34,7 @@ You must have access to the <%= vars.app_runtime_short %> Velero backup artifact
 To restore a <%= vars.app_runtime_short %> backup:
 
 * [Prepare the Velero Backup Artifacts](#restore-prepare)
-* [Start a <%= vars.app_runtime_short %> Restore](#restore-start)
+* [Start a <%= vars.app_runtime_short %> Velero Restore](#restore-start)
 
 ### <a id='restore-prepare'></a> Prepare the Velero Backup Artifacts
 
@@ -49,7 +50,7 @@ To prepare your <%= vars.app_runtime_short %> Velero backup artifacts:
 generate a JSON file containing a snapshot of Cloud Foundry at the time of the backup.
 
     ```
-    ./bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
+    ./tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
     ```
 
     Where:
@@ -58,104 +59,135 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
 
     For example:
     <pre class="terminal">
-    $ ./bin/get-backup-metadata.sh backup_1 output-file.json
+    $ ./tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
 
-### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Restore of Tanzu Postgres
-
-To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances: 
-
-1. To fetch the name of the backup to restore:
+1. To prepare database resources for a restoration:
 
     ```
-    kubectl -n postgres-dbs exec -t pgbackrest info --stanza=ccdb  
+    kubectl -n postgres-dbs delete postgres.sql.tanzu.vmware.com/ccdb --wait
+    kubectl -n postgres-dbs delete pvc --selector postgres-instance=ccdb
+    kubectl -n postgres-dbs delete postgres.sql.tanzu.vmware.com/uaadb --wait
+    kubectl -n postgres-dbs delete pvc --selector postgres-instance=uaadb
     ```
 
-1. [Restore the CCDB Tanzu Postgres Database](#restore-ccdb)
-1. [Restore the UAADB Tanzu Postgres Database](#restore-uaadb)
+    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
+
+    <p class="note"><strong>Note:</strong> This process deletes some kubernetes resources
+    to force velero to restore the db pod's persistent volume to the snapshotted version.
+    This is required to restore the correct data.
+    </p>
 
 
-#### <a id='restore-ccdb'></a> Restore the CCDB Tanzu Postgres Database 
+### <a id='restore-start'></a> Start a <%= vars.app_runtime_short %> Velero Restore
 
-To restore <%= vars.app_runtime_short %> CCDB Tanzu Postgres Instance:
+To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
-1. To fetch the pid for the CCDB `pg_auto_failover` child process:  
-
-    ```
-    kubectl -n postgres-dbs exec -t ccdb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
-    ```
-
-1. To stop the the CCDB `pg_auto_failover` child process:  
+1. To restore Tanzu Postgres Databases:
 
     ```
-    kubectl -n postgres-dbs exec -t ccdb-0 -- kill -STOP CCDB-PID
+    velero create restore RESTORE-NAME \
+      --from-backup BACKUP-NAME \
+      --wait
     ```
 
-    Where `CCDB-PID` is the pid you collected in the last step.
+    Where:
+    * `BACKUP-NAME` is the name of the velero backup artifact to be restored.
+    * `RESTORE-NAME` is a name you choose to identify this restore attempt.
 
-1. To stop the Postgres instance:  
+    The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
 
-    ```
-    kubectl -n postgres-dbs exec -t ccdb-0 -- pg_ctl stop
-    ```
+## <a id='restore-monitoring'></a> Monitor Restore Progress
 
-1. To restore the CCDB Postgres database:  
+To inspect the status of a restore:
 
-    ```
-    kubectl -n postgres-dbs exec -t ccdb-0 -- pgbackrest restore --stanza=ccdb --delta --db-include=cloud_controller --type name --target BACKUP-NAME
-    ```
+* [Review All Restores](#restore-monitor-all)
+* [Inspect a Single Restore](#restore-monitor-single)
 
-     Where `BACKUP-NAME` is the name of the backup you want to restore from.  
+### <a id='restore-monitor-all'></a> Review All Restores
 
-1. To restart the CCDB `pg_auto_failover` child process and restart the Postgres process:  
+To see the names and status of all restores:
 
-    ```
-    kubectl -n postgres-dbs exec -t ccdb-0 -- kill -CONT CCDB-PID
-    ```
-
-    Where `CCDB-PID` is the pid you collected in the step above.
-
-#### <a id='restore-uaadb'></a> Restore the UAADB Tanzu Postgres Database 
-
-To restore <%= vars.app_runtime_short %> UAADB Tanzu Postgres Instance:
-
-1. To fetch the pid for the UAADB `pg_auto_failover` child process:  
+1. Open a command line.
+1. To display information about all restores:
 
     ```
-    kubectl -n postgres-dbs exec -t uaadb-0 -- ps -ef | grep "pg_autoctl: start/stop postgres" | grep -v grep | awk '{print $2}'
+    velero get restores
     ```
 
-1. To stop the the UAADB `pg_auto_failover` child process:      
+    For example:
+
+    <pre class="terminal">
+    $ velero get restores
+
+    NAME    STATUS                       CREATED EXPIRES STORAGE LOCATION  SELECTOR
+    restore_1 Completed 2020-03-24 14:12:29 +0000 UTC    21d          default    &lt;none&gt;
+    </pre>
+
+### <a id='restore-monitor-single'></a> Inspect a Single Restore
+
+To review the status of a single restore:
+
+1. Determine the name of the restore. For more information, see [Review All Restores](#restore-monitor-all) above.
+1. To display information about a single restore:
 
     ```
-    kubectl -n postgres-dbs exec -t uaadb-0 -- kill -STOP UAADB-PID
+    velero describe restore RESTORE-NAME
     ```
 
-    Where `UAADB-PID` is the pid you collected in the last step.
+    For example:
 
-1. To stop the Postgres instance:  
+    <pre class="terminal">
+    $ velero describe restore MY_RESTORE_NAME
+    Note: Add --details flag for highly verbose output
+
+    Name:         MY_RESTORE_NAME
+    Namespace:    default
+    Labels:       &lt;none&gt;
+    Annotations:  &lt;none&gt;
+
+    Phase:  Completed
+
+    Backup:  MY_BACKUP_NAME
+
+    Namespaces:
+      Included:  *
+      Excluded:  &lt;none&gt;
+
+    Resources:
+      Included:        *
+      Excluded:        nodes, events, events.events.k8s.io, backups.velero.io, restores.velero.io, resticrepositories.velero.io
+      Cluster-scoped:  auto
+
+    Namespace mappings:  &lt;none&gt;
+
+    Label selector:  &lt;none&gt;
+
+    Restore PVs:  auto
+    </pre>
+
+## <a id='restore-review'></a> Review a Completed Restore
+
+To review and validate a completed restore:
+
+* [Review Restore Logs](#restore-monitor-logs)
+* [Validate the Restore](#restore-validate)
+* [Troubleshoot a Failed Restore](#restore-troubleshoot)
+
+### <a id='restore-monitor-logs'></a> Review Restore Logs
+
+You can inspect the logs for your restore after the restore has completed.
+Review the logs for any failures and their root causes.
+
+1. To review the logs for a particular restore:
 
     ```
-    kubectl -n postgres-dbs exec -t uaadb-0 -- pg_ctl stop
+    velero restore logs RESTORE-NAME
     ```
 
-1. To restore the UAADB Postgres database:  
+    Where `RESTORE-NAME` is name you provided as your restore name.
 
-    ```
-    kubectl -n postgres-dbs exec -t uaadb-0 -- pgbackrest restore --stanza=uaadb --delta --db-include=uaa --type name --target BACKUP-NAME
-    ```
 
-     Where `BACKUP-NAME` is the name of the backup you want to restore from.  
-
-1. To restart the UAADB `pg_auto_failover` child process and restart the Postgres process:  
-
-    ```
-    kubectl -n postgres-dbs exec -t uaadb-0 -- kill -CONT UAADB-PID
-    ```
-
-    Where `UAADB-PID` is the pid you collected in the step above.
-
-	
 ### <a id='restore-validate'></a> Validate the Restore
 
 Given a restore has completed and there were no errors or warnings,
@@ -206,7 +238,7 @@ Confirm the following are present in the `tanzu-application-service/config/_ytt_
 
     For example:
     <pre class="terminal">
-    $ ./bin/get-backup-metadata.sh backup_1 output-file.json
+    $ ./tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh backup_1 output-file.json
     </pre>
 
 1. To compare the backup state to the restored system state:
