@@ -13,23 +13,24 @@ This topic provides an overview of how to restore
 
 ## <a id='overview'></a> Overview
 
-Velero supports a granular restore, which means you can tell velero to restore only specific resources from the backup. Unfortunately this is not the case for <%= vars.app_runtime_short %> database backup, it has no granularity and all the organizations, spaces & application will be restored as one.
 
-You do have 2 options while restoring <%= vars.app_runtime_short %>:
+When restoring the <%= vars.app_runtime_short %> database,
+the data for all the orgs, spaces, and apps are restored.
 
-1. Restore to a new platform with no state - this scenario is typical for a full disaster recovery
-1. Restore in place while deleting all current state of the platform - this scenario maybe used when things went so bad that it is worth losing some recent changes in favor of restoring a healthy baseline
+Database restore is not granular.
 
-* [Restore <%= vars.app_runtime_short %>](#restore-tas)
-* [Monitor Restore Progress](#restore-monitoring)
-* [Review a Completed Restore](#restore-review)
+To restore <%= vars.app_runtime_short %>: 
+
+* [Start <%= vars.app_runtime_short %> Restore](#restore-tas)
+* [Monitor the Restore Progress](#restore-monitoring)
+* [Review the Completed Restore](#restore-review)
 
 ## <a id='prerequisites'></a> Prerequisites
 
 You must have access to the <%= vars.app_runtime_short %> Velero backup artifacts you plan to restore.
 
 
-## <a id='restore-tas'></a> Restore <%= vars.app_runtime_short %>
+## <a id='restore-tas'></a> Start <%= vars.app_runtime_short %> Restore
 
 To restore a <%= vars.app_runtime_short %> backup:
 
@@ -73,8 +74,8 @@ generate a JSON file containing a snapshot of Cloud Foundry at the time of the b
 
     The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
 
-    <p class="note"><strong>Note:</strong> This process deletes some kubernetes resources
-    to force velero to restore the db pod's persistent volume to the snapshotted version.
+    <p class="note"><strong>Note:</strong> This process deletes some Kubernetes resources,
+    forcing Velero to restore the database Pod's persistent volume to the backup version.
     This is required to restore the correct data.
     </p>
 
@@ -92,12 +93,12 @@ To restore <%= vars.app_runtime_short %> Tanzu Postgres Instances:
     ```
 
     Where:
-    * `BACKUP-NAME` is the name of the velero backup artifact to be restored.
+    * `BACKUP-NAME` is the name of the Velero backup artifact to be restored.
     * `RESTORE-NAME` is a name you choose to identify this restore attempt.
 
     The `--wait` parameter is optional. Include the `--wait` parameter to follow the restore procedure progress.
 
-## <a id='restore-monitoring'></a> Monitor Restore Progress
+## <a id='restore-monitoring'></a> Monitor the Restore Progress
 
 To inspect the status of a restore:
 
@@ -166,13 +167,12 @@ To review the status of a single restore:
     Restore PVs:  auto
     </pre>
 
-## <a id='restore-review'></a> Review a Completed Restore
+## <a id='restore-review'></a> Review the Completed Restore
 
 To review and validate a completed restore:
 
 * [Review Restore Logs](#restore-monitor-logs)
 * [Validate the Restore](#restore-validate)
-* [Troubleshoot a Failed Restore](#restore-troubleshoot)
 
 ### <a id='restore-monitor-logs'></a> Review Restore Logs
 
@@ -190,26 +190,27 @@ Review the logs for any failures and their root causes.
 
 ### <a id='restore-validate'></a> Validate the Restore
 
-Given a restore has completed and there were no errors or warnings,
-the backup-recovery solution provides a simple way to help validate the restored Cloud Foundry data.
+The Cloud Foundry Metadata reporting tool provides two scripts to capture the
+Cloud Foundry state from the backup, and then compare it to the live, restored state.
 
-The Cloud Foundry Metadata reporting tool provides a simple script to get the Cloud Foundry
-state which was captured during a previous backup, and given this output can compare it to the live, running Cloud Foundry.
-
-<p class="note"><strong>Note:</strong> This is not a perfect snapshot of the data in Cloud Foundry and should only be used as an aid to verifying the data.
-The validation follows the Cloud Foundry constructs of “users, organizations, spaces and apps”
+<p class="note"><strong>Note:</strong> The Cloud Foundry state from the backup is not a
+    complete snapshot and should only be used as an aid to verifying the data.
+The validation follows the Cloud Foundry constructs of “users, orgs, spaces, and apps”
 to measure what data was in Cloud Foundry during a backup.
 </p>
 
+After your restore has completed, follow the steps
+below to validate the restored data.
+
+
+**Prerequisites**: Confirm that you have downloaded the Tanzu Application Service from 
+[VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes#/releases/777237) 
+and that the `get-backup-metadata.sh` and `compare-backup-metadata.sh` scripts are present in the 
+`tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` 
+directory.
+
 To validate a completed restore:
 
-1. If you do not have the <%= vars.app_runtime_short %> installation resources,
-download the resources from [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes).
-For more information, see [Preparing Installation Resources](preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).
-1. Inspect the <%= vars.app_runtime_short %> artifact.
-Confirm the following are present in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` directory:
-    * `get-backup-metadata.sh`
-    * `compare-backup-metadata.sh`
 1. To determine the name of the backup used to restore your system:
 
     ```
@@ -246,7 +247,7 @@ Confirm the following are present in the `tanzu-application-service/config/_ytt_
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/compare-backup-metadata.sh OUTPUT-FILENAME
     ```
-    Where `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step.
+    Where `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step.  
 <br>
     The script displays the difference between the current restored Cloud Foundry state and
     the system's state at the time the backup was created.
