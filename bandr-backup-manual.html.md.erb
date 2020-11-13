@@ -19,22 +19,20 @@ To back up <%= vars.app_runtime_short %>:
 * [Monitor Backup Progress](#backup-progress)
 * [Review a Completed Backup](#backup-review)
 
-## <a id='prerequisites'></a> Prerequisites
-
 ## <a id='backup-tas4k8s'></a> Back Up <%= vars.app_runtime_short %>
 
 To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
-1. To back up the PGBackrest volume and secrets:
+1. Start a velero backup:
 
     ```
     velero create backup BACKUP-NAME \
-	--include-namespaces NAMESPACES \
-	--selector ‘app in (RESOURCE-LIST)` \
-	--storage-location STORAGE-LOCATION \
-	--ttl TTL-LENGTH \
-	--wait
-	```
+    	--include-namespaces NAMESPACES \
+    	--selector ‘app in (RESOURCE-LIST)` \
+    	--storage-location STORAGE-LOCATION \
+    	--ttl TTL-LENGTH \
+    	--wait
+  	```
 
     Where:
     * `BACKUP-NAME` is the name to apply to the generated backup.
@@ -60,19 +58,16 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 <br>
     * (Optional) Include the `--wait` parameter to follow the backup procedure progress.
 <br>
-  The recommended command line is:
 
-    ```
-    velero create backup BACKUP-NAME \
+The recommended command line is:
+
+```
+velero create backup BACKUP-NAME \
 	--include-namespaces postgres-dbs,cf-system \
 	--selector ‘app in (postgres, cf-metadata)` \
-	--storage-location STORAGE-LOCATION \
-	--ttl TTL-LENGTH \
+	--ttl 35040h0m0s \
 	--wait
-	```
-
-
-
+```
 
 ## <a id='backup-progress'></a> Monitor Backup Progress
 
@@ -156,7 +151,7 @@ To validate a completed backup by reviewing the Cloud Foundry data that was back
 
     Where `BACKUP-NAME` is the name you applied to your backup.
 <br>
-    (Optional) Include the `--details` parameter to display a highly verbose output.  
+    (Optional) Include the `--details` parameter to display a highly verbose output.
 <br>
     For example:
 

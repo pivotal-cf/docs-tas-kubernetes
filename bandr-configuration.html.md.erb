@@ -1,9 +1,9 @@
----
+--
 title: Configuring Back Up and Restore for Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic provides an overview of how to configure back up and recovery for 
+This topic provides an overview of how to configure back up and recovery for
 <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 <%= partial 'evaluation_only' %>
@@ -12,28 +12,22 @@ This topic provides an overview of how to configure back up and recovery for
 
 ## <a id='overview'></a> Overview
 
-After installing <%= vars.app_runtime_short %>, you must 
-prepare your <%= vars.app_runtime_short %> Postgres databases for backup and restore operations.
-To prepare your <%= vars.app_runtime_short %> Postgres databases, see 
-[Prepare Postgres Databases for Backup](#prepare-postgres) below.  
-
-To enable backup and recovery functions for <%= vars.app_runtime_short %>, 
-install and configure Velero in your environment. 
+To enable backup and recovery functions for <%= vars.app_runtime_short %>,
+install and configure Velero in your environment.
 To install and configure Velero, see [Set Up and Install Velero and Back Up Components]
 (#setup-backup-comp) below.
 
-
 ## <a id='prerequisites'></a> Prerequisites
 
-The following are required before configuring backup and recovery for <%= vars.app_runtime_short %>:  
+The following are required before configuring backup and recovery for <%= vars.app_runtime_short %>:
 
-* <%= vars.app_runtime_short %> has been installed. For more information, see 
-[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html).  
-* <%= vars.app_runtime_short %> has been configured 
-to use an external Tanzu Postgres Pod for the CCDB and UAA databases.  
-* Kubernetes command line tool (kubectl) has been installed in your environment. 
-For more information, see [Installing Command-Line Tools](installing-command-line-tools.html).  
-* A working Kubernetes cluster. 
+* <%= vars.app_runtime_short %> has been installed. For more information, see
+[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html).
+* <%= vars.app_runtime_short %> has been configured
+to use an external Tanzu Postgres Pod for the CCDB and UAA databases.
+* Kubernetes command line tool (kubectl) has been installed in your environment.
+For more information, see [Installing Command-Line Tools](installing-command-line-tools.html).
+* A working Kubernetes cluster.
 For more information, see [Supported Kubernetes Distributions]
 (release-notes.html#supported-platforms) in _Release Notes_.
 
@@ -41,167 +35,121 @@ For more information, see [Supported Kubernetes Distributions]
 
 The following are additional requirements for configuring backup and recovery for <%= vars.app_runtime_short %> on vSphere:
 
-* The vSphere backup and recovery user account must meet additional requirements:  
-    * vSphere CSI driver user requirements. 
+* The vSphere backup and recovery user account must meet additional requirements:
+    * vSphere CSI driver user requirements.
     For more information on the vSphere CSI Driver requirements, see [vSphere Roles and Privileges]
-    (https://vsphere-csi-driver.sigs.k8s.io/driver-deployment/prerequisites.html#roles_and_privileges) 
-    in the _vSphere CSI Driver - Prerequisites_ documentation.  
-    * Virtual Disk Development Kit (VDDK) user requirements. 
+    (https://vsphere-csi-driver.sigs.k8s.io/driver-deployment/prerequisites.html#roles_and_privileges)
+    in the _vSphere CSI Driver - Prerequisites_ documentation.
+    * Virtual Disk Development Kit (VDDK) user requirements.
     For more information on the VDDK requirements, see [Credentials and Privileges for VMDK Access]
-    (https://code.vmware.com/docs/11750/virtual-disk-development-kit-programming-guide/GUID-8301C6CF-37C2-42CC-B4C5-BB1DD28F79C9.html) 
+    (https://code.vmware.com/docs/11750/virtual-disk-development-kit-programming-guide/GUID-8301C6CF-37C2-42CC-B4C5-BB1DD28F79C9.html)
     in the _Virtual Disk Development Kit Programming Guide_ documentation.
- <br>   
-    Apply user privileges at the vCenter Server level.  
-* The installed components must meet the following supported product requirements:  
-    * Velero: v1.3.2 or later  
-    * vSphere: v6.7U3 or later  
-    * vSphere CSI/CNS driver: v1.0.2 or later  
+ <br>
+    Apply user privileges at the vCenter Server level.
+* The installed components must meet the following supported product requirements:
+    * Velero: v1.3.2 or later
+    * vSphere: v6.7U3 or later
+    * vSphere CSI/CNS driver: v1.0.2 or later
     * Kubernetes: v1.14 or later
 
-    For more information, see [Compatibility](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#compatibility) 
-and [Prerequisites](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#prerequisites) 
+    For more information, see [Compatibility](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#compatibility)
+and [Prerequisites](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#prerequisites)
 in _Velero Plugin for vSphere_ in GitHub.
-
-
-
-## <a id='prepare-postgres'></a> Prepare Postgres Databases for Backup
-
-To prepare your <%= vars.app_runtime_short %> Postgres instances for backup and restore:  
-
-1. Complete the steps in [Setting up the Environment]
-(http://postgres-kubernetes.docs.pivotal.io/1-0/backup-restore.html#backup_prerequisites) 
-in the _VMware Tanzu SQL for Postgres_ documentation.  
-
-1. Annotate the Postgres Pods to ensure full backups are made through Velero:
-
-    ```
-    kubectl -n postgres-dbs annotate pod \
-      ccdb-0 \
-      '["/bin/bash", "-c", "pgbackrest stanza-create --stanza=ccdb --pg1-path=/pgsql/data && pgbackrest backup --stanza=ccdb"]' \
-      'pre.hook.backup.velero.io/timeout=120s'
-
-    kubectl -n postgres-dbs annotate pod \
-      uaadb-0 \
-      '["/bin/bash", "-c", "pgbackrest stanza-create --stanza=uaadb --pg1-path=/pgsql/data && pgbackrest backup --stanza=uaadb"]' \
-      'pre.hook.backup.velero.io/timeout=120s'
-    ```
-
-
-1. To verify the annotations have been applied:  
-
-    ```
-    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
-    ```
-
-    For example:
-    <pre class="terminal">
-    kubectl -n postgres-dbs get pod -o jsonpath='{.items[*].metadata.annotations}'
-    {
-      "pre.hook.backup.velero.io/command": "[\"pgbackrest\",\"--stanza=ccdb\",\"--type=full\",\"backup\"]",
-      "pre.hook.backup.velero.io/timeout": "60s"
-    }
-    {
-      "pre.hook.backup.velero.io/command": "[\"pgbackrest\",\"--stanza=uaadb\",\"--type=full\",\"backup\"]",
-      "pre.hook.backup.velero.io/timeout": "60s"
-    }
-    </pre>
-
 
 ## <a id='setup-backup-comp'></a> Set Up and Install Velero and Back Up Components
 
-Velero and an Iaas specific Velero plugin must be installed to back up and restore <%= vars.app_runtime_short %>.  
+Velero and an Iaas specific Velero plugin must be installed to back up and restore <%= vars.app_runtime_short %>.
 
-The Velero plugin requires specific IaaS permissions to enable 
+The Velero plugin requires specific IaaS permissions to enable
 disk snapshotting, storage bucket read/write permissions and other backup and restore features.
 
-To set up back up components:  
+To set up back up components:
 
 1. To install the Velero CLI, see [Install the CLI]
-(https://velero.io/docs/v1.4/basic-install/#install-the-cli) 
-in the Velero documentation.  
+(https://velero.io/docs/v1.4/basic-install/#install-the-cli)
+in the Velero documentation.
 
-1. To install the Velero plug-in and configure back up components, 
-follow the steps required by your IaaS:  
-    * [Set Up Back Up Components on AWS](#setup-backup-comp-aws)  
+1. To install the Velero plug-in and configure back up components,
+follow the steps required by your IaaS:
+    * [Set Up Back Up Components on AWS](#setup-backup-comp-aws)
     * [Set Up Back Up Components on Azure](#setup-backup-comp-azure)
     * [Set Up Back Up Components on GCP](#setup-backup-comp-gcp)
-    * [Set Up Back Up Components on vSphere](#setup-backup-comp-vsphere)  
+    * [Set Up Back Up Components on vSphere](#setup-backup-comp-vsphere)
 
 
 ### <a id='setup-backup-comp-aws'></a> Set Up Back Up Components on AWS
 
-To install and configure Velero for <%= vars.app_runtime_short %> on AWS:  
+To install and configure Velero for <%= vars.app_runtime_short %> on AWS:
 
 1. To create a storage bucket for Velero, follow the steps in [Create S3 bucket]
-(https://github.com/vmware-tanzu/velero-plugin-for-aws#Create-S3-bucket) 
+(https://github.com/vmware-tanzu/velero-plugin-for-aws#Create-S3-bucket)
 in _Velero plugins for AWS_ in GitHub.
 
 1. To grant access permissions, follow the steps in [Set permissions for Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-aws#Set-permissions-for-Velero) 
+(https://github.com/vmware-tanzu/velero-plugin-for-aws#Set-permissions-for-Velero)
 in _Velero plugins for AWS_ in GitHub.
 
 1. To install Velero, follow the steps in [Install and start Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-aws#Install-and-start-Velero) 
-in _Velero plugins for AWS_ in GitHub.  
+(https://github.com/vmware-tanzu/velero-plugin-for-aws#Install-and-start-Velero)
+in _Velero plugins for AWS_ in GitHub.
 
 
 ### <a id='setup-backup-comp-azure'></a> Set Up Back Up Components on Azure
 
-To install and configure Velero for <%= vars.app_runtime_short %> on Azure:  
+To install and configure Velero for <%= vars.app_runtime_short %> on Azure:
 
 1. To create a storage container for Velero, follow the steps in [Create Azure storage account and blob container]
-(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Create-Azure-storage-account-and-blob-container) 
+(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Create-Azure-storage-account-and-blob-container)
 in _Velero plugins for Azure_ in GitHub.
 
 1. To grant access permissions, follow the steps in [Set permissions for Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Set-permissions-for-Velero) 
+(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Set-permissions-for-Velero)
 in _Velero plugins for Microsoft Azure_ in GitHub.
 
 1. To install Velero, follow the steps in [Install and start Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Install-and-start-Velero) 
-in _Velero plugins for Azure_ in GitHub.  
+(https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure#Install-and-start-Velero)
+in _Velero plugins for Azure_ in GitHub.
 
 
 ### <a id='setup-backup-comp-gcp'></a> Set Up Back Up Components on GCP
 
-To install and configure Velero for <%= vars.app_runtime_short %> on GCP:  
+To install and configure Velero for <%= vars.app_runtime_short %> on GCP:
 
 1. To create a storage container for Velero, follow the steps in [Create an GCS bucket]
-(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Create-an-GCS-bucket) 
+(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Create-an-GCS-bucket)
 in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 
 1. To grant access permissions, follow the steps in [Set permissions for Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Set-permissions-for-Velero) 
+(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Set-permissions-for-Velero)
 in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 
 1. To install Velero, follow the steps in [Install and start Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Install-and-start-Velero) 
-in _Plugins for Google Cloud Platform (GCP)_ in GitHub.  
+(https://github.com/vmware-tanzu/velero-plugin-for-gcp#Install-and-start-Velero)
+in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 
 
 ### <a id='setup-backup-comp-vsphere'></a> Set Up Back Up Components on vSphere
 
-To install and configure Velero for <%= vars.app_runtime_short %> on vSphere:  
+To install and configure Velero for <%= vars.app_runtime_short %> on vSphere:
 
-1. Confirm you have completed the steps in [Prerequisites for vSphere](#prerequisites-vsphere) above.  
-1. To create a storage location for Velero:  
+1. Confirm you have completed the steps in [Prerequisites for vSphere](#prerequisites-vsphere) above.
+1. To create a storage location for Velero:
 
-    1. Follow the steps in 
+    1. Follow the steps in
 [Create a VolumeSnapshotLocation](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#Create-a-VolumeSnapshotLocation)
-in _Velero Plugin for vSphere_ in GitHub.  
+in _Velero Plugin for vSphere_ in GitHub.
 
-    1. Follow the steps in 
+    1. Follow the steps in
 [Setting a default VolumeSnapshotLocation](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#setting-a-default-volumesnapshotlocation)
-in _Velero Plugin for vSphere_ in GitHub.  
+in _Velero Plugin for vSphere_ in GitHub.
 
 1. To grant access permissions, follow the steps in [Set permissions for Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-aws#Set-permissions-for-Velero) 
+(https://github.com/vmware-tanzu/velero-plugin-for-aws#Set-permissions-for-Velero)
 in _Velero plugins for AWS_ in GitHub.
 
 1. To install Velero, follow the steps in [Install and start Velero]
-(https://github.com/vmware-tanzu/velero-plugin-for-aws#Install-and-start-Velero) 
-in _Velero plugins for AWS_ in GitHub.  
+(https://github.com/vmware-tanzu/velero-plugin-for-aws#Install-and-start-Velero)
+in _Velero plugins for AWS_ in GitHub.
 
 <p class="note"><strong>Note:</strong> The Velero Plug-in for vSphere does not support Guest or Supervisor clusters on vSphere.
 </p>
-
