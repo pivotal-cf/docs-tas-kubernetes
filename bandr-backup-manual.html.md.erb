@@ -59,15 +59,15 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
     * (Optional) Include the `--wait` parameter to follow the backup procedure progress.
 <br>
 
-The recommended command line is:
+    The recommended command line is:
 
-```
-velero create backup BACKUP-NAME \
-	--include-namespaces postgres-dbs,cf-system \
-	--selector ‘app in (postgres, cf-metadata)` \
-	--ttl 35040h0m0s \
-	--wait
-```
+    ```
+    velero create backup BACKUP-NAME \
+	    --include-namespaces postgres-dbs,cf-system \
+	    --selector ‘app in (postgres, cf-metadata)` \
+	    --ttl 35040h0m0s \
+	    --wait
+    ```
 
 ## <a id='backup-progress'></a> Monitor Backup Progress
 
@@ -149,10 +149,10 @@ To validate a completed backup by reviewing the Cloud Foundry data that was back
     velero describe backup BACKUP-NAME
     ```
 
-    Where `BACKUP-NAME` is the name you applied to your backup.
-<br>
-    (Optional) Include the `--details` parameter to display a highly verbose output.
-<br>
+    Where:  
+    * `BACKUP-NAME` is the name you applied to your backup.  
+    * (Optional) Include the `--details` parameter to display a highly verbose output.  
+
     For example:
 
     <pre class="terminal">
