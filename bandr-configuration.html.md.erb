@@ -1,4 +1,4 @@
---
+---
 title: Configuring Back Up and Restore for Tanzu Application Service for Kubernetes
 owner: Tanzu Application Service Release Engineering
 ---
@@ -12,9 +12,11 @@ This topic provides an overview of how to configure back up and recovery for
 
 ## <a id='overview'></a> Overview
 
-To enable backup and recovery functions for <%= vars.app_runtime_short %>,
-install and configure Velero in your environment.
-To install and configure Velero, see [Set Up and Install Velero and Back Up Components]
+After installing <%= vars.app_runtime_short %>, 
+install and configure Velero in your environment 
+to enable <%= vars.app_runtime_short %> backup and recovery 
+functions. 
+See [Set Up and Install Velero and Back Up Components]
 (#setup-backup-comp) below.
 
 ## <a id='prerequisites'></a> Prerequisites
@@ -43,7 +45,7 @@ The following are additional requirements for configuring backup and recovery fo
     * Virtual Disk Development Kit (VDDK) user requirements.
     For more information on the VDDK requirements, see [Credentials and Privileges for VMDK Access]
     (https://code.vmware.com/docs/11750/virtual-disk-development-kit-programming-guide/GUID-8301C6CF-37C2-42CC-B4C5-BB1DD28F79C9.html)
-    in the _Virtual Disk Development Kit Programming Guide_ documentation.
+    in the _Virtual Disk Development Kit Programming Guide_ documentation.  
  <br>
     Apply user privileges at the vCenter Server level.
 * The installed components must meet the following supported product requirements:
@@ -66,7 +68,7 @@ disk snapshotting, storage bucket read/write permissions and other backup and re
 To set up back up components:
 
 1. To install the Velero CLI, see [Install the CLI]
-(https://velero.io/docs/v1.4/basic-install/#install-the-cli)
+(https://velero.io/docs/v1.4/basic-install/#install-the-cli) 
 in the Velero documentation.
 
 1. To install the Velero plug-in and configure back up components,
