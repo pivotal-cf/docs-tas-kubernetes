@@ -179,7 +179,9 @@ To review and validate a completed restore:
 You can inspect the logs for your restore after the restore has completed.
 Review the logs for any failures and their root causes.
 
-1. To review the logs for a particular restore:
+To review the logs for a particular restore:
+
+1. Run:
 
     ```
     velero restore logs RESTORE-NAME
@@ -203,11 +205,21 @@ After your restore has completed, follow the steps
 below to validate the restored data.
 
 
-**Prerequisites**: Confirm that you have downloaded the Tanzu Application Service from 
-[VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes#/releases/777237) 
-and that the `get-backup-metadata.sh` and `compare-backup-metadata.sh` scripts are present in the 
-`tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` 
-directory.
+#### Prerequisites
+
+Before validating your backup, confirm that the following scripts are in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` 
+directory:  
+
+* `get-backup-metadata.sh`
+* `compare-backup-metadata.sh`
+
+If the scripts are not present, download the Tanzu Application Service from 
+[VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes#/releases/777237). 
+For more information, see [Prepare Your Installation Resources]
+(preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).  
+
+
+#### Procedure
 
 To validate a completed restore:
 
