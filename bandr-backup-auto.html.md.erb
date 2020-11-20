@@ -86,7 +86,16 @@ Specify for the IaaS tool to create a `credentials-velero` output file to your l
 
 ## <a id='backup-create-script'></a> Automate Your Velero Backup
 
-1. To create a Velero backup script, create a bash script with the following content:
+There are two methods for automating your Velero backup:
+
+* [Create a Bash Script](#backup-create-bash-script) 
+* [Create a Concourse Script](#backup-create-concourse-script)
+
+### <a id='backup-create-bash-script'></a> Create a Bash Script
+
+To create a Velero backup script:  
+
+1. Create a bash script with the following content:
 
     ```
     #!/usr/bin/env bash
@@ -113,140 +122,143 @@ Specify for the IaaS tool to create a `credentials-velero` output file to your l
         --wait
     ```
 
-1. To automate Velero back up using a Concourse pipeline:
-    1. Create the following Concourse configuration:
+### <a id='backup-create-concourse-script'></a> Create a Concourse Script
 
-        ```
-        ---
-        resources:
-        - name: every-3h
-          type: time
-          icon: clock-outline
-          source:
-            interval: 3h
-        
-        jobs:
-        - name: backup
-          plan:
-          - get: every-3h
-            trigger: true
-          - task: create-backup
-            config:
-              platform: linux
-              image_resource:
-                type: registry-image
-                source:
-                  repository: IMAGE-REPOSITORY
-              params:
-                SERVICE_ACCOUNT_KEY: ((service-account-key))
-                SERVICE_ZONE: ((service-zone))
-                SERVICE_CLUSTER_NAME: ((service-cluster-name))
-              run:
-                path: /bin/bash
-                args:
-                  - -c
-                  - |
-                    set -eu
-        
-                    gcloud auth activate-service-account --key-file=<(echo "$SERVICE_ACCOUNT_KEY")
-                    gcloud container clusters get-credentials "${SERVICE_CLUSTER_NAME}" --zone "${SERVICE_ZONE}"
-        
-        
-                    if ! kubectl get namespace cf-system &> /dev/null
-                    then
-                      echo "error: cf-system namespace not found"
-                      echo "  Please ensure Tanzu Application Service is installed on this cluster"
-                      exit 1
-                    fi
-        
-                    backup_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
-        
-                    ONE_DAY=24
-                    ONE_YEAR=365
-                    FOUR_YEARS="$((4*${ONE_YEAR}*${ONE_DAY}))h"
-        
-                    velero create backup "${backup_name}" \
-                      --include-namespaces postgres-dbs,cf-system \
-                      --selector 'app in (cf-metadata, postgres)' \
-                      --ttl "${FOUR_YEARS}" \
-                      --wait
-        
-                    velero backup describe "${backup_name}" --details
-        ```
+To automate Velero back up using a Concourse pipeline:
 
-        Where `IMAGE-REPOSITORY` is the registry location for storing your backups.  
+1. Create the following Concourse configuration:
+
+    ```
+    ---
+    resources:
+    - name: every-3h
+      type: time
+      icon: clock-outline
+      source:
+        interval: 3h
+    
+    jobs:
+    - name: backup
+      plan:
+      - get: every-3h
+        trigger: true
+      - task: create-backup
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: IMAGE-REPOSITORY
+          params:
+            SERVICE_ACCOUNT_KEY: ((service-account-key))
+            SERVICE_ZONE: ((service-zone))
+            SERVICE_CLUSTER_NAME: ((service-cluster-name))
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                set -eu
+    
+                gcloud auth activate-service-account --key-file=<(echo "$SERVICE_ACCOUNT_KEY")
+                gcloud container clusters get-credentials "${SERVICE_CLUSTER_NAME}" --zone "${SERVICE_ZONE}"
+    
+    
+                if ! kubectl get namespace cf-system &> /dev/null
+                then
+                  echo "error: cf-system namespace not found"
+                  echo "  Please ensure Tanzu Application Service is installed on this cluster"
+                  exit 1
+                fi
+    
+                backup_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
+    
+                ONE_DAY=24
+                ONE_YEAR=365
+                FOUR_YEARS="$((4*${ONE_YEAR}*${ONE_DAY}))h"
+    
+                velero create backup "${backup_name}" \
+                  --include-namespaces postgres-dbs,cf-system \
+                  --selector 'app in (cf-metadata, postgres)' \
+                  --ttl "${FOUR_YEARS}" \
+                  --wait
+    
+                velero backup describe "${backup_name}" --details
+    ```
+
+    Where `IMAGE-REPOSITORY` is the registry location for storing your backups.  
 <br>
-        For example:  
+    For example:  
 
-        ```
-        ---
-        resources:
-        - name: every-3h
-          type: time
-          icon: clock-outline
-          source:
-            interval: 3h
-        jobs:
-        - name: backup
-          plan:
-          - get: every-3h
-            trigger: true
-          - task: create-backup
-            config:
-              platform: linux
-              image\_resource:
-                type: registry-image
-                source:
-                  repository: pcfplatformrecovery/backup-and-restore-cf-for-k8s
-              params:
-                SERVICE\_ACCOUNT\_KEY: ((service-account-key))
-                SERVICE\_ZONE: ((service-zone))
-                SERVICE\_CLUSTER\_NAME: ((service-cluster-name))
-              run:
-                path: /bin/bash
-                args:
-                  - -c
-                  - |
-                    set -eu
-        
-                    gcloud auth activate-service-account --key-file=<(echo "$SERVICE\_ACCOUNT\_KEY")
-                    gcloud container clusters get-credentials "${SERVICE\_CLUSTER\_NAME}" --zone "${SERVICE\_ZONE}"
-        
-        
-                    if ! kubectl get namespace cf-system &> /dev/null
-                    then
-                      echo "error: cf-system namespace not found"
-                      echo "  Please ensure Tanzu Application Service is installed on this cluster"
-                      exit 1
-                    fi
-        
-                    backup\_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
-        
-                    ONE\_DAY=24
-                    ONE\_YEAR=365
-                    FOUR\_YEARS="$((4*${ONE\_YEAR}*${ONE\_DAY}))h"
-        
-                    velero create backup "${backup\_name}" \
-                      --include-namespaces postgres-dbs,cf-system \
-                      --selector 'app in (cf-metadata, postgres)' \
-                      --ttl "${FOUR\_YEARS}" \
-                      --wait
-        
-                    velero backup describe "${backup\_name}" --details
-        ```
+    ```
+    ---
+    resources:
+    - name: every-3h
+      type: time
+      icon: clock-outline
+      source:
+        interval: 3h
+    jobs:
+    - name: backup
+      plan:
+      - get: every-3h
+        trigger: true
+      - task: create-backup
+        config:
+          platform: linux
+          image\_resource:
+            type: registry-image
+            source:
+              repository: pcfplatformrecovery/backup-and-restore-cf-for-k8s
+          params:
+            SERVICE\_ACCOUNT\_KEY: ((service-account-key))
+            SERVICE\_ZONE: ((service-zone))
+            SERVICE\_CLUSTER\_NAME: ((service-cluster-name))
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                set -eu
+    
+                gcloud auth activate-service-account --key-file=<(echo "$SERVICE\_ACCOUNT\_KEY")
+                gcloud container clusters get-credentials "${SERVICE\_CLUSTER\_NAME}" --zone "${SERVICE\_ZONE}"
+    
+    
+                if ! kubectl get namespace cf-system &> /dev/null
+                then
+                  echo "error: cf-system namespace not found"
+                  echo "  Please ensure Tanzu Application Service is installed on this cluster"
+                  exit 1
+                fi
+    
+                backup\_name="tas4k8s-$(date -u +'%Y-%m-%d-%Hh%Mm%Ss')"
+    
+                ONE\_DAY=24
+                ONE\_YEAR=365
+                FOUR\_YEARS="$((4*${ONE\_YEAR}*${ONE\_DAY}))h"
+    
+                velero create backup "${backup\_name}" \
+                  --include-namespaces postgres-dbs,cf-system \
+                  --selector 'app in (cf-metadata, postgres)' \
+                  --ttl "${FOUR\_YEARS}" \
+                  --wait
+    
+                velero backup describe "${backup\_name}" --details
+    ```
 
-    1. Configure the pipeline to run with the following required parameters:
+1. Configure the pipeline to run with the following required parameters:
 
-        ```
-        --var service-account-key=”SERVICE-ACCOUNT-KEY”
-        --var service-zone=”ZONE-NAME”
-        --var service-cluster-name=”CLUSTER-NAME"
-        ```
+    ```
+    --var service-account-key=”SERVICE-ACCOUNT-KEY”
+    --var service-zone=”ZONE-NAME”
+    --var service-cluster-name=”CLUSTER-NAME"
+    ```
 
-        Where:  
-        * `SERVICE-ACCOUNT-KEY` is the content of service account key.  
-        * `ZONE-NAME` is the project zone where cluster is deployed.  
-        * `CLUSTER-NAME` is the name of the cluster to be backed up.  
+    Where:  
+    * `SERVICE-ACCOUNT-KEY` is the content of service account key.  
+    * `ZONE-NAME` is the project zone where cluster is deployed.  
+    * `CLUSTER-NAME` is the name of the cluster to be backed up.  
 
 ## <a id='backup-review-automated'></a> Review the Automated Velero Backup
 
