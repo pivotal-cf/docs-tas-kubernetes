@@ -198,7 +198,7 @@ Cloud Foundry state from the backup, and then compare it to the live, restored s
 <p class="note"><strong>Note:</strong> The Cloud Foundry state from the backup is not a
     complete snapshot and should only be used as an aid to verifying the data.
 The validation follows the Cloud Foundry constructs of “users, orgs, spaces, and apps”
-to measure what data was in Cloud Foundry during a backup.
+to measure what data was in Cloud Foundry during a back up.
 </p>
 
 After your restore has completed, follow the steps
@@ -238,7 +238,7 @@ To validate a completed restore:
     backup_1 Completed 2020-03-24 14:12:29 +0000 UTC     21d          default    &lt;none&gt;
     </pre>
 
-1. To generate a snapshot of the Cloud Foundry state at the time of the backup:
+1. To generate a snapshot of the Cloud Foundry state at the time of the back up:
 
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/get-backup-metadata.sh BACKUP-NAME OUTPUT-FILENAME
