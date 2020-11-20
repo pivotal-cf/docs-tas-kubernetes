@@ -16,18 +16,24 @@ After installing <%= vars.app_runtime_short %>,
 install and configure Velero in your environment 
 to enable <%= vars.app_runtime_short %> backup and recovery 
 functions. 
-See [Set Up and Install Velero and Back Up Components]
+See [Install and Configure Velero and Back Up Components]
 (#setup-backup-comp) below.
 
 ## <a id='prerequisites'></a> Prerequisites
 
+The following are required for <%= vars.app_runtime_short %> backup and recovery.
+
+### <a id='prerequisites-general'></a> General Prerequisites
+
 The following are required before configuring backup and recovery for <%= vars.app_runtime_short %>:
 
-* <%= vars.app_runtime_short %> has been installed. For more information, see
-[Installing Tanzu Application Service for Kubernetes](installing-tas-for-kubernetes.html).
-* <%= vars.app_runtime_short %> has been configured
-to use an external Tanzu Postgres Pod for the CCDB and UAA databases.
-* Kubernetes command line tool (kubectl) has been installed in your environment.
+* A <%= vars.app_runtime_short %> installation configured to use 
+an external Tanzu Postgres Pod for the CCDB and UAA databases. 
+For more information, see 
+[Configuring Your System Databases](configuring-system-databases.html) and 
+[Installing Tanzu Application Service for Kubernetes]
+(installing-tas-for-kubernetes.html).  
+* The Kubernetes command line tool (kubectl) is installed in your environment.
 For more information, see [Installing Command-Line Tools](installing-command-line-tools.html).
 * A working Kubernetes cluster.
 For more information, see [Supported Kubernetes Distributions]
@@ -58,7 +64,7 @@ The following are additional requirements for configuring backup and recovery fo
 and [Prerequisites](https://github.com/vmware-tanzu/velero-plugin-for-vsphere#prerequisites)
 in _Velero Plugin for vSphere_ in GitHub.
 
-## <a id='setup-backup-comp'></a> Set Up and Install Velero and Back Up Components
+## <a id='setup-backup-comp'></a> Install and Configure Velero and Back Up Components
 
 Velero and an Iaas specific Velero plugin must be installed to back up and restore <%= vars.app_runtime_short %>.
 
@@ -73,13 +79,13 @@ in the Velero documentation.
 
 1. To install the Velero plug-in and configure back up components,
 follow the steps required by your IaaS:
-    * [Set Up Back Up Components on AWS](#setup-backup-comp-aws)
-    * [Set Up Back Up Components on Azure](#setup-backup-comp-azure)
-    * [Set Up Back Up Components on GCP](#setup-backup-comp-gcp)
-    * [Set Up Back Up Components on vSphere](#setup-backup-comp-vsphere)
+    * [Configure Back Up Components on AWS](#setup-backup-comp-aws)
+    * [Configure Back Up Components on Azure](#setup-backup-comp-azure)
+    * [Configure Back Up Components on GCP](#setup-backup-comp-gcp)
+    * [Configure Back Up Components on vSphere](#setup-backup-comp-vsphere)
 
 
-### <a id='setup-backup-comp-aws'></a> Set Up Back Up Components on AWS
+### <a id='setup-backup-comp-aws'></a> Configure Back Up Components on AWS
 
 To install and configure Velero for <%= vars.app_runtime_short %> on AWS:
 
@@ -96,7 +102,7 @@ in _Velero plugins for AWS_ in GitHub.
 in _Velero plugins for AWS_ in GitHub.
 
 
-### <a id='setup-backup-comp-azure'></a> Set Up Back Up Components on Azure
+### <a id='setup-backup-comp-azure'></a> Configure Back Up Components on Azure
 
 To install and configure Velero for <%= vars.app_runtime_short %> on Azure:
 
@@ -113,7 +119,7 @@ in _Velero plugins for Microsoft Azure_ in GitHub.
 in _Velero plugins for Azure_ in GitHub.
 
 
-### <a id='setup-backup-comp-gcp'></a> Set Up Back Up Components on GCP
+### <a id='setup-backup-comp-gcp'></a> Configure Back Up Components on GCP
 
 To install and configure Velero for <%= vars.app_runtime_short %> on GCP:
 
@@ -130,7 +136,7 @@ in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 in _Plugins for Google Cloud Platform (GCP)_ in GitHub.
 
 
-### <a id='setup-backup-comp-vsphere'></a> Set Up Back Up Components on vSphere
+### <a id='setup-backup-comp-vsphere'></a> Configure Back Up Components on vSphere
 
 To install and configure Velero for <%= vars.app_runtime_short %> on vSphere:
 
