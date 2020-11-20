@@ -14,7 +14,7 @@ This topic provides an overview of how to configure back up and restore for
 
 After installing <%= vars.app_runtime_short %>, 
 install and configure Velero in your environment 
-to enable <%= vars.app_runtime_short %> backup and restore 
+to enable <%= vars.app_runtime_short %> back up and restore 
 functions. 
 See [Install and Configure Velero and Back Up Components]
 (#setup-backup-comp) below.
@@ -25,7 +25,7 @@ The following are required for <%= vars.app_runtime_short %> back up and restore
 
 ### <a id='prerequisites-general'></a> General Prerequisites
 
-The following are required before configuring backup and restore for <%= vars.app_runtime_short %>:
+The following are required before configuring back up and restore for <%= vars.app_runtime_short %>:
 
 * A <%= vars.app_runtime_short %> installation configured to use 
 an external Tanzu Postgres Pod for the CCDB and UAA databases. 
@@ -43,7 +43,7 @@ For more information, see [Supported Kubernetes Distributions]
 
 The following are additional requirements for configuring back up and restore for <%= vars.app_runtime_short %> on vSphere:
 
-* The vSphere backup and restore user account must meet additional requirements:
+* The vSphere back up and restore user account must meet additional requirements:
     * vSphere CSI driver user requirements.
     For more information on the vSphere CSI Driver requirements, see [vSphere Roles and Privileges]
     (https://vsphere-csi-driver.sigs.k8s.io/driver-deployment/prerequisites.html#roles_and_privileges)
@@ -69,7 +69,7 @@ in _Velero Plugin for vSphere_ in GitHub.
 Velero and an Iaas specific Velero plugin must be installed to back up and restore <%= vars.app_runtime_short %>.
 
 The Velero plugin requires specific IaaS permissions to enable
-disk snapshotting, storage bucket read/write permissions and other backup and restore features.
+disk snapshotting, storage bucket read/write permissions and other back up and restore features.
 
 To set up back up components:
 
