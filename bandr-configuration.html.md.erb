@@ -3,7 +3,7 @@ title: Configuring Back Up and Restore for Tanzu Application Service for Kuberne
 owner: Tanzu Application Service Release Engineering
 ---
 
-This topic provides an overview of how to configure back up and recovery for
+This topic provides an overview of how to configure back up and restore for
 <%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
 
 <%= partial 'evaluation_only' %>
@@ -14,18 +14,18 @@ This topic provides an overview of how to configure back up and recovery for
 
 After installing <%= vars.app_runtime_short %>, 
 install and configure Velero in your environment 
-to enable <%= vars.app_runtime_short %> backup and recovery 
+to enable <%= vars.app_runtime_short %> backup and restore 
 functions. 
 See [Install and Configure Velero and Back Up Components]
 (#setup-backup-comp) below.
 
 ## <a id='prerequisites'></a> Prerequisites
 
-The following are required for <%= vars.app_runtime_short %> backup and recovery.
+The following are required for <%= vars.app_runtime_short %> back up and restore.
 
 ### <a id='prerequisites-general'></a> General Prerequisites
 
-The following are required before configuring backup and recovery for <%= vars.app_runtime_short %>:
+The following are required before configuring backup and restore for <%= vars.app_runtime_short %>:
 
 * A <%= vars.app_runtime_short %> installation configured to use 
 an external Tanzu Postgres Pod for the CCDB and UAA databases. 
@@ -41,9 +41,9 @@ For more information, see [Supported Kubernetes Distributions]
 
 ### <a id='prerequisites-vsphere'></a> Prerequisites for vSphere
 
-The following are additional requirements for configuring backup and recovery for <%= vars.app_runtime_short %> on vSphere:
+The following are additional requirements for configuring back up and restore for <%= vars.app_runtime_short %> on vSphere:
 
-* The vSphere backup and recovery user account must meet additional requirements:
+* The vSphere backup and restore user account must meet additional requirements:
     * vSphere CSI driver user requirements.
     For more information on the vSphere CSI Driver requirements, see [vSphere Roles and Privileges]
     (https://vsphere-csi-driver.sigs.k8s.io/driver-deployment/prerequisites.html#roles_and_privileges)
