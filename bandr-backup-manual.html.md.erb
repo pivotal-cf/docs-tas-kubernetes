@@ -1,11 +1,14 @@
 ---
-title: Backing Up <%= vars.app_runtime_full %>
+title: Backing Up <%= vars.app_runtime_full %> Manually
 owner: Tanzu Application Service Release Engineering
 ---
 <% current_page.data.title = "Backing Up #{vars.app_runtime_full}" %>
 
-This topic provides an overview of how to back up
-<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).
+This topic provides an overview of how to manually back up
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>).  
+
+To back up <%= vars.app_runtime_short %> automatically, see 
+[Backing Up <%= vars.app_runtime_short %> Using Automation](bandr-backup-auto.html).  
 
 <%= partial 'evaluation_only' %>
 
@@ -79,7 +82,7 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
 
 To monitor the progress of a running backup:
 
-1. To display information about all back up processes:
+1. To determine the name of your backup:
 
     ```
     velero get backups
@@ -93,7 +96,7 @@ To monitor the progress of a running backup:
     backup_1 Completed 2020-03-24 14:12:29 +0000 UTC     21d          default  (app in (cf-metadata,postgres)
     </pre>
 
-1. To inspect the backup you just started:
+1. To inspect a backup:
 
     ```
     velero describe backup BACKUP-NAME
@@ -117,7 +120,9 @@ To review a completed backup:
 After a backup has completed, the backup logs can be reviewed for a detailed inspection
 of the root cause of potential failures.
 
-1. To review the backup logs of a completed backup:
+To review the backup logs of a completed backup:
+
+1. Run:
 
     ```
     velero backup logs  BACKUP-NAME
