@@ -4,7 +4,10 @@ owner: Tanzu Application Service Release Engineering
 ---
 
 This topic provides an overview of how to back up 
-<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>) using automation.
+<%= vars.app_runtime_full %> (<%= vars.app_runtime_short %>) using automation.  
+
+To back up <%= vars.app_runtime_short %> manually, see 
+[Backing Up <%= vars.app_runtime_short %> Manually](bandr-backup-manual.html).  
 
 <%= partial 'evaluation_only' %>
 
@@ -15,7 +18,6 @@ This topic provides an overview of how to back up
 To backup <%= vars.app_runtime_short %> using automation:  
 
 1. [Create and Configure a Service Account for Backing Up](#backup-service-account)  
-1. [Install Velero](#backup-install-velero)  
 1. [Automate Your Velero Backup](#backup-create-script)  
 1. [Review the Automates Velero Backup](#backup-review-automated)  
 
@@ -26,8 +28,9 @@ For more information, see [Backing Up <%= vars.app_runtime_full %>](bandr-backup
 
 ## <a id='backup-service-account'></a> Create and Configure a Service Account for Backing Up
 
-1. To create a service account to run the automated backup, 
-use your IaaS tools to create the account.  
+To create a service account to run the automated backup:
+
+1. Use your IaaS tools to create the service account:  
 <br>
     For example, to create a service account on GCP:
     <pre class="terminal"> 
@@ -79,22 +82,6 @@ Specify for the IaaS tool to create a `credentials-velero` output file to your l
     <pre class="terminal"> 
     gcloud iam service-accounts keys create credentials-velero \
         --iam-account $SERVICE\_ACCOUNT\_EMAIL
-    </pre>
-
-## <a id='backup-install-velero'></a> Install Velero
-
-1. If, you have not already done so, 
-install Velero to the Kubernetes clusters you want to backup using automation. 
-For more information, see [Set Up and Install Velero and Back Up Components]
-(bandr-backup-manual.html#setup-backup-comp) in _Backing Up <%= vars.app_runtime_full %>_.  
-<br>    
-    For example, to install Velero on GCP:
-    <pre class="terminal"> 
-    velero install \
-    --provider gcp \
-    --plugins velero/velero-plugin-for-gcp:v1.1.0 \
-    --bucket velero-demo-bucket \
-    --secret-file credentials-velero
     </pre>
 
 ## <a id='backup-create-script'></a> Automate Your Velero Backup
