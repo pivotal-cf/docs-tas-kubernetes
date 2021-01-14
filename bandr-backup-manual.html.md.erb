@@ -37,7 +37,7 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
     ```
     velero create backup BACKUP-NAME \
     	--include-namespaces NAMESPACES \
-    	--selector ‘app in (RESOURCE-LIST)` \
+    	--selector 'app in (RESOURCE-LIST)' \
     	--storage-location STORAGE-LOCATION \
     	--ttl TTL-LENGTH \
     	--wait
@@ -73,7 +73,7 @@ To back up <%= vars.app_runtime_short %> Tanzu Postgres Instances:
     ```
     velero create backup BACKUP-NAME \
 	    --include-namespaces postgres-dbs,cf-system \
-	    --selector ‘app in (postgres, cf-metadata)` \
+	    --selector 'app in (postgres, cf-metadata)' \
 	    --ttl 35040h0m0s \
 	    --wait
     ```
