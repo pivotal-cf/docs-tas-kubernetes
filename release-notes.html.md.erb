@@ -9,9 +9,10 @@ This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app
 
 <%= partial 'limitation_notes' %>
 
-## <a id='0-6-0'></a> v<%= vars.local_product_version %>
 
-**Release Date**: November 25, 2020
+## <a id='0-7-0'></a> v<%= vars.local_product_version %>
+
+**Release Date**: January 21, 2020
 
 ### <a id='product-snapshot'></a>Product Snapshot
 
@@ -26,11 +27,157 @@ This topic contains release notes for <%= vars.app_runtime_full %> (<%= vars.app
   </tr>
   <tr>
     <td>Release date</td>
-    <td>November 25, 2020</td>
+    <td>January 21, 2020</td>
   </tr>
 </table>
 
 To download VMware <%= vars.app_runtime_short %> v<%= vars.local_product_version %>, see
+[VMware <%= vars.app_runtime_full %>]
+(https://network.pivotal.io/products/tas-for-kubernetes)
+on the _VMware Tanzu Network_.
+
+#### <a id='0-7-0-supported-platforms'></a>Supported Kubernetes Distributions
+
+<%= vars.app_runtime_short %> is compatible with Kubernetes v1.16 and later, and is tested with the following Kubernetes distributions:
+
+<table class="nice">
+  <tr>
+    <th>Platform</th>
+    <th width=40%>Version</th>
+  </tr>
+  <tr>
+    <td>Tanzu Kubernetes Grid</td>
+    <td>v1.0, with <code>metrics-server</code></td>
+  </tr>
+  <tr>
+    <td>Tanzu Kubernetes Grid Integrated Edition</td>
+    <td>v1.7, v1.8 and v1.9</td>
+  </tr>
+  <tr>
+    <td>Tanzu Kubernetes Grid Service for vSphere</td>
+    <td>v7.0</td>
+  </tr>
+</table>
+
+#### <a id='0-7-0-installed-components'></a>Installed With <%= vars.app_runtime_short %> v<%= vars.local_product_version %>
+
+<%= vars.app_runtime_short %> uses the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>cf-for-k8s</td>
+    <td><a href="https://github.com/cloudfoundry/cf-for-k8s/commit/f2eddce53bcd05b62043b8f681387b09c1fb087f">Commit f2eddce</a></td>
+  </tr>
+  <tr>
+    <td>Istio</td>
+    <td>v1.7.3</td>
+  </tr>
+  <tr>
+    <td>kpack</td>
+    <td>v0.1.2</td>
+  </tr>
+</table>
+
+#### <a id='0-7-0-additional-components'></a>Required Additional Components
+
+<%= vars.app_runtime_short %> requires the following components:
+
+<table class="nice">
+  <tr>
+    <th>Element</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>BOSH CLI</td>
+    <td>v6.3.1</td>
+  </tr>
+  <tr>
+    <td>cf CLI</td>
+    <td>v7.0.1 or later</td>
+  </tr>
+
+  <tr>
+    <td>Docker CLI</td>
+    <td>v19.03 or later</td>
+  </tr>
+  <tr>
+    <td>Harbor Registry</td>
+    <td>v2.0.1 or later</td>
+  </tr>
+  <tr>
+    <td>kubectl, the Kubernetes CLI</td>
+    <td>v1.16.0 or later</td>
+  </tr>
+  <tr>
+    <td>kapp</td>
+    <td>v0.34.0 or later</td>
+  </tr>
+  <tr>
+    <td>kbld</td>
+    <td>v0.25.0 or later</td>
+  </tr>
+  <tr>
+    <td>ytt</td>
+    <td>v0.28.0 or later</td>
+  </tr>
+</table>
+
+#### <a id='0-7-0-supported-environments'></a>Supported Environments  
+
+<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments: 
+
+* 64-bit Mac OS 
+* 64-bit Linux OS 
+
+### <a id='0-7-0-features'></a> Features
+
+New features and changes in this release:
+
+- 
+- Security enhancements
+
+### <a id='0-7-0-breaking'></a> Breaking Changes
+
+This release has the following breaking changes:  
+
+* 
+
+### <a id='0-7-0-known-issues'></a> Known Issues
+
+This release has the following issues:
+
+ - **Apps Manager** does not support inviting members.
+ - **Apps Manager** does not support creating container networking policies for apps.
+ - Pushing apps or retrieving app logs with `cf logs` requires cf CLI v7.0.1 or later
+
+
+
+## <a id='0-6-0'></a> v0.6
+
+**Release Date**: December 4, 2020
+
+### <a id='product-snapshot'></a>Product Snapshot
+
+<table class="nice">
+  <tr>
+    <th>Release</th>
+    <th width=40%>Details</th>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td>v0.6</td>
+  </tr>
+  <tr>
+    <td>Release date</td>
+    <td>December 4, 2020</td>
+  </tr>
+</table>
+
+To download VMware <%= vars.app_runtime_short %> v0.6, see
 [VMware <%= vars.app_runtime_full %>]
 (https://network.pivotal.io/products/tas-for-kubernetes)
 on the _VMware Tanzu Network_.
@@ -58,7 +205,7 @@ on the _VMware Tanzu Network_.
   </tr>
 </table>
 
-#### <a id='0-6-0-installed-components'></a>Installed With <%= vars.local_product_version %>
+#### <a id='0-6-0-installed-components'></a>Installed With <%= vars.app_runtime_short %> v0.6
 
 <%= vars.app_runtime_short %> uses the following components:
 
@@ -125,6 +272,12 @@ on the _VMware Tanzu Network_.
   </tr>
 </table>
 
+#### <a id='0-6-0-supported-environments'></a>Supported Environments  
+
+<%= vars.app_runtime_short %> can be deployed and managed from the following desktop OS environments: 
+
+* 64-bit Mac OS 
+* 64-bit Linux OS 
 
 ### <a id='0-6-0-features'></a> Features
 
