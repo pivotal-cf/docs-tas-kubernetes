@@ -259,7 +259,9 @@ To validate a completed restore:
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/compare-backup-metadata.sh OUTPUT-FILENAME NAMESPACE
     ```
-    Where `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step and `NAMESPACE` is the Kubernetes namespace that the cf-metadata pod is running in (default is `cf-system`).
+    Where:  
+    * `OUTPUT-FILENAME` is the name of the backup state JSON file created in the previous step.  
+    * `NAMESPACE` is the Kubernetes namespace that the cf-metadata pod is running in. The default namespace is `cf-system`.  
 <br>
     The script displays the difference between the current restored Cloud Foundry state and
     the system's state at the time the backup was created.
