@@ -207,16 +207,31 @@ below to validate the restored data.
 
 #### <a id='restore-validate-prerequisites'></a> Prerequisites
 
-Before validating your backup, confirm that the following scripts are in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` 
+Before validating your backup:
+
+1. Confirm that the following scripts are in the `tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin` 
 directory:  
+    * `get-backup-metadata.sh`
+    * `compare-backup-metadata.sh`
 
-* `get-backup-metadata.sh`
-* `compare-backup-metadata.sh`
+    If the scripts are not present, download the Tanzu Application Service from 
+    [VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes#/releases/777237). 
+    For more information, see [Prepare Your Installation Resources]
+    (preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).  
 
-If the scripts are not present, download the Tanzu Application Service from 
-[VMware Tanzu Network](https://network.pivotal.io/products/tas-for-kubernetes#/releases/777237). 
-For more information, see [Prepare Your Installation Resources]
-(preparing-to-install-tas-for-kubernetes.html#preparing-installation-resources).  
+1. Prepare the `compare-backup-metadata.sh` script for validating your restore:
+
+    1. Open the `compare-backup-metadata.sh` script.
+    1. To specify the container, modify the last line in the script to include `-c cf-metadata`:
+
+        ```
+        kubectl ${NAMESPACE} exec -it "${POD_NAME}" -c cf-metadata -- bash -ce 'backup-metadata compare' < "$1"
+        ```
+
+        <p class="note warning"><strong>Warning:</strong> You must modify the <code>compare-backup-metadata.sh</code> script to 
+        explicitly specify the <code>cf-metadata</code> container because the <code>cf-metadata</code> container 
+        is not the default container in the Pod. 
+        </p>
 
 
 #### <a id='restore-validate-procedure'></a> Procedure
@@ -255,17 +270,6 @@ To validate a completed restore:
     </pre>
 
 1. To compare the backup state to the restored system state:
-
-    <p class="note warning"><strong>Warning:</strong> There is a known issue with the compare-backup-metadata.sh script below due to the `cf-metadata` container
-    no longer being the default container in the Pod. To use it you will need to modify the script to specify the container with the `-c cf-metadata` flag.</p>
-
-    The final line of the `compare-backup-metadata.sh` script should look like:
-
-    ```
-    kubectl ${NAMESPACE} exec -it "${POD_NAME}" -c cf-metadata -- bash -ce 'backup-metadata compare' < "$1"
-    ```
-
-    Run the script:
 
     ```
     tanzu-application-service/config/_ytt_lib/github.com/pivotal/cf-for-k8s-disaster-recovery/backup-metadata/bin/compare-backup-metadata.sh OUTPUT-FILENAME NAMESPACE
