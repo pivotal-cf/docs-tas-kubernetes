@@ -133,12 +133,11 @@ on the _VMware Tanzu Network_.
 
 New features and changes in this release:
 
-- 
-- Security enhancements
+This release has no new features.
 
 ### <a id='0-7-0-breaking'></a> Breaking Changes
 
-This release has no breaking changes.
+This release has not been tested against Tanzu Kubernetes Grid Integrated Edition.
 
 ### <a id='0-7-0-known-issues'></a> Known Issues
 
@@ -146,10 +145,9 @@ This release has the following issues:
 
  - **Apps Manager** does not support inviting members.
  - **Apps Manager** does not support creating container networking policies for apps.
- - Due to a known bug in containerd version 1.4.0 and 1.4.1, there is a limit to the maximum size of an image's labels.
-   This will cause failures in staging applications during `cf push`.
-   There is a workaround of reducing the number of buildpacks used by the cf-default-builder.
-   Containerd version 1.4.1 is used by TKGm 1.2.1.
+ - Staging applications fail during `cf push` if you exceed the maximum image label size when using containerd v1.4.0 and 1.4.1. 
+ Containerd version 1.4.1 is used by TKGm 1.2.1. To reduce the chances of exceeding the maximum image's label size, 
+ reduce the number of buildpacks used by the cf-default-builder.  
 
 
 ## <a id='0-6-0'></a> v0.6
