@@ -228,7 +228,7 @@ directory:
         kubectl ${NAMESPACE} exec -it "${POD_NAME}" -c cf-metadata -- bash -ce 'backup-metadata compare' < "$1"
         ```
 
-        <p class="note warning"><strong>Warning:</strong> You must modify the <code>compare-backup-metadata.sh</code> script to 
+        <p class="note"><strong>Note:</strong> You must modify the <code>compare-backup-metadata.sh</code> script to 
         explicitly specify the <code>cf-metadata</code> container because the <code>cf-metadata</code> container 
         is not the default container in the Pod. 
         </p>
