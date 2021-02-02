@@ -52,12 +52,33 @@ for <%= vars.app_runtime_short %> on TKG:
 * Your Tanzu Kubernetes Grid environment:
     * Is Tanzu Kubernetes Grid version is 1.0 or later.
     * Includes `metrics-server`. TKG does not bundle `metrics-server`,
-    which is required by Tanzu Application Service.
-    To deploy `metrics-server`, run:
+      which is required by Tanzu Application Service.
+      To deploy `metrics-server`, run:
 
         ```
-        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml
+        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml
         ```
+
+      * The above apply will likely fail on Tanzu Kubernetes Grid. To resolve the issue, you'll need to add the
+        `--kubelet-insecure-tls` flag to the `args` on the `metrics-server` container of the `metrics-server` deployment.
+      * Alternately, you can write the following snippet to a file called `add-kubelet-insecure-tls-to-metrics-server.yml`
+        and then run
+        `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml -f add-kubelet-insecure-tls-to-metrics-server.yml`
+
+            ```
+            #@ load("@ytt:overlay", "overlay")
+            #@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"metrics-server"}}),expects=1
+            ---
+            spec:
+              template:
+                spec:
+                  containers:
+                    #@overlay/match by=overlay.subset({"name": "metrics-server"}),expects=1
+                    - args:
+                        #@overlay/append
+                        - --kubelet-insecure-tls
+            ```
+
 * Your Kubernetes clusters have been created with the following characteristics:
     * The Kubernetes cluster has at least 5 worker nodes.
     * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
