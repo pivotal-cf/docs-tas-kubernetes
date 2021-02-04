@@ -9,14 +9,17 @@ This topic describes how to create and configure Kubernetes clusters to support
 
 ## <a id='overview'></a> Overview
 
-Before creating or configuring Kubernetes clusters,
-ensure your environment and clusters support
+Before creating or configuring Kubernetes clusters:  
+
+1. Ensure your environment and clusters support
 <%= vars.app_runtime_short %>:
+    * [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
+    * [VMware Tanzu Kubernetes Grid](#grid)
 
-* [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
-* [VMware Tanzu Kubernetes Grid](#grid)
+1. Complete the following:  
+    * [Verify that a Default Storage Class Exists](#verify-default-storage).  
 
-### <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
+## <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
 <%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.
 
@@ -24,17 +27,16 @@ Ensure the following before creating or configuring Kubernetes clusters
 for <%= vars.app_runtime_short %> on TKGI:
 
 * Your TKGI version is v1.7 or later.
-* Your Kubernetes clusters have been created with the following characteristics:
-    * The Kubernetes cluster has at least 5 worker nodes.
-    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
+* Your Kubernetes clusters have been created with the following characteristics:  
+    * The Kubernetes cluster has at least 5 worker nodes.  
+    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.  
     * The worker nodes in the Kubernetes clusters trust the container image registry that
     <%= vars.app_runtime_short %> uses to store buildpack-based app images.
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
-    the certificate of that CA.
-    * kubectl targets the cluster. To ensure that kubectl targets the cluster,
-    run `tkgi get-credentials CLUSTER-NAME` after creating the cluster.
-
+    the certificate of that CA.  
+    * kubectl can target your clusters. To ensure that kubectl targets your clusters, 
+    complete the steps in [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target).  
 
 For information about creating a cluster with TKGI,
 see [Creating Clusters](https://docs.pivotal.io/tkgi/create-cluster.html)
@@ -49,49 +51,81 @@ in the TKGI documentation.
 Ensure the following before creating or configuring Kubernetes clusters
 for <%= vars.app_runtime_short %> on TKG:
 
-* Your Tanzu Kubernetes Grid environment:
-    * Is Tanzu Kubernetes Grid version is 1.0 or later.
-    * Includes `metrics-server`. TKG does not bundle `metrics-server`,
-      which is required by Tanzu Application Service.
-      To deploy `metrics-server`, run:
+* Your Tanzu Kubernetes Grid version is 1.0 or later.
+* Your Tanzu Kubernetes Grid environment includes `metrics-server`.
+<BR>
+    TKG does not bundle `metrics-server`, which is required by Tanzu Application Service. 
+    To deploy `metrics-server`, complete the steps in [Deploy `metrics-server` to Tanzu Kubernetes Grid](#deploy-metrics-server).  
 
-        ```
-        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml
-        ```
-
-      * The above apply will likely fail on Tanzu Kubernetes Grid. To resolve the issue, you'll need to add the
-        `--kubelet-insecure-tls` flag to the `args` on the `metrics-server` container of the `metrics-server` deployment.
-      * Alternately, you can write the following snippet to a file called `add-kubelet-insecure-tls-to-metrics-server.yml`
-        and then run
-        `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml -f add-kubelet-insecure-tls-to-metrics-server.yml`
-
-            ```
-            #@ load("@ytt:overlay", "overlay")
-            #@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"metrics-server"}}),expects=1
-            ---
-            spec:
-              template:
-                spec:
-                  containers:
-                    #@overlay/match by=overlay.subset({"name": "metrics-server"}),expects=1
-                    - args:
-                        #@overlay/append
-                        - --kubelet-insecure-tls
-            ```
-
-* Your Kubernetes clusters have been created with the following characteristics:
-    * The Kubernetes cluster has at least 5 worker nodes.
-    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.
+* Your Kubernetes clusters have been created with the following characteristics:  
+    * The Kubernetes cluster has at least 5 worker nodes.  
+    * Each worker node has at least 2 CPU and 7.5&nbsp;GB of memory available for allocation.  
     * The worker nodes in the Kubernetes clusters trust the container image registry that
-    <%= vars.app_runtime_short %> uses to store buildpack-based app images.
+    <%= vars.app_runtime_short %> uses to store buildpack-based app images.  
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
-    the certificate of that CA.
+    the certificate of that CA.  
+    * kubectl can target your clusters. To ensure that kubectl targets your clusters, 
+    complete the steps in [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target).  
 
 For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
 (https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).
 
-After creating the cluster, run `tkg get credentials CLUSTER-NAME` to get the context name and `kubectl config use-context CONTEXT-NAME` to ensure that kubectl targets the cluster.
+
+### <a id='deploy-metrics-server'></a> Deploy `metrics-server` to Tanzu Kubernetes Grid
+
+TKG does not bundle `metrics-server`, which is required by Tanzu Application Service.
+
+To deploy `metrics-server`, complete either of the following:  
+
+* Use a basic `kubectl apply` command:
+    1. Run the following `kubectl apply` command:
+
+        ```
+        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml
+        ```
+    1. If this `kubectl apply` command fails, add the `--kubelet-insecure-tls` flag 
+    to the `args` on the `metrics-server` container of the `metrics-server` deployment.
+* Use `kubectl apply` with a custom configuration:
+    1. Create a file named `add-kubelet-insecure-tls-to-metrics-server.yml`.
+    1. Add the following to the new `add-kubelet-insecure-tls-to-metrics-server.yml` file and save:  
+
+        ```
+        #@ load("@ytt:overlay", "overlay")
+        #@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"metrics-server"}}),expects=1
+        ---
+        spec:
+          template:
+            spec:
+              containers:
+                #@overlay/match by=overlay.subset({"name": "metrics-server"}),expects=1
+                - args:
+                    #@overlay/append
+                    - --kubelet-insecure-tls
+        ```
+    1. Run the following `kubectl apply` command:  
+
+        ```
+        kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml -f add-kubelet-insecure-tls-to-metrics-server.yml`
+        ```
+
+### <a id='ensure-kubectl-target'></a> Ensure kubectl Targets Your Cluster
+
+To ensure that kubectl targets the cluster:  
+
+1. To get the context name after creating the cluster, run:  
+
+    ```
+    tkg get credentials CLUSTER-NAME
+    ```
+    Where `CLUSTER-NAME` is your cluster name.  
+
+1. To ensure that kubectl targets the cluster, run:  
+
+    ```
+    kubectl config use-context CONTEXT-NAME
+    ```
+    Where `CONTEXT-NAME` is the context name collected in the last step.
 
 ## <a id='verify-default-storage'></a> Verify that a Default Storage Class Exists
 
