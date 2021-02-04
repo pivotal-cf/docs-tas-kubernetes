@@ -17,7 +17,8 @@ Before creating or configuring Kubernetes clusters:
     * [VMware Tanzu Kubernetes Grid](#grid)
 
 1. Complete the following:  
-    * [Verify that a Default Storage Class Exists](#verify-default-storage).  
+    * [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target)  
+    * [Verify That a Default Storage Class Exists](#verify-default-storage)  
 
 ## <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
@@ -35,8 +36,6 @@ for <%= vars.app_runtime_short %> on TKGI:
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
     the certificate of that CA.  
-    * kubectl can target your clusters. To ensure that kubectl targets your clusters, 
-    complete the steps in [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target).  
 
 For information about creating a cluster with TKGI,
 see [Creating Clusters](https://docs.pivotal.io/tkgi/create-cluster.html)
@@ -65,8 +64,6 @@ for <%= vars.app_runtime_short %> on TKG:
     If the registry has a certificate issued from a private certificate authority (CA),
     this typically entails configuring the worker nodes in the Kubernetes cluster to trust
     the certificate of that CA.  
-    * kubectl can target your clusters. To ensure that kubectl targets your clusters, 
-    complete the steps in [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target).  
 
 For information about setting up TKG, see [Installing Tanzu Kubernetes Grid]
 (https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.0/vmware-tanzu-kubernetes-grid-10/GUID-install-tkg-index.html).
@@ -109,16 +106,18 @@ To deploy `metrics-server`, complete either of the following:
         kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml -f add-kubelet-insecure-tls-to-metrics-server.yml`
         ```
 
-### <a id='ensure-kubectl-target'></a> Ensure kubectl Targets Your Cluster
+## <a id='ensure-kubectl-target'></a> Ensure kubectl Targets Your Cluster
 
-To ensure that kubectl targets the cluster:  
+To ensure that kubectl targets your cluster:  
 
 1. To get the context name after creating the cluster, run:  
 
     ```
-    tkg get credentials CLUSTER-NAME
+    TKG-TKGI get credentials CLUSTER-NAME
     ```
-    Where `CLUSTER-NAME` is your cluster name.  
+    Where:  
+    * `TKG-TKGI` is either `tkg` or `tkgi` depending on your environment.
+    * `CLUSTER-NAME` is your cluster name.  
 
 1. To ensure that kubectl targets the cluster, run:  
 
@@ -127,7 +126,7 @@ To ensure that kubectl targets the cluster:
     ```
     Where `CONTEXT-NAME` is the context name collected in the last step.
 
-## <a id='verify-default-storage'></a> Verify that a Default Storage Class Exists
+## <a id='verify-default-storage'></a> Verify That a Default Storage Class Exists
 
 <%= vars.app_runtime_short %> requires each Kubernetes cluster provide persistent volumes for its internal Minio blobstore. A default StorageClass resource in the Kubernetes cluster can dynamically provision the persistent volumes that <%= vars.app_runtime_short %> calls for.
 
