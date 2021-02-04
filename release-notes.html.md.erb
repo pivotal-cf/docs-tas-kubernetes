@@ -147,10 +147,14 @@ This release has the following issues:
 
  - **Apps Manager** does not support inviting members.
  - **Apps Manager** does not support creating container networking policies for apps.
- - The `kapp` utility may fail to delete CF due to the version of Antrea used in TKGm 1.2.0 and 1.2.1. This issue can be worked around by specifying a filter to exclude Antrea resources during deletion:
-   ```
-   kapp delete -a cf --filter '{"not":{"resource":{"kinds":["AntreaControllerInfo"]}}}'
-   ```
+ - On TKGm v1.2.0 and v1.2.1, the `kapp` utility may fail to delete CF due to the version of Antrea used in those environments.  
+ <br>
+    To work around this issue, specify a filter to exclude Antrea resources during deletion:  
+
+    ```
+    kapp delete -a cf --filter '{"not":{"resource":{"kinds":["AntreaControllerInfo"]}}}'
+    ```  
+
  - Staging applications fail during `cf push` if you exceed the maximum image label size when using containerd v1.4.0 and 1.4.1. 
  Containerd version 1.4.1 is used by TKGm 1.2.1. To reduce the chances of exceeding the maximum image's label size, 
  reduce the number of buildpacks used by the cf-default-builder.  
