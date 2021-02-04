@@ -9,20 +9,23 @@ This topic describes how to create and configure Kubernetes clusters to support
 
 ## <a id='overview'></a> Overview
 
-Before creating or configuring Kubernetes clusters:  
+<%= vars.app_runtime_short %> supports Kubernetes clusters in 
+VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) and VMware Tanzu Kubernetes Grid (TKG) environments.
 
-1. Ensure your environment and clusters support
-<%= vars.app_runtime_short %>:
-    * [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
-    * [VMware Tanzu Kubernetes Grid](#grid)
+Before creating or configuring Kubernetes clusters in these environments,
+ensure your environment and configurations support <%= vars.app_runtime_short %>:  
 
-1. Complete the following:  
-    * [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target)  
-    * [Verify That a Default Storage Class Exists](#verify-default-storage)  
+* [VMware Tanzu Kubernetes Grid Integrated Edition](#tkgi)
+* [VMware Tanzu Kubernetes Grid](#grid)
+
+Before using Kubernetes clusters created in these environments, complete the following validations:  
+
+* [Ensure kubectl Targets Your Cluster](#ensure-kubectl-target)  
+* [Verify That a Default Storage Class Exists](#verify-default-storage)  
 
 ## <a id='tkgi'></a> Tanzu Kubernetes Grid Integrated Edition
 
-<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition (TKGI) environments.
+<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid Integrated Edition environments.
 
 Ensure the following before creating or configuring Kubernetes clusters
 for <%= vars.app_runtime_short %> on TKGI:
@@ -45,7 +48,7 @@ in the TKGI documentation.
 
 ## <a id='grid'></a> VMware Tanzu Kubernetes Grid
 
-<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid (TKG) environments.
+<%= vars.app_runtime_short %> supports Kubernetes clusters in VMware Tanzu Kubernetes Grid environments.
 
 Ensure the following before creating or configuring Kubernetes clusters
 for <%= vars.app_runtime_short %> on TKG:
